@@ -144,7 +144,7 @@ export function AdminStorefront() {
         {b && (
           <div className="adm-slots">
             <Slot title="Logo" accept="image/png,image/webp,image/jpeg" busy={busy === 'logo'} value={b.logo} fallback="" alt={b.logoAlt} onAlt={v => setB({ ...b, logoAlt: v })}
-              hint="Your boutique logo, shown in the site header and menu. A square or round image works best (PNG with a transparent background is ideal). Until you add one, the DHANYA text wordmark is shown. You can replace it whenever you like."
+              hint="Your boutique logo, shown in the site header and menu. A square or round image works best (PNG with a transparent background is ideal). Until you add one, the SCOPE 13 text wordmark is shown. You can replace it whenever you like."
               onUpload={f => run('logo', async () => { const up = await uploadImage(f); const next = { ...b, logo: up.url }; await saveBranding(next); setB(next) }, 'Logo updated.')}
               onReset={() => run('logo', async () => { const next = { ...b, logo: null, logoAlt: '' }; await saveBranding(next); setB(next) }, 'Logo removed. The text wordmark is back.')} />
             <Slot title="Hero model photo" accept="image/png,image/webp,image/jpeg" busy={busy === 'hero'} value={b.heroModel} fallback="" pos={b.heroModelPos} onPos={v => run('hero', async () => { const next = { ...b, heroModelPos: v }; await saveBranding(next); setB(next) }, 'Focus saved.')} alt={b.heroAlt} onAlt={v => setB({ ...b, heroAlt: v })}
@@ -188,7 +188,7 @@ export function AdminStorefront() {
         <HomePicks onSaved={refresh} toast={toast} />
 
         <section className="adm-block"><h2 className="serif adm-h2">Reels &amp; photo gallery</h2>
-          <p className="muted small">Up to 6 reels (videos) and 6 photos for “Inside DHANYA BOUTIQUE” now have their own page. <Link className="link-u" to="/admin/reels">Open Reels &amp; Gallery →</Link></p></section>
+          <p className="muted small">Up to 6 reels (videos) and 6 photos for “Inside SCOPE 13” now have their own page. <Link className="link-u" to="/admin/reels">Open Reels &amp; Gallery →</Link></p></section>
       </div>
       </AdminShell>
     </Gate>
@@ -267,7 +267,7 @@ const TEXT_GROUPS = [
   ['Shop Story', [['storyTitle', 'Title'], ['story', 'Story (one paragraph per box)', 'paras']]],
   ['Trending collections', [['trendingEyebrow', 'Small label'], ['trendingTitle', 'Title'], ['trendingSub', 'Line under the title']]],
   ['Choose your world', [['worldEyebrow', 'Small label'], ['worldTitle', 'Title']]],
-  ['Inside DHANYA BOUTIQUE (reels & photos)', [['instaTitle', 'Title'], ['instaSub', 'Line under the title', 'area']]],
+  ['Inside SCOPE 13 (reels & photos)', [['instaTitle', 'Title'], ['instaSub', 'Line under the title', 'area']]],
   ['Enquiry / contact', [['contactEyebrow', 'Small label'], ['contactTitle', 'Title (press Enter for a new line)', 'area'], ['contactSub', 'Line under the title', 'area']]],
   ['About page', [['aboutTitle', 'Title (press Enter for a new line)', 'area'], ['aboutLead', 'Main line', 'area'], ['aboutSub', 'Second line', 'area']]],
 ];

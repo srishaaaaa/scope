@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ScopeHero from '../components/hero/ScopeHero';
 import { TrendingNow, Bestsellers } from '../components/home/Products';
-import ShopCategories from '../components/home/Trending';
+import HorizontalShowcase from '../components/home/HorizontalShowcase';
 import { Features, StorySplit } from '../components/home/Story';
 import Gallery from '../components/home/Gallery';
 import CustomerReviews from '../components/CustomerReviews';
@@ -29,7 +29,7 @@ export default function Home() {
       <div className="s13-flow">
         <TrendingNow />
         <Bestsellers />
-        <ShopCategories />
+        <HorizontalShowcase />
         <Features />
         <StorySplit />
         <CustomerReviews />

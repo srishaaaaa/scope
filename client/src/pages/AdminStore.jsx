@@ -151,7 +151,7 @@ export function StoreSettingsForm() {
     try {
       const lines = f.address.split('\n').map(s => s.trim()).filter(Boolean);
       await api('/admin/settings/store', { method: 'PUT', body: {
-        name: f.name || 'DHANYA', owner: f.owner || null, address: lines.length ? lines : null, phone: f.phone || null, email: f.email || null, timeZone: f.timeZone,
+        name: f.name || 'SCOPE 13', owner: f.owner || null, address: lines.length ? lines : null, phone: f.phone || null, email: f.email || null, timeZone: f.timeZone,
         location: f.lat !== '' && f.lng !== '' ? { lat: Number(f.lat), lng: Number(f.lng) } : null, mapsUrl: f.mapsUrl || null,
         hours: f.label ? { label: f.label, open: f.open, close: f.close, days: f.days } : null } });
       await api('/admin/settings/social', { method: 'PUT', body: { instagram: { handle: f.igHandle || null, url: f.igUrl || null, posts: f.posts }, links: f.links } });

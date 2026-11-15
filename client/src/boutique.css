@@ -255,7 +255,7 @@ h1, h2, h3, .serif { font-family: var(--serif); font-weight: 700; letter-spacing
    ===================================================================== */
 .bh { background: radial-gradient(120% 95% at 80% 42%, #4c4c4c 0%, #242424 40%, #242424 74%, #0d0d0d 100%); color: #F2F2F2; position: relative; isolation: isolate }
 .bh::before { content: ''; position: absolute; inset: -10% -5%; z-index: -1; pointer-events: none;
-  background: linear-gradient(112deg, transparent 18%, rgba(255, 225, 255, .10) 30%, transparent 42%), linear-gradient(112deg, transparent 50%, rgba(255, 215, 255, .07) 61%, transparent 72%);
+  background: linear-gradient(112deg, transparent 18%, rgba(235, 242, 245, .10) 30%, transparent 42%), linear-gradient(112deg, transparent 50%, rgba(229, 237, 241, .07) 61%, transparent 72%);
   animation: bh-rays 15s ease-in-out infinite alternate }
 /* the bottom of the hero fades into the ticker's purple so the two read as one colour */
 .bh::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: clamp(140px, 22vh, 260px); z-index: -1; pointer-events: none; background: linear-gradient(to top, var(--red, #242424) 0%, rgba(36, 36, 36, .55) 38%, transparent 100%) }
@@ -264,7 +264,7 @@ h1, h2, h3, .serif { font-family: var(--serif); font-weight: 700; letter-spacing
 .bh-orn, .bh-side-l, .bh-side-r, .bh-lotus { display: none }
 .bh-petals { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden }
 .bh-petals i { position: absolute; top: -8%; width: 13px; height: 19px; border-radius: 85% 0 85% 0; opacity: 0; animation: bh-fall 15s linear infinite;
-  background: linear-gradient(135deg, rgba(246, 214, 244, .95), rgba(190, 104, 186, .75)); box-shadow: 0 0 12px rgba(236, 176, 232, .5) }
+  background: linear-gradient(135deg, rgba(222, 233, 238, .95), rgba(112, 159, 182, .75)); box-shadow: 0 0 12px rgba(190, 211, 222, .5) }
 .bh-petals i:nth-child(1) { left: 6%; animation-duration: 16s; animation-delay: -3s; width: 11px; height: 16px }
 .bh-petals i:nth-child(2) { left: 15%; animation-duration: 13s; animation-delay: -9s }
 .bh-petals i:nth-child(3) { left: 24%; animation-duration: 18s; animation-delay: -6s; width: 15px; height: 21px }
@@ -296,7 +296,7 @@ h1, h2, h3, .serif { font-family: var(--serif); font-weight: 700; letter-spacing
   .bh .bh-wrap { grid-template-columns: 50% 50% }
   .bh .bh-panel { background: transparent; color: #F2F2F2; padding: 150px 20px 100px clamp(64px, 7.5vw, 140px) }
   .bh .bh-model { margin-left: -14%; width: calc(100% + 14%) } /* reaches the right edge of the screen */
-  .bh .bh-model::before { content: ''; position: absolute; inset: 4% -8% 0 -4%; z-index: 0; pointer-events: none; background: radial-gradient(48% 52% at 56% 44%, rgba(226, 150, 226, .38), transparent 72%); animation: bh-glow 6s ease-in-out infinite alternate }
+  .bh .bh-model::before { content: ''; position: absolute; inset: 4% -8% 0 -4%; z-index: 0; pointer-events: none; background: radial-gradient(48% 52% at 56% 44%, rgba(167, 195, 209, .38), transparent 72%); animation: bh-glow 6s ease-in-out infinite alternate }
   .bh .bh-model .bh-arch { z-index: 1; background: transparent; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 26%, #000 91%, transparent 100%), linear-gradient(to bottom, #000 0, #000 80%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0, #000 26%, #000 91%, transparent 100%), linear-gradient(to bottom, #000 0, #000 80%, transparent 100%); mask-composite: intersect }
   .bh .bh-model .bh-arch.skel, .bh .bh-model .bh-arch .blank { background: rgba(255, 255, 255, .05); border: 0 }
   .bh .bh-headline .et { font-size: clamp(46px, 5.3vw, 96px); line-height: 1.04 }
@@ -316,7 +316,7 @@ h1, h2, h3, .serif { font-family: var(--serif); font-weight: 700; letter-spacing
 @media (max-width: 699px) {
   .bh { background: radial-gradient(120% 70% at 70% 28%, #4c4c4c, #212121 55%, #0d0d0d) }
   .bh .bh-brand b { color: #D8D8D8 } .bh .bh-brand i { color: #BDBDBD }
-  .bh .bh-panel { background: rgba(40, 6, 40, .55); color: #F2F2F2; box-shadow: inset 0 0 0 1px rgba(233, 200, 140, .35), 0 20px 50px rgba(0, 0, 0, .35) }
+  .bh .bh-panel { background: rgba(16, 25, 30, .55); color: #F2F2F2; box-shadow: inset 0 0 0 1px rgba(233, 200, 140, .35), 0 20px 50px rgba(0, 0, 0, .35) }
   .bh .bh-model .bh-arch { box-shadow: 0 0 0 2px rgba(233, 200, 140, .85), 0 20px 50px rgba(0, 0, 0, .4) }
   .bh .bh-spark { background: #D8D8D8 }
 }
@@ -356,7 +356,7 @@ h1, h2, h3, .serif { font-family: var(--serif); font-weight: 700; letter-spacing
   .bh .bh-model .bh-arch { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 0; box-shadow: none; background: transparent; -webkit-mask-image: none; mask-image: none }
   .bh .bh-model .bh-arch img { width: 100%; height: 100%; object-fit: cover; object-position: 72% 18% }
   .bh .bh-model::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-    background: linear-gradient(90deg, rgba(36, 5, 36, .94) 0%, rgba(36, 36, 36, .78) 42%, rgba(36, 36, 36, .18) 82%), linear-gradient(to top, #242424 0%, rgba(36, 36, 36, 0) 30%), linear-gradient(to bottom, rgba(36, 5, 36, .55) 0%, transparent 22%) }
+    background: linear-gradient(90deg, rgba(14, 23, 27, .94) 0%, rgba(36, 36, 36, .78) 42%, rgba(36, 36, 36, .18) 82%), linear-gradient(to top, #242424 0%, rgba(36, 36, 36, 0) 30%), linear-gradient(to bottom, rgba(14, 23, 27, .55) 0%, transparent 22%) }
   .bh .bh-panel { position: relative; z-index: 3; width: 100%; min-height: 100vh; min-height: 100svh; padding: 116px 20px 92px; display: flex; flex-direction: column; justify-content: center; background: transparent; box-shadow: none; border-radius: 0 }
   .bh .bh-pill { font-size: 10px; padding: 5px 14px 5px 5px }
   .bh .bh-headline { margin-top: 20px }

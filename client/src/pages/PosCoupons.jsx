@@ -9,13 +9,13 @@ import { downloadCsv } from '../components/StockMovements';
 const toPaise = s => { const n = Math.round(parseFloat(String(s || '').replace(/,/g, '')) * 100); return Number.isFinite(n) && n > 0 ? n : 0 };
 const dmy = d => d ? String(d).slice(0, 10).split('-').reverse().join('-') : '';
 const BLANK = { code: '', type: 'percent', value: '', min: '', expires: '', limit: '', sentOnly: false };
-const generate = () => { const w = ['DHANYA', 'SAREE', 'FESTIVE', 'WELCOME', 'SILK']; const r = Math.random().toString(36).slice(2, 5).toUpperCase(); return `${w[Math.floor(Math.random() * w.length)]}${r}` };
+const generate = () => { const w = ['SCOPE 13', 'NEWDROP', 'FESTIVE', 'WELCOME', 'STYLE']; const r = Math.random().toString(36).slice(2, 5).toUpperCase(); return `${w[Math.floor(Math.random() * w.length)]}${r}` };
 const offerText = c => c.discountType === 'percent' ? `${c.discountValue}% OFF` : `${inr(c.discountValue)} OFF`;
 const expired = c => c.expiresOn && String(c.expiresOn).slice(0, 10) < new Date().toISOString().slice(0, 10);
 
 // The message opened in WhatsApp: the offer, its rules and the link to the printable coupon card.
 const message = (c, name, shop) => [
-  `Hello${name ? ' ' + name : ''},`, `🎁 Here is a coupon from *${shop?.name || 'DHANYA'}*`, '', `Code: *${c.code}*`, `Offer: *${offerText(c)}*`, '',
+  `Hello${name ? ' ' + name : ''},`, `🎁 Here is a coupon from *${shop?.name || 'SCOPE 13'}*`, '', `Code: *${c.code}*`, `Offer: *${offerText(c)}*`, '',
   ...(c.minOrder ? [`• Valid on purchases of ${inr(c.minOrder)} or more`] : []), ...(c.expiresOn ? [`• Valid till ${dmy(c.expiresOn)}`] : []),
   ...(c.sentOnly ? ['• Only for the mobile number it was sent to'] : []), '• Show this code at billing. Discount applies to the item value only.', '',
   `Download your coupon: ${location.origin}/coupon/${c.code}`, ...(shop?.phone ? ['', `📞 ${shop.phone}`] : []),

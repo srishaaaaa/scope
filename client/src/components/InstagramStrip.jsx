@@ -76,7 +76,7 @@ function Viewer({ items, start, onClose }) {
     </div>, document.body);
 }
 
-// "Inside DHANYA BOUTIQUE": a photo gallery (up to 6) and a row of videos (up to 6), shown separately. Both are managed in
+// "Inside SCOPE 13": a photo gallery (up to 6) and a row of videos (up to 6), shown separately. Both are managed in
 // Admin → Storefront images. Only what has been added is shown; a gallery with nothing in it is hidden.
 export default function InstagramStrip() {
   const { site } = useApp();

@@ -17,11 +17,11 @@ export default function CouponCard() {
   const rules = [c.minOrder ? `Valid on purchases of ${inr(c.minOrder)} or more` : 'No minimum purchase', c.expiresOn ? `Valid till ${dmy(c.expiresOn)}` : 'No expiry date', ...(c.sentOnly ? ['Only for the mobile number it was sent to'] : []), 'Discount applies to the item value only'];
   const download = () => {
     const cv = document.createElement('canvas'); cv.width = 900; cv.height = 1100; const x = cv.getContext('2d');
-    x.fillStyle = '#fff'; x.fillRect(0, 0, 900, 1100); x.setLineDash([14, 10]); x.lineWidth = 4; x.strokeStyle = '#330533'; x.strokeRect(40, 40, 820, 1020); x.setLineDash([]); x.textAlign = 'center';
-    x.fillStyle = '#330533'; x.font = '700 44px Georgia, serif'; x.fillText(d.shop.name, 450, 150);
+    x.fillStyle = '#fff'; x.fillRect(0, 0, 900, 1100); x.setLineDash([14, 10]); x.lineWidth = 4; x.strokeStyle = '#131f25'; x.strokeRect(40, 40, 820, 1020); x.setLineDash([]); x.textAlign = 'center';
+    x.fillStyle = '#131f25'; x.font = '700 44px Georgia, serif'; x.fillText(d.shop.name, 450, 150);
     x.fillStyle = '#C6A052'; x.font = '700 26px Arial'; x.fillText('GIFT COUPON', 450, 210);
     x.fillStyle = '#211714'; x.font = '800 130px Georgia, serif'; x.fillText(off, 450, 440);
-    x.fillStyle = '#330533'; x.beginPath(); x.roundRect(180, 520, 540, 130, 28); x.fill(); x.fillStyle = '#fff'; x.font = '700 64px monospace'; x.fillText(c.code, 450, 605);
+    x.fillStyle = '#131f25'; x.beginPath(); x.roundRect(180, 520, 540, 130, 28); x.fill(); x.fillStyle = '#fff'; x.font = '700 64px monospace'; x.fillText(c.code, 450, 605);
     x.fillStyle = '#211714'; x.font = '28px Arial'; rules.forEach((r, i) => x.fillText(r, 450, 740 + i * 52));
     if (d.shop.phone) { x.fillStyle = '#6f6270'; x.font = '26px Arial'; x.fillText(d.shop.phone, 450, 1000) }
     const a = Object.assign(document.createElement('a'), { href: cv.toDataURL('image/png'), download: `coupon-${c.code}.png` }); a.click();

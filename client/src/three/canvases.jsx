@@ -56,8 +56,8 @@ export function PortalCanvas({ entering, quality, reduced }) {
       <PortalRig entering={entering} mix={mix} reduced={reduced} />
       <Atmosphere sparkles={quality.sparkles} lightMix={mix} />
       <Arches count={quality.low ? 5 : 7} gap={1.5} still={reduced} />
-      <Silk segments={quality.seg} size={[26, 16]} position={[0, 0, -12]} rotation={[0, 0, 0.08]} amp={1.5} mixRef={mix} colors={['#2a1630', '#C6A46A']} scroll={false} />
-      <Silk segments={quality.seg} size={[12, 5]} position={[-2, -2.4, -2]} rotation={[-0.9, 0.3, 0.3]} amp={0.8} mixRef={mix} colors={['#3a2230', '#B77F8C']} opacity={0.6} scroll={false} />
+      <Silk segments={quality.seg} size={[26, 16]} position={[0, 0, -12]} rotation={[0, 0, 0.08]} amp={1.5} mixRef={mix} colors={['#18272e', '#C6A46A']} scroll={false} />
+      <Silk segments={quality.seg} size={[12, 5]} position={[-2, -2.4, -2]} rotation={[-0.9, 0.3, 0.3]} amp={0.8} mixRef={mix} colors={['#22323a', '#7fa4b7']} opacity={0.6} scroll={false} />
     </Stage>
   );
 }

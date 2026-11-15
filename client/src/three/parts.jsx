@@ -42,7 +42,7 @@ void main(){
 }`;
 
 // Procedural silk: all displacement happens in the vertex shader (no per-frame CPU loops).
-export function Silk({ segments = [96, 64], size = [9, 6], position = [0, 0, 0], rotation = [0, 0, 0], amp = 1, mixRef, mix = 0, colors = ['#2a1630', '#C6A46A'], opacity = 0.92, scroll = true }) {
+export function Silk({ segments = [96, 64], size = [9, 6], position = [0, 0, 0], rotation = [0, 0, 0], amp = 1, mixRef, mix = 0, colors = ['#18272e', '#C6A46A'], opacity = 0.92, scroll = true }) {
   const mat = useRef();
   const uniforms = useMemo(() => ({
     uTime: { value: 0 }, uPointer: { value: new THREE.Vector2() }, uScroll: { value: 0 }, uAmp: { value: amp },
@@ -87,7 +87,7 @@ export function Arches({ count = 6, gap = 1.4, width = 3.2, height = 5, thicknes
         <mesh key={i} geometry={geo} position={[0, 0, -i * gap]} scale={1 - i * 0.025}>
           {i % 2 === 0
             ? <meshStandardMaterial color="#C6A46A" metalness={1} roughness={0.26} envMapIntensity={1.3} />
-            : <meshPhysicalMaterial color="#2a1a33" transparent opacity={0.5} roughness={0.08} metalness={0.25} clearcoat={1} clearcoatRoughness={0.1} envMapIntensity={1.6} />}
+            : <meshPhysicalMaterial color="#1a2b33" transparent opacity={0.5} roughness={0.08} metalness={0.25} clearcoat={1} clearcoatRoughness={0.1} envMapIntensity={1.6} />}
         </mesh>
       ))}
     </group>
@@ -97,8 +97,8 @@ export function Arches({ count = 6, gap = 1.4, width = 3.2, height = 5, thicknes
 // Procedural lighting: a static environment of light panels (no network HDRs) for reflections.
 export function Atmosphere({ sparkles = 80, sparkleArea = [14, 8, 16], lightMix }) {
   const key = useRef(); const rim = useRef();
-  const plum = useMemo(() => new THREE.Color('#6b4a7a'), []); const champ = useMemo(() => new THREE.Color('#E4C98F'), []);
-  useFrame(() => { const m = lightMix ? lightMix.current : 0; key.current.color.lerpColors(plum, champ, m); rim.current.color.lerpColors(new THREE.Color('#B77F8C'), champ, m) });
+  const plum = useMemo(() => new THREE.Color('#4a6a7a'), []); const champ = useMemo(() => new THREE.Color('#E4C98F'), []);
+  useFrame(() => { const m = lightMix ? lightMix.current : 0; key.current.color.lerpColors(plum, champ, m); rim.current.color.lerpColors(new THREE.Color('#7fa4b7'), champ, m) });
   return (
     <>
       <ambientLight intensity={0.25} />
@@ -106,7 +106,7 @@ export function Atmosphere({ sparkles = 80, sparkleArea = [14, 8, 16], lightMix 
       <pointLight ref={rim} position={[-4, -1, 2]} intensity={35} distance={25} />
       <Environment resolution={128} frames={1}>
         <Lightformer form="rect" intensity={2.2} position={[0, 4, 3]} scale={[8, 1.2, 1]} color="#F5F0E8" />
-        <Lightformer form="rect" intensity={1.4} position={[-5, 0, 2]} scale={[1.2, 6, 1]} color="#B77F8C" />
+        <Lightformer form="rect" intensity={1.4} position={[-5, 0, 2]} scale={[1.2, 6, 1]} color="#7fa4b7" />
         <Lightformer form="rect" intensity={1.8} position={[5, 1, -2]} scale={[1.2, 6, 1]} color="#C6A46A" />
       </Environment>
       <Sparkles count={sparkles} scale={sparkleArea} size={2.2} speed={0.18} opacity={0.7} color="#E4C98F" noise={0.6} />

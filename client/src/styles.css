@@ -82,7 +82,7 @@ input, select, textarea { font: inherit; color: inherit }
 /* ============ overlays ============ */
 .overlay-root { position: fixed; inset: 0; z-index: 120 }
 .overlay-root.top { display: grid; justify-items: center; align-items: start; padding: 90px 16px 0 }
-.scrim { position: absolute; inset: 0; background: rgba(5, 4, 8, .62); backdrop-filter: blur(3px) }
+.scrim { position: absolute; inset: 0; background: rgba(4, 7, 8, .62); backdrop-filter: blur(3px) }
 .drawer { position: absolute; top: 0; right: 0; bottom: 0; width: min(460px, 100%); display: flex; flex-direction: column }
 .drawer.left { right: auto; left: 0 }
 .drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 22px 26px; border-bottom: 1px solid var(--line) }
@@ -126,7 +126,7 @@ input, select, textarea { font: inherit; color: inherit }
 .toasts { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 250; display: grid; gap: 8px; justify-items: center; width: min(92vw, 420px); pointer-events: none }
 .toast { pointer-events: auto; padding: 13px 20px; background: rgba(16, 16, 16, .94); color: var(--ivory); border: 1px solid var(--line); font-size: 13px; letter-spacing: .04em; backdrop-filter: blur(14px); width: 100%; text-align: left }
 .toast.warn { border-color: var(--rose) }
-.lightbox { position: fixed; inset: 0; z-index: 130; background: rgba(5, 4, 8, .97); display: grid; place-items: center; color: var(--ivory) }
+.lightbox { position: fixed; inset: 0; z-index: 130; background: rgba(4, 7, 8, .97); display: grid; place-items: center; color: var(--ivory) }
 .lightbox .close { position: absolute; top: 16px; right: 16px }
 .lightbox .nav { position: absolute; top: 50%; font-size: 34px; transform: translateY(-50%) }
 .lightbox .prev { left: 14px } .lightbox .next { right: 14px }
@@ -179,7 +179,7 @@ input, select, textarea { font: inherit; color: inherit }
 .intro-bg, .hero-scene { position: absolute; inset: 0; isolation: isolate }
 .scene, .scene > div, .scene canvas { position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; display: block }
 .scene canvas { touch-action: pan-y }
-.intro-fallback, .hero-fallback { position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 50% at 70% 40%, rgba(169, 169, 169, .22), transparent 70%), radial-gradient(70% 60% at 20% 80%, rgba(183, 127, 140, .18), transparent 70%), linear-gradient(160deg, var(--plum), var(--ob) 65%) }
+.intro-fallback, .hero-fallback { position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 50% at 70% 40%, rgba(169, 169, 169, .22), transparent 70%), radial-gradient(70% 60% at 20% 80%, rgba(127, 164, 183, .18), transparent 70%), linear-gradient(160deg, var(--plum), var(--ob) 65%) }
 .intro-vignette, .hero-vignette { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse at center, transparent 35%, rgba(16, 16, 16, .78) 100%) }
 .intro-skip { position: absolute; top: 20px; right: var(--pad); z-index: 5; letter-spacing: .3em; font-size: 11px; padding: 12px 14px; opacity: .75 }
 .intro-skip:hover { opacity: 1 }
@@ -193,7 +193,7 @@ input, select, textarea { font: inherit; color: inherit }
 .enter-btn:hover { transform: scale(1.04); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 10px 60px rgba(169, 169, 169, .4) }
 .enter-btn span { position: relative }
 .sweeps { position: absolute; inset: 0; z-index: 6; overflow: hidden; pointer-events: none }
-.sweep { position: absolute; left: 0; width: 100%; height: 38%; background: linear-gradient(100deg, transparent 0%, rgba(75, 40, 90, .9) 30%, rgba(228, 201, 143, .95) 62%, transparent 100%) }
+.sweep { position: absolute; left: 0; width: 100%; height: 38%; background: linear-gradient(100deg, transparent 0%, rgba(44, 72, 86, .9) 30%, rgba(228, 201, 143, .95) 62%, transparent 100%) }
 .flash { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, #e6e6e6, rgba(245, 230, 196, 0) 70%) }
 
 /* ============ home ============ */

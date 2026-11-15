@@ -86,7 +86,7 @@ export default function AdminShell({ title, sub, actions, children }) {
     }
   }, []);
   const { user, site } = useApp();
-  const nm = site?.store?.name || 'Dhanyas Boutique';
+  const nm = site?.store?.name || 'SCOPE 13';
   const manager = !!user && ['owner', 'admin'].includes(user.role);
   const pages = useStaffAccess(user); const { pathname } = useLocation();
   const allNav = NAV.flatMap(g => g.items.map(i => i[0]));

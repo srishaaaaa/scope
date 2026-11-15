@@ -23,10 +23,10 @@ export default function LogoCard() {
       <div style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap' }}>
         <div className="dpos-logo-prev"><img src={b?.logo || DEFAULT_LOGO} alt="Current logo" /></div>
         <div style={{ display: 'grid', gap: 8 }}>
-          <p className="sub" style={{ maxWidth: 440 }}>Your Dhanyas Boutique logo is already set. It shows in the website header and at the top of every invoice. Upload a different image to replace it. A square image works best (JPEG, PNG or WebP).</p>
+          <p className="sub" style={{ maxWidth: 440 }}>Your SCOPE 13 logo is already set. It shows in the website header and at the top of every invoice. Upload a different image to replace it. A square image works best (JPEG, PNG or WebP).</p>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <button type="button" className="dpos-btn" disabled={busy || !b} onClick={() => input.current.click()}>{busy ? 'Saving…' : b?.logo ? 'Replace logo' : 'Upload logo'}</button>
-            {b?.logo && <button type="button" className="dpos-btn danger" disabled={busy} onClick={() => confirm('Remove the custom logo? The built-in Dhanyas Boutique logo will be used again.') && save(null)}>Remove</button>}
+            {b?.logo && <button type="button" className="dpos-btn danger" disabled={busy} onClick={() => confirm('Remove the custom logo? The built-in SCOPE 13 logo will be used again.') && save(null)}>Remove</button>}
           </div>
           <input ref={input} type="file" hidden accept="image/jpeg,image/png,image/webp" onChange={pick} />
           {err && <p className="dpos-err" role="alert">{err}</p>}

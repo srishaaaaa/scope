@@ -24,7 +24,7 @@ import { Chips, PeriodFilter, inPeriod, periodRange, todayStr, usePeriod } from 
 import StaffOnly from '../components/StaffOnly';
 import { useStaffAccess } from '../lib/staffAccess';
 
-// Dhanya POS: the in-store billing module of the admin. Everything the screen shows comes from the API; prices, stock,
+// SCOPE 13 POS: the in-store billing module of the admin. Everything the screen shows comes from the API; prices, stock,
 // totals and invoice numbers are decided on the server (the totals here are only a live preview).
 
 const toPaise = s => { const n = Math.round(parseFloat(String(s || '').replace(/,/g, '')) * 100); return Number.isFinite(n) && n > 0 ? n : 0 };
@@ -227,7 +227,7 @@ function Billing({ channel, shop, onSale, onAdvance }) {
     try {
       const sale = await api('/admin/pos/sales', { method: 'POST', body: { ...body, idempotencyKey: (key.current ??= uuid()) } });
       const link = `${location.origin}/invoice/${sale.shareToken}`;
-      const to = kind === 'print' ? `${link}?print=1` : kind === 'wa' ? waLink(sale.customerPhone, `Hello${sale.customerName ? ' ' + sale.customerName : ''}, here is your invoice ${sale.invoiceNo} from ${shop?.name || 'DHANYA BOUTIQUE'} for ${inr(sale.total)}: ${link}`) : null;
+      const to = kind === 'print' ? `${link}?print=1` : kind === 'wa' ? waLink(sale.customerPhone, `Hello${sale.customerName ? ' ' + sale.customerName : ''}, here is your invoice ${sale.invoiceNo} from ${shop?.name || 'SCOPE 13'} for ${inr(sale.total)}: ${link}`) : null;
       if (to) { if (tab) tab.location.href = to; else window.open(to, '_blank') }
       toast(`Bill ${sale.invoiceNo} saved.`); onSale(sale, true); clearOrder();
       if (!ws) { setQ(''); api('/admin/pos/catalog').then(setResults).catch(() => {}) }
@@ -504,7 +504,7 @@ function Analytics({ channel, openInvoice, tick, goExpenses }) {
       <div className="an-all">
         {!ws && <div className="an-grp" role="radiogroup" aria-label="Channel">{[['all', 'All Channels', ''], ['offline', 'Offline (POS)', '#f5a524'], ['online', 'Online', '#22a06b']].map(([k, l, c]) => <button key={k} type="button" role="radio" aria-checked={src === k} className={src === k ? 'on' : ''} onClick={() => setSrc(k)}>{c && <i style={{ background: c }} />}{l}</button>)}</div>}
         <div className="an-gst"><Chips value={gst} onChange={setGst} options={GST_CHIPS} /></div>
-        <div className="an-pay" role="radiogroup" aria-label="Payment"><b>PAYMENT</b>{[['all', 'All', ''], ['cash', 'Cash', '#f5a524'], ['upi', 'GPay / UPI', '#3b82f6'], ['card', 'Card', '#ec4899'], ['split', 'Split', '#8b5cf6']].map(([k, l, c]) => <button key={k} type="button" role="radio" aria-checked={pay === k} className={pay === k ? 'on' : ''} onClick={() => setPay(k)}>{c && <i style={{ background: c }} />}{l}</button>)}</div>
+        <div className="an-pay" role="radiogroup" aria-label="Payment"><b>PAYMENT</b>{[['all', 'All', ''], ['cash', 'Cash', '#f5a524'], ['upi', 'GPay / UPI', '#3b82f6'], ['card', 'Card', '#7aa5ba'], ['split', 'Split', '#8db2c5']].map(([k, l, c]) => <button key={k} type="button" role="radio" aria-checked={pay === k} className={pay === k ? 'on' : ''} onClick={() => setPay(k)}>{c && <i style={{ background: c }} />}{l}</button>)}</div>
       </div>
       <Err>{err}</Err>
 

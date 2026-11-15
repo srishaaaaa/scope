@@ -11,11 +11,11 @@ import { inr } from '../../lib/format';
 const EASE = [0.22, 1, 0.36, 1];
 const WORD = ['S', 'C', 'O', 'P', 'E', ' ', '1', '3'];
 
-// Editorial hero: a light stage, a giant SCOPE 13 wordmark and the model standing in front of it so the letters pass
-// behind the figure. Layers sit at different depths: the wordmark, the figure and the ground shadow each answer the
-// pointer and the scroll by a different amount, with a slight 3D turn on the figure.
-// The figure is the admin hero photo (Admin → Storefront images; a transparent PNG cut-out sits on the stage as-is, an
-// ordinary photo on a light background is blended into it), else a product photo, else a neutral placeholder figure.
+// Editorial hero set like a quiet studio: a pale ice-blue disc and fine rings behind the model, architectural slabs
+// standing on a floor, a slow beam of light, a halftone dot patch and a faint floor reflection. The giant SCOPE 13
+// wordmark sits between the set and the model so the letters pass behind him. Every layer sits at its own depth and
+// answers the pointer and the scroll by a different amount.
+// The figure is the supplied hero cut-out (or the admin hero photo, or a product photo, or a neutral placeholder).
 export default function ScopeHero() {
   const { entered, site, catalog } = useApp();
   const photo = site.branding?.heroModel || media.heroCutout || catalog.featured.find(p => p.image)?.image || null;
@@ -33,21 +33,20 @@ export default function ScopeHero() {
   const figX = useTransform(sx, [-0.5, 0.5], [-14, 14]), figY = useTransform(sy, [-0.5, 0.5], [-6, 6]);
   const rotY = useTransform(sx, [-0.5, 0.5], [-5, 5]);
   const shadowX = useTransform(sx, [-0.5, 0.5], [18, -18]);
-  const ringX = useTransform(sx, [-0.5, 0.5], [12, -12]), ringY = useTransform(sy, [-0.5, 0.5], [8, -8]);
+  const sunX = useTransform(sx, [-0.5, 0.5], [14, -14]), sunY = useTransform(sy, [-0.5, 0.5], [9, -9]);
+  const slabL = useTransform(sx, [-0.5, 0.5], [6, -6]), slabR = useTransform(sx, [-0.5, 0.5], [-10, 10]);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const wordY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [0, -70]);
   const figScroll = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [0, 50]);
+  const sunScroll = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [0, 90]);
   const move = e => { if (!fine || reduced) return; const r = ref.current.getBoundingClientRect(); mx.set((e.clientX - r.left) / r.width - 0.5); my.set((e.clientY - r.top) / r.height - 0.5) };
 
   return (
     <section ref={ref} className="s13-hero" data-hero aria-label="SCOPE 13" onPointerMove={move} onPointerLeave={() => { mx.set(0); my.set(0) }}>
-      <div className="s13-h-deco" aria-hidden="true">
+      <div className="s13-h-art" aria-hidden="true">
         <span className="g g1" /><span className="g g2" /><span className="g g3" />
-        <motion.span className="ring" style={{ x: ringX, y: ringY }} />
-        <motion.span className="ring ring2" style={{ x: ringX, y: ringY }} />
-        <span className="vt l">CONTEMPORARY MENSWEAR &nbsp;·&nbsp; MADURAI</span>
-        <span className="vt r">9.9252° N &nbsp;—&nbsp; 78.1198° E</span>
-        <span className="cue"><i />SCROLL</span>
+        <motion.span className="ring" style={{ x: sunX, y: sunY }} />
+        <motion.span className="ring r2" style={{ x: sunX, y: sunY }} />
       </div>
 
       <h1 className="s13-h-word" aria-label="SCOPE 13. A new era of everyday style.">
@@ -88,25 +87,25 @@ export default function ScopeHero() {
         </Link>
       </motion.div>
 
-      {/* featured product chip (live data) */}
+      {/* running marquee strip */}
+      <div className="s13-h-strip" aria-hidden="true">
+        <div className="s13-h-strip-track">{[0, 1].map(k => <ul key={k}>{marquee.concat(marquee).map((t, i) => <li key={i}>{t}<i>&#10022;</i></li>)}</ul>)}</div>
+      </div>
+
+      <div className="s13-h-side l" aria-hidden="true">CONTEMPORARY MENSWEAR &nbsp;·&nbsp; MADURAI</div>
+      <div className="s13-h-side r" aria-hidden="true">9.9252° N &nbsp;—&nbsp; 78.1198° E</div>
+
       {feat && (
         <motion.div className="s13-h-feat" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.15, ease: EASE }}>
           <Link to={`/product/${feat.slug}`} data-cursor="VIEW"><small>FEATURED</small><strong>{feat.name}</strong><em>{inr(feat.price)} <i aria-hidden="true">&rarr;</i></em></Link>
         </motion.div>
       )}
-
-      {/* category index (live data) */}
       {cats.length > 0 && (
         <motion.nav className="s13-h-index" aria-label="Categories" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.25, ease: EASE }}>
           <p>INDEX</p>
           <ul>{cats.map((c, i) => <li key={c.slug}><Link to={`/shop?category=${c.slug}`}><span>{String(i + 1).padStart(2, '0')}</span>{c.name}</Link></li>)}</ul>
         </motion.nav>
       )}
-
-      {/* marquee strip */}
-      <div className="s13-h-strip" aria-hidden="true">
-        <div className="s13-h-strip-track">{[0, 1].map(k => <ul key={k}>{marquee.concat(marquee).map((t, i) => <li key={i}>{t}<i>&#10022;</i></li>)}</ul>)}</div>
-      </div>
     </section>
   );
 }

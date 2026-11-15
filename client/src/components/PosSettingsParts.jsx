@@ -4,8 +4,8 @@ import { useApp } from '../context/App';
 import Modal from './Modal';
 
 const GREYS = ['#0a0a0a', '#18181b', '#1c1917', '#1e293b', '#262626', '#292524', '#2a2423', '#334155', '#3b4256', '#404048', '#44403c', '#4a4540', '#475569', '#4b5563', '#52525b', '#5c564d', '#57534e', '#64748b', '#6b7280', '#78716c'];
-const COLOURS = ['#330533', '#7f1d3f', '#9f1239', '#b91c1c', '#c2410c', '#a16207', '#15803d', '#047857', '#0f766e', '#0e7490', '#1d4ed8', '#4338ca', '#6d28d9', '#7e22ce', '#a21caf', '#be185d'];
-export const DEFAULT_ACCENT = '#330533';
+const COLOURS = ['#131f25', '#355667', '#3c6275', '#b91c1c', '#c2410c', '#a16207', '#15803d', '#047857', '#0f766e', '#0e7490', '#1d4ed8', '#4338ca', '#588ea9', '#52859e', '#457086', '#49768d'];
+export const DEFAULT_ACCENT = '#131f25';
 
 // One accent colour for the POS: buttons, totals, invoice headers. Saved with the other settings.
 export function AccentPicker({ value, onChange }) {

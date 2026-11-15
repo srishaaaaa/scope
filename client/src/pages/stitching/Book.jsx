@@ -56,7 +56,7 @@ export default function Book() {
             <div className="stc-row"><button className="dpos-btn sm" disabled={!nw.name.trim() || nw.phone.replace(/\D/g, '').length < 7} onClick={addCustomer}>Add customer</button><button className="dpos-btn ghost sm" onClick={() => setNw(null)}>Cancel</button></div></div>
             : <button className="dpos-btn outline sm" onClick={() => setNw({ name: '', phone: '' })}>+ New customer</button>}
           {!list ? <Empty>Loading…</Empty> : !list.length ? <Empty>No customers found.</Empty> : <ul style={{ listStyle: 'none', margin: 0, padding: 0, maxHeight: 520, overflow: 'auto' }}>{list.map(c => (
-            <li key={c.id}><button className="stc-row between" style={{ width: '100%', textAlign: 'left', padding: '10px 8px', borderRadius: 12, background: sel?.id === c.id ? '#f3ecf6' : 'transparent' }} onClick={() => setSel(c)}>
+            <li key={c.id}><button className="stc-row between" style={{ width: '100%', textAlign: 'left', padding: '10px 8px', borderRadius: 12, background: sel?.id === c.id ? '#edf2f5' : 'transparent' }} onClick={() => setSel(c)}>
               <span><b>{c.name || 'Customer'}</b><div className="muted small">{c.phone}</div></span><span className={`stc-pill ${c.profiles ? 's-work' : ''}`}>{c.profiles} profile{c.profiles === 1 ? '' : 's'}</span></button></li>))}</ul>}
         </section>
         <section className="dpos-card stc-stack">
