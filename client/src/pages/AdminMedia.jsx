@@ -142,7 +142,7 @@ export function AdminStorefront() {
   return (
     <Gate state={state}>
       <AdminShell title="Storefront images">
-      <div className="adm">
+      <div className="adm adm-sf">
         {err && <p role="alert" className="err">{err}</p>}
         {b && (
           <div className="adm-slots">
