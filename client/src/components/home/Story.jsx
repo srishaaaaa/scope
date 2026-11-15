@@ -11,7 +11,7 @@ import BrandPanel from './BrandPanel';
 import { coverStyle } from '../../lib/imgPos';
 
 const Ico = ({ children, kind }) => (
-  <svg className={`ico ${kind || ''}`} width="34" height="34" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{children}</svg>
+  <svg className={`ico ${kind || ''}`} width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{children}</svg>
 );
 const Draw = ({ d }) => <motion.path d={d} initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 1.4, ease: 'easeInOut' }} />;
 const TRUCK = 'M4 11h20v15H4zM24 16h7l5 5v5H24zM11 30a3 3 0 1 0 0-.1M29 30a3 3 0 1 0 0-.1';
@@ -38,7 +38,7 @@ export function Features() {
       <div className="s13-wrap">
         <ul className="s13-feat-row">
           {items.map(([path, t, s], i) => (
-            <Reveal as="li" key={t} delay={i * 0.06} className="s13-feat"><Ico kind={KINDS[i]}><Draw d={path} /></Ico><div><strong>{t}</strong><span>{s}</span></div></Reveal>
+            <Reveal as="li" key={t} delay={i * 0.06} className="s13-feat"><em className="n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</em><Ico kind={KINDS[i]}><Draw d={path} /></Ico><div><strong>{t}</strong><span>{s}</span></div></Reveal>
           ))}
         </ul>
       </div>

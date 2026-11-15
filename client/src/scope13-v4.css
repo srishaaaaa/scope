@@ -415,3 +415,28 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .s13-feat:hover svg.ico { background: #12232C; color: #fff !important; transition: background .35s, color .35s }
 .s13-feat strong { position: relative; display: inline-block } .s13-feat strong::after { content: ''; position: absolute; left: 0; right: 100%; bottom: -3px; height: 1px; background: #477E90; transition: right .5s var(--ease) } .s13-feat:hover strong::after { right: 0 }
 @media (prefers-reduced-motion: reduce) { .s13-features, .s13-features::before, .s13-feat svg.ico { animation: none !important } }
+
+/* ---- quiet detail on the right of the hero: halftone patch + measuring ruler ---- */
+.s13-h-dots { position: absolute; z-index: 0; right: 0; top: 36%; width: 30vw; height: 44%; pointer-events: none; background-image: radial-gradient(rgba(18,35,44,.34) 1.2px, transparent 1.7px); background-size: 16px 16px; -webkit-mask-image: radial-gradient(closest-side at 80% 50%, #000, transparent); mask-image: radial-gradient(closest-side at 80% 50%, #000, transparent); opacity: .75 }
+.s13-h-ruler { position: absolute; z-index: 2; right: 46px; top: 22%; bottom: 22%; width: 14px; pointer-events: none; background: repeating-linear-gradient(180deg, rgba(11,11,11,.4) 0 1px, transparent 1px 10px) right/9px 100% no-repeat, repeating-linear-gradient(180deg, rgba(11,11,11,.7) 0 1px, transparent 1px 50px) right/16px 100% no-repeat }
+.s13-h-ruler i { position: absolute; right: 22px; font: 500 8.5px/1 var(--sans); letter-spacing: .12em; color: rgba(11,11,11,.5); font-style: normal } .s13-h-ruler i:nth-child(1) { top: -4px } .s13-h-ruler i:nth-child(2) { top: calc(50% - 4px) } .s13-h-ruler i:nth-child(3) { bottom: -4px }
+@media (max-width: 1100px) { .s13-h-ruler { display: none } .s13-h-dots { width: 46vw; top: 44% } }
+
+/* ======================= benefits band: bigger, darker, numbered ======================= */
+.s13-features { background: #12232C !important; border: 0 !important; animation: none !important; color: #fff }
+.s13-features::before { background: linear-gradient(100deg, transparent, rgba(127,174,195,.16), transparent) !important }
+.s13-features::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(127,174,195,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(127,174,195,.07) 1px, transparent 1px); background-size: 64px 64px; pointer-events: none; -webkit-mask-image: linear-gradient(180deg, transparent, #000 40%, transparent); mask-image: linear-gradient(180deg, transparent, #000 40%, transparent) }
+.s13-features .s13-wrap { position: relative; z-index: 1 }
+.s13-feat-row { border: 0 !important }
+.s13-feat { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; padding: 44px 30px 46px !important; border-right: 1px solid rgba(255,255,255,.12) !important; background: transparent !important }
+.s13-feat:first-child { padding-left: 0 !important } .s13-feat:last-child { border-right: 0 !important }
+.s13-feat:hover { background: rgba(255,255,255,.05) !important; transform: none }
+.s13-feat .n { position: absolute; right: 26px; top: 18px; font: 700 clamp(34px, 3.2vw, 52px)/1 'Syne', var(--display); font-style: normal; color: transparent; -webkit-text-stroke: 1px rgba(127,174,195,.35); letter-spacing: -.03em }
+.s13-feat svg.ico { width: 64px !important; height: 64px !important; padding: 14px !important; background: rgba(127,174,195,.14) !important; color: #7FAEC3 !important; box-shadow: 0 0 0 1px rgba(127,174,195,.35) !important }
+.s13-feat:hover svg.ico { background: #7FAEC3 !important; color: #12232C !important }
+.s13-feat strong { font: 700 14px/1.3 var(--display) !important; letter-spacing: .14em !important; color: #fff; margin-bottom: 6px }
+.s13-feat strong::after { background: #7FAEC3 !important }
+.s13-feat span { font-size: 14px !important; line-height: 1.55 !important; color: rgba(255,255,255,.72) !important; max-width: 250px }
+@keyframes s13-pulse { 0%, 100% { box-shadow: 0 0 0 1px rgba(127,174,195,.35), 0 0 0 0 rgba(127,174,195,.5) } 60% { box-shadow: 0 0 0 1px rgba(127,174,195,.35), 0 0 0 14px rgba(127,174,195,0) } }
+@media (max-width: 1000px) { .s13-feat { padding: 30px 20px !important; border-bottom: 1px solid rgba(255,255,255,.12) !important } .s13-feat:first-child { padding-left: 20px !important } }
+@media (max-width: 560px) { .s13-feat { flex-direction: row !important; align-items: center !important } .s13-feat svg.ico { width: 52px !important; height: 52px !important; padding: 11px !important; flex: none } .s13-feat .n { display: none } }

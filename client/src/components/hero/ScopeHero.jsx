@@ -95,6 +95,8 @@ export default function ScopeHero() {
         <div className="s13-h-strip-track">{[0, 1].map(k => <ul key={k}>{marquee.concat(marquee).map((t, i) => <li key={i}>{t}<i>&#10022;</i></li>)}</ul>)}</div>
       </div>
 
+      <span className="s13-h-dots" aria-hidden="true" />
+      <span className="s13-h-ruler" aria-hidden="true"><i>00</i><i>50</i><i>100</i></span>
       <div className="s13-h-side l" aria-hidden="true">CONTEMPORARY MENSWEAR &nbsp;·&nbsp; MADURAI</div>
       <div className="s13-h-side r" aria-hidden="true">9.9252° N &nbsp;—&nbsp; 78.1198° E</div>
 
