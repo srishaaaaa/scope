@@ -1,11 +1,12 @@
-import { useRef } from 'react';
+import { lazy, Suspense, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useApp } from '../../context/App';
-import { useFinePointer, useReduced } from '../../lib/hooks';
+import { useFinePointer, useIsMobile, useReduced, hasWebGL } from '../../lib/hooks';
 import { Magnetic } from '../Motion';
 import BrandPanel from '../home/BrandPanel';
 
+const HeroScene = lazy(() => import('../../three/HeroScene'));
 const EASE = [0.22, 1, 0.36, 1];
 const rise = (d, show) => ({ initial: { opacity: 0, y: 24 }, animate: show ? { opacity: 1, y: 0 } : undefined, transition: { duration: 1, delay: d, ease: EASE } });
 
@@ -16,7 +17,8 @@ export default function ScopeHero() {
   const { entered, site, catalog } = useApp();
   const src = site.branding?.heroModel || catalog.featured.find(p => p.image)?.image || null;
   const pos = site.branding?.heroModelPos || '50% 18%';
-  const reduced = useReduced(), fine = useFinePointer();
+  const reduced = useReduced(), fine = useFinePointer(), mobile = useIsMobile();
+  const scene3d = !mobile && hasWebGL();
   const ref = useRef();
   const mx = useMotionValue(0), my = useMotionValue(0);
   const sx = useSpring(mx, { stiffness: 70, damping: 20 }), sy = useSpring(my, { stiffness: 70, damping: 20 });
@@ -27,9 +29,13 @@ export default function ScopeHero() {
   return (
     <section ref={ref} className="s13-hero" data-hero aria-label="SCOPE 13" onPointerMove={move} onPointerLeave={() => { mx.set(0); my.set(0) }}>
       <div className="s13-h-media" aria-hidden="true">
-        <motion.div className="s13-h-img" style={{ x, y }} initial={{ scale: 1.12, opacity: 0 }} animate={show ? { scale: 1.04, opacity: 1 } : undefined} transition={{ duration: 2, ease: EASE }}>
-          {src ? <img src={src} alt="" style={{ objectPosition: pos }} fetchpriority="high" decoding="async" /> : <BrandPanel big />}
-        </motion.div>
+        {scene3d
+          ? <Suspense fallback={<div className="s13-h-canvas" />}><HeroScene src={src} reduced={reduced} /></Suspense>
+          : (
+            <motion.div className="s13-h-img" style={{ x, y }} initial={{ scale: 1.12, opacity: 0 }} animate={show ? { scale: 1.04, opacity: 1 } : undefined} transition={{ duration: 2, ease: EASE }}>
+              {src ? <img src={src} alt="" style={{ objectPosition: pos }} fetchpriority="high" decoding="async" /> : <BrandPanel big />}
+            </motion.div>
+          )}
         <span className="s13-h-fade" />
       </div>
       <div className="s13-wrap s13-h-grid">

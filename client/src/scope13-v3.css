@@ -70,7 +70,7 @@
 
 /* ---- product shelves: five across on desktop ---- */
 .s13-shelf { padding-top: var(--rhythm); padding-bottom: var(--rhythm) }
-.s13-pslide { width: clamp(220px, calc((min(100vw, var(--max)) - 2 * var(--pad) - 4 * var(--gap)) / 5), 290px) }
+.s13-pslide { width: clamp(220px, calc((min(100vw, var(--max)) - 2 * var(--pad) - 4 * var(--gap)) / 5), 340px) }
 .s13-pscroll .s13-scroller-track { align-items: flex-start }
 .pcard-frame { border-radius: 0 !important; background: #EEF2F4; aspect-ratio: 4 / 4.6 }
 .pcard-no, .pcard-from { display: none !important }
@@ -139,7 +139,7 @@
 
 /* the storefront renders at true size (the old global 90% zoom broke viewport-based widths) */
 @media (min-width: 900px) { body:not(:has(.dpos)) { zoom: 1 !important } }
-:root { --max: 1240px }
+:root { --max: 1720px; --pad: clamp(20px, 3.6vw, 64px) }
 .site-header .hdr { border: 0 !important }
 .s13-h2, .rev-head h2, .insta-head h2, .studio h2, .eq-info h2, .s13-story h2 { text-transform: none !important }
 .s13-brandpanel.big b { font-size: clamp(130px, 18vw, 290px) !important }
@@ -151,3 +151,5 @@
   .s13-home { padding-top: calc(var(--ann) + 64px) }
 }
 @media (max-width: 900px) { .s13-h-copy { padding-top: 0 !important } .s13-h-stage { display: none } }
+.s13-h-canvas { position: absolute; inset: 0; background: #12232C } .s13-h-canvas canvas { display: block; width: 100% !important; height: 100% !important }
+.s13-h-media .s13-h-fade { background: linear-gradient(90deg, #12232C 0%, rgba(18,35,44,.7) 14%, rgba(18,35,44,0) 42%) }
