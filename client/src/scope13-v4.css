@@ -499,3 +499,8 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 
 /* ---- reels / gallery framing controls in the admin ---- */
 .dpos-adj { padding: 10px 12px 2px } .dpos-adj .adj-box { max-height: 300px } .dpos-adj .adj-row .muted { display: none }
+
+/* ---- gallery photos use the same 4:5 frame as the admin preview; reels keep 9:16 ---- */
+.insta-photos .insta-tile { aspect-ratio: 4 / 5 !important; border-radius: 18px; overflow: hidden }
+.insta-photos .insta-tile img { transform-origin: inherit }
+.insta-reels .insta-tile, .insta-block:not(.insta-photos) .insta-tile { aspect-ratio: 9 / 16 !important; border-radius: 18px; overflow: hidden }
