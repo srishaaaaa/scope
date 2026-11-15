@@ -62,9 +62,7 @@ export function StorySplit() {
           <Reveal className="s13-story-media">{photo ? <img src={photo} alt={site.branding?.storyAlt || 'SCOPE 13'} loading="lazy" style={coverStyle(site.branding?.storyPos)} /> : lead ? <ProductMedia p={lead} /> : <BrandPanel />}</Reveal>
           <div className="s13-story-copy">
             <Reveal><p className="s13-label"><i />OUR STORY</p></Reveal>
-            <h2 id="story-h" className="s13-h2">
-              {['More than', 'what you wear.'].map((l, i) => <span className="s13-mask" key={l}><motion.span initial={{ y: '115%' }} whileInView={{ y: '0%' }} viewport={{ once: true }} transition={{ duration: 1, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}>{l}</motion.span></span>)}
-            </h2>
+            <h2 id="story-h" className="sr">More than what you wear.</h2>
             {brand.story.slice(0, 2).map((p, i) => <Reveal key={i} delay={0.08 * i}><p className="s13-story-p">{p}</p></Reveal>)}
             <Reveal delay={0.2}><ul className="s13-stats">{stats.map(([n, l]) => <li key={l}><strong>{n}</strong><span>{l}</span></li>)}</ul><Link className="s13-link" to="/about" data-cursor="DISCOVER">DISCOVER SCOPE 13 →</Link></Reveal>
           </div>
