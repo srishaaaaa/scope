@@ -21,12 +21,10 @@ function MegaMenu({ kind, x, onNavigate }) {
   const { catalog, site } = useApp();
   const hp = site.homepage || {};
   const ordered = (list, slugs) => slugs?.length ? slugs.map(s => list.find(x => x.slug === s)).filter(Boolean) : list;
-  const rows = kind === 'collections'
-    ? [{ name: 'All collections', to: '/collections' }, ...ordered(catalog.collections, hp.collections).map(c => ({ name: c.name, to: `/collections/${c.slug}` }))]
-    : [...ordered(catalog.categories, hp.categories).map(c => ({ name: c.name, to: `/shop?category=${c.slug}` }))];
-  const label = kind === 'collections' ? 'Collections' : 'Shop by category';
+  const rows = ordered(catalog.categories, hp.categories).map(c => ({ name: c.name, to: `/shop?category=${c.slug}` }));
+  const label = 'Collections';
   return (
-    <motion.div className={`mega mega-sm mega-${kind}`} style={x != null ? { left: `clamp(12px, ${Math.round(x - 220)}px, calc(100vw - 452px))` } : undefined} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
+    <motion.div className={`mega mega-sm mega-${kind}`} style={x != null ? { left: `clamp(12px, ${Math.round(x - 270)}px, calc(100vw - 552px))` } : undefined} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
       <div className="mega-in">
         <div className="mega-col">
           <p className="mega-label">{label}</p>
@@ -38,21 +36,6 @@ function MegaMenu({ kind, x, onNavigate }) {
             ))}
           </ul>
         </div>
-        {catalog.featured.length > 0 && (
-          <div className="mega-col">
-            <p className="mega-label">Featured</p>
-            <div className="mega-feature">
-              {catalog.featured.slice(0, 2).map((p, i) => (
-                <motion.div key={p.slug} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 + i * 0.08, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}>
-                  <Link className="mega-tile" to={`/product/${p.slug}`} onClick={onNavigate} data-cursor="VIEW">
-                    <span className="mega-img"><span><ProductMedia p={p} /></span></span>
-                    <strong className="serif">{p.name}</strong><span className="small muted">{inr(p.price)}</span>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </motion.div>
   );

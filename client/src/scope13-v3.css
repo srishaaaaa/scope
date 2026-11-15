@@ -153,3 +153,13 @@
 @media (max-width: 900px) { .s13-h-copy { padding-top: 0 !important } .s13-h-stage { display: none } }
 .s13-h-canvas { position: absolute; inset: 0; background: #12232C } .s13-h-canvas canvas { display: block; width: 100% !important; height: 100% !important }
 .s13-h-media .s13-h-fade { background: linear-gradient(90deg, #12232C 0%, rgba(18,35,44,.7) 14%, rgba(18,35,44,0) 42%) }
+
+/* ---- Collections dropdown: two-column list of category names ---- */
+.site-header .mega.mega-sm { right: auto !important; width: min(540px, calc(100vw - 24px)); margin: 0; top: calc(100% - 6px); border-radius: 14px; background: #fff; border: 1px solid rgba(36,36,36,.1); box-shadow: 0 24px 60px -24px rgba(16,16,16,.35); transform-origin: top left }
+.site-header .mega-sm .mega-in { display: block !important; padding: 22px 28px 14px !important; max-width: none }
+.site-header .mega-sm .mega-label { margin: 0 0 8px; color: var(--accent) } .site-header .mega-sm .mega-label::after { background: linear-gradient(90deg, rgba(71,126,144,.5), transparent) }
+.site-header .mega-sm .mega-cats { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px }
+.site-header .mega-sm .mega-cats li { border-bottom: 1px solid rgba(36,36,36,.1) }
+.site-header .mega-sm .mega-cats a { padding: 13px 2px; font: 600 19px/1.2 var(--serif-d, var(--quote)); letter-spacing: 0; color: var(--charcoal); transition: padding .4s var(--ease), color .3s }
+.site-header .mega-sm .mega-cats a:hover, .site-header .mega-sm .mega-cats a:focus-visible { padding-left: 10px; color: var(--accent) }
+@media (max-width: 900px) { .site-header .mega-sm { display: none } }
