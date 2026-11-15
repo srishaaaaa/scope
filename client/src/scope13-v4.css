@@ -83,3 +83,63 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .s-thumb { width: 48px !important }
 .s-text .serif { font: 500 15px/1.25 var(--sans) !important; letter-spacing: 0 !important }
 @media (max-width: 700px) { .overlay-root.top { padding-top: 64px !important } .search .search-bar input { font-size: 16px !important } }
+
+/* ---- brand wordmark: Playfair Display (high-contrast fashion serif with a clear numeral 1) everywhere "SCOPE 13" is set as a logotype ---- */
+:root { --brand: 'Playfair Display', 'Bodoni Moda', Didot, Georgia, serif }
+.s13-h-word-in { font-family: var(--brand) !important; font-weight: 600 !important; letter-spacing: -.02em !important; font-size: clamp(80px, 15.2vw, 310px) !important; font-variant-numeric: lining-nums }
+.site-header .wordmark .wm-text b, .site-header .wordmark .wm-text i { font-family: var(--brand) !important; font-weight: 700 !important; letter-spacing: .06em !important; font-size: clamp(22px, 2vw, 28px) !important; font-variant-numeric: lining-nums }
+.s13-intro-mark { font-family: var(--brand) !important; font-weight: 600 !important; letter-spacing: .02em !important }
+.s13-foot .foot-mark span { font-family: var(--brand) !important; font-weight: 600 !important; letter-spacing: -.02em !important }
+.foot-wordmark { font-family: var(--brand) !important; font-weight: 700 !important; letter-spacing: .12em !important }
+.s13-brandpanel b { font-family: var(--brand) !important; font-weight: 600 !important }
+@media (max-width: 900px) { .s13-h-word-in { font-size: 16.5vw !important } }
+
+/* ---- hero background detail: quiet, low-contrast, behind the wordmark and figure ---- */
+.s13-h-deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden }
+.s13-h-deco::after { content: ''; position: absolute; inset: 0; opacity: .22; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") }
+.s13-h-deco .g { position: absolute; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.09) 18%, rgba(0,0,0,.09) 82%, transparent) }
+.s13-h-deco .g1 { left: 25% } .s13-h-deco .g2 { left: 50% } .s13-h-deco .g3 { left: 75% }
+.s13-h-deco .ring { position: absolute; left: 50%; top: 52%; width: min(86vh, 62vw); aspect-ratio: 1; margin: calc(min(86vh, 62vw) / -2) 0 0 calc(min(86vh, 62vw) / -2); border-radius: 50%; border: 1px solid rgba(0,0,0,.1) }
+.s13-h-deco .ring2 { width: min(60vh, 44vw); margin: calc(min(60vh, 44vw) / -2) 0 0 calc(min(60vh, 44vw) / -2); border-style: dashed; border-color: rgba(0,0,0,.12) }
+.s13-h-deco .vt { position: absolute; top: 50%; font: 500 9.5px/1 var(--sans); letter-spacing: .38em; color: rgba(11,11,11,.5); white-space: nowrap }
+.s13-h-deco .vt.l { left: 20px; transform: translateY(-50%) rotate(-90deg); transform-origin: left center; margin-top: 130px }
+.s13-h-deco .vt.r { right: 20px; transform: translateY(-50%) rotate(90deg); transform-origin: right center; margin-top: 90px }
+.s13-h-deco .cue { position: absolute; left: 50%; bottom: 14px; translate: -50% 0; display: flex; align-items: center; gap: 12px; font: 500 9.5px/1 var(--sans); letter-spacing: .38em; color: rgba(11,11,11,.55) }
+.s13-h-deco .cue i { position: relative; display: block; width: 44px; height: 1px; background: rgba(11,11,11,.2); overflow: hidden }
+.s13-h-deco .cue i::after { content: ''; position: absolute; inset: 0; background: #0b0b0b; animation: s13-cue2 2.4s var(--ease) infinite }
+@keyframes s13-cue2 { 0% { transform: translateX(-100%) } 60%, 100% { transform: translateX(100%) } }
+@media (max-width: 900px) { .s13-h-deco .vt, .s13-h-deco .g1, .s13-h-deco .g3 { display: none } .s13-h-deco .ring { width: 92vw; margin: -46vw 0 0 -46vw; top: 56% } .s13-h-deco .ring2 { display: none } .s13-h-deco .cue { display: none } }
+@media (prefers-reduced-motion: reduce) { .s13-h-deco .cue i::after { animation: none } }
+.s13-h-deco::after { opacity: .12 !important }
+.s13-hero { background: #E8E8E6 !important }
+
+/* ---- richer stage: tonal gradient in the logo's ice blue, badge, index, featured chip, marquee strip ---- */
+.s13-hero { background: radial-gradient(38% 52% at 84% 80%, rgba(127,174,195,.34), transparent 70%), radial-gradient(34% 46% at 10% 16%, rgba(255,255,255,.75), transparent 72%), radial-gradient(30% 40% at 62% 6%, rgba(127,174,195,.16), transparent 70%), #E8E8E6 !important }
+.s13-h-fig { bottom: 6.5% !important; height: 86% !important } .s13-h-ground { bottom: 5% !important }
+.s13-h-cta { bottom: 12% !important } .s13-h-note { bottom: 12% !important }
+.s13-h-deco .cue { display: none }
+
+.s13-h-badge { position: absolute; z-index: 3; left: 67%; top: 15%; width: 112px; height: 112px }
+.s13-h-badge a { position: relative; display: grid; place-items: center; width: 100%; height: 100%; border-radius: 50%; background: rgba(255,255,255,.55); backdrop-filter: blur(6px); box-shadow: inset 0 0 0 1px rgba(11,11,11,.14); transition: background .4s, transform .5s var(--ease) }
+.s13-h-badge a:hover { background: #0b0b0b; transform: scale(1.06) } .s13-h-badge a:hover b { color: #fff } .s13-h-badge a:hover text { fill: #fff }
+.s13-h-badge svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: s13-spin 26s linear infinite } .s13-h-badge text { font: 600 8.6px var(--sans); letter-spacing: .2em; fill: #0b0b0b; transition: fill .4s }
+.s13-h-badge b { position: relative; font: 400 22px/1 var(--sans); color: #0b0b0b; transition: color .4s }
+@keyframes s13-spin { to { transform: rotate(360deg) } }
+
+.s13-h-feat { position: absolute; z-index: 3; left: max(var(--pad), 8vw); top: 37% }
+.s13-h-feat a { display: grid; gap: 4px; padding: 14px 18px; min-width: 190px; background: rgba(255,255,255,.62); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px rgba(11,11,11,.1); transition: background .35s, transform .4s var(--ease) } .s13-h-feat a:hover { background: #fff; transform: translateY(-3px) }
+.s13-h-feat small { font: 600 9px/1 var(--sans); letter-spacing: .3em; color: var(--accent) } .s13-h-feat strong { font: 500 14px/1.3 var(--sans); color: #0b0b0b } .s13-h-feat em { font-style: normal; font: 500 12px var(--sans); color: #444 } .s13-h-feat i { font-style: normal; display: inline-block; transition: transform .4s var(--ease) } .s13-h-feat a:hover i { transform: translateX(4px) }
+
+.s13-h-index { position: absolute; z-index: 3; right: max(var(--pad), 8vw); top: 33% }
+.s13-h-index p { margin: 0 0 12px; font: 600 9.5px/1 var(--sans); letter-spacing: .34em; color: rgba(11,11,11,.55); padding-bottom: 10px; border-bottom: 1px solid rgba(11,11,11,.2) }
+.s13-h-index ul { display: grid; gap: 2px } .s13-h-index a { display: flex; align-items: baseline; gap: 12px; padding: 6px 0; font: 500 13px/1.2 var(--sans); color: #0b0b0b; transition: padding .4s var(--ease), color .3s } .s13-h-index a span { font: 500 10px var(--sans); letter-spacing: .14em; color: rgba(11,11,11,.45) } .s13-h-index a:hover { padding-left: 8px; color: var(--accent) }
+
+.s13-h-strip { position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; height: 38px; background: #0b0b0b; color: #fff; overflow: hidden; display: flex; align-items: center }
+.s13-h-strip-track { display: flex; width: max-content; animation: s13-strip 38s linear infinite } .s13-h-strip ul { display: flex; flex: none }
+.s13-h-strip li { display: inline-flex; align-items: center; gap: 28px; padding-right: 28px; font: 500 10.5px/1 var(--sans); letter-spacing: .34em; white-space: nowrap } .s13-h-strip li i { font-style: normal; color: var(--ice); font-size: 9px }
+@keyframes s13-strip { to { transform: translateX(-50%) } }
+@media (max-width: 1100px) { .s13-h-index { display: none } }
+@media (max-width: 900px) { .s13-h-badge { left: auto; right: var(--pad); top: 6%; width: 84px; height: 84px } .s13-h-badge text { font-size: 9.6px } .s13-h-feat { display: none } .s13-h-fig { bottom: 12% !important; height: 62% !important } .s13-h-ground { bottom: 10.5% !important } .s13-h-cta { bottom: 9% !important } .s13-h-strip { height: 32px } }
+@media (prefers-reduced-motion: reduce) { .s13-h-badge svg, .s13-h-strip-track { animation: none } }
+.s13-h-feat { top: 28% !important }
+.s13-h-badge text { font-size: 8px !important; letter-spacing: 0 !important }
