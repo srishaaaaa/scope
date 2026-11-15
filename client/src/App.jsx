@@ -20,6 +20,7 @@ import Product from './pages/Product';
 import { Wishlist, CartPage, Checkout, Auth } from './pages/Shopping';
 import { Account } from './pages/Account';
 import { About, Journal, NotFound, Policy } from './pages/Static';
+import Enquiry from './pages/Enquiry';
 
 // POS is admin-only and code-split: public visitors never download it.
 // Each lazy element is created once at module level (never inside render).
@@ -112,6 +113,7 @@ export default function App() {
           <Route path="/admin/billing" element={A.pos} />
           <Route path="/admin/billing/:tab" element={A.pos} />
           <Route path="/about" element={<About />} />
+          <Route path="/enquiry" element={<Enquiry />} />
           <Route path="/journal" element={<Journal />} />
           <Route path="/privacy" element={<Policy slug="privacy" title="Privacy policy" />} />
           <Route path="/terms" element={<Policy slug="terms" title="Terms and conditions" />} />

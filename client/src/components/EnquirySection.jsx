@@ -52,7 +52,7 @@ export default function EnquirySection() {
               <label className="eq-f"><span>Your name *</span><input required value={f.name} onChange={set('name')} autoComplete="name" /></label>
               <label className="eq-f"><span>Phone *</span><input required type="tel" inputMode="tel" value={f.phone} onChange={set('phone')} autoComplete="tel" /></label>
               <label className="eq-f"><span>Email</span><input type="email" value={f.email} onChange={set('email')} autoComplete="email" /></label>
-              <label className="eq-f"><span>Which piece are you looking for?</span><input value={f.interest} onChange={set('interest')} placeholder="e.g. oversized tee, cargo pants, jacket" /></label>
+              <label className="eq-f"><span>Subject</span><input value={f.interest} onChange={set('interest')} placeholder="e.g. sizing, a piece, an order" /></label>
               <label className="eq-f wide"><span>Message</span><textarea rows="3" value={f.message} onChange={set('message')} /></label>
               <label className="eq-hp" aria-hidden="true">Website<input tabIndex="-1" autoComplete="off" value={f.website} onChange={set('website')} /></label>
             </div>

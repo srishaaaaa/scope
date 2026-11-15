@@ -67,7 +67,7 @@ function Viewer({ items, start, onClose }) {
       <button className="viewer-back" onClick={close} aria-label="Back to gallery"><Back /><span>BACK</span></button>
       {items.length > 1 && <span className="viewer-count">{i + 1} / {items.length}</span>}
       <div className="viewer-stage" key={i}>
-        {!pv ? <img src={cur.image} alt={cur.alt || 'Boutique photo'} />
+        {!pv ? <img src={cur.image} alt={cur.alt || 'SCOPE 13 photo'} />
           : pv.kind === 'file' ? <video ref={vid} src={pv.src} poster={cur.image || undefined} autoPlay loop playsInline controls />
           : <iframe src={pv.embed} title={cur.alt || 'Reel'} allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowFullScreen />}
       </div>
@@ -102,7 +102,7 @@ export default function InstagramStrip() {
             return (
               <Reveal as="li" key={t.video + i} delay={(i % 3) * 0.1}>
                 <div className="insta-tile insta-click" onClick={() => setView({ list: videos, i })} role="button" tabIndex={0} aria-label="Play reel full screen" onKeyDown={e => { if (e.key === 'Enter') setView({ list: videos, i }) }}>
-                  <Reel post={t} label={t.alt || 'Boutique video'} fallbackUrl={ig?.url} />
+                  <Reel post={t} label={t.alt || 'SCOPE 13 video'} fallbackUrl={ig?.url} />
                   {t.href && <a className="insta-open" onClick={e => e.stopPropagation()} href={t.href} target="_blank" rel="noopener noreferrer" aria-label="Open this post on Instagram">↗</a>}
                 </div>
               </Reveal>
@@ -117,7 +117,7 @@ export default function InstagramStrip() {
             return (
               <Reveal as="li" key={t.image + i} delay={(i % 3) * 0.1}>
                 <div className="insta-tile insta-click" onClick={() => setView({ list: photos, i })} role="button" tabIndex={0} aria-label="View photo full screen" onKeyDown={e => { if (e.key === 'Enter') setView({ list: photos, i }) }}>
-                  <img src={t.image} alt={t.alt || 'Boutique photo'} loading="lazy" />
+                  <img src={t.image} alt={t.alt || 'SCOPE 13 photo'} loading="lazy" />
                   {t.href && <a className="insta-open" onClick={e => e.stopPropagation()} href={t.href} target="_blank" rel="noopener noreferrer" aria-label="Open this post on Instagram">↗</a>}
                 </div>
               </Reveal>

@@ -1,0 +1,76 @@
+/* SCOPE 13 — logo colours. Steel blue, ice blue and azure are sampled from the campaign image; white stays dominant. */
+:root { --accent: #477E90; --ice: #7FAEC3; --azure: #2C7BC6; --deep: #12232C; --deep2: #1B3340 }
+::selection { background: var(--accent); color: #fff }
+:focus-visible { outline-color: var(--azure) }
+
+/* hero + type accents */
+.s13-hero::after { background: linear-gradient(90deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,.55) 28%, rgba(255,255,255,0) 50%), linear-gradient(0deg, rgba(255,255,255,.7) 0%, rgba(255,255,255,0) 10%) }
+.s13-h2 em { color: var(--accent) }
+.s13-label i, .s13-eyebrow i, .eq-label i, .cu-label i { background: var(--accent) }
+.s13-link { transition: color .3s } .s13-link:hover { color: var(--accent) }
+.s13-btn:hover { background: var(--deep2) }
+.s13-btn:hover b { background: var(--ice); color: var(--deep) }
+.site-header .nav-pill::after { background: var(--accent) }
+.site-header .primary a.active { color: var(--deep) }
+.site-header .cart-pill { background: var(--deep) } .site-header .cart-pill:hover { background: var(--accent); color: #fff }
+.site-header .cart-n, .count { background: var(--azure) !important; color: #fff !important }
+.s13-h-scroll i::after { background: var(--accent) }
+.s13-tcard-t i { border-color: var(--accent); color: var(--accent) } .s13-tcard:hover .s13-tcard-t i { background: var(--accent); color: #fff }
+.s13-tcard-no { color: var(--accent) }
+.s13-round { border-color: var(--deep) } .s13-round:hover { background: var(--deep); border-color: var(--deep) }
+.s13-feat svg { color: var(--accent) } .s13-feat:hover { background: #F1F7FA } .s13-feat-row { border-top-color: var(--accent) }
+.s13-traits li:hover, .s13-badges li:hover { background: var(--deep); border-color: var(--deep) }
+.s13-new, .s13-craft { background: #F1F6F9 }
+.pcard-add, .btn.solid, .home .btn.solid { background: var(--deep); border-color: var(--deep) } .btn.solid:hover:not(:disabled) { color: var(--deep) }
+.chip.on, .pdp-info .chip.on, .s13-active-chip, .s13-fcount, .cat-tabs button.on { background: var(--deep); border-color: var(--deep) }
+.price-row input:focus, .eq-f input:focus, .eq-f textarea:focus { border-color: var(--accent) !important }
+.eq-f:focus-within span { color: var(--accent) }
+.eq .bh-btn, .eq-msg.ok { background: var(--deep) }
+.eq-card { background: #F6F9FB }
+
+/* dark sections take the logo's deep teal-navy */
+.s13-campaign { background: var(--deep); display: block; height: auto }
+.s13-camp-grid { display: grid; grid-template-columns: 6fr 5fr; gap: clamp(28px, 6vw, 96px); align-items: center; min-height: 100svh; padding-block: clamp(80px, 9vw, 130px) }
+.s13-camp-h { margin: 0 0 24px; font: 600 clamp(44px, 7.4vw, 120px)/.92 var(--display); letter-spacing: -.055em }
+.s13-camp-copy .s13-label.light i { background: var(--ice) }
+.s13-camp-p { margin: 0 0 32px; max-width: 420px; color: rgba(255,255,255,.78); line-height: 1.65 }
+.s13-camp-frame { position: relative; inset: auto; aspect-ratio: 4 / 5; max-height: 80vh; width: 100%; max-width: 560px; justify-self: end; overflow: hidden; border-radius: 6px; box-shadow: 0 50px 90px -40px rgba(0,0,0,.7), 0 0 0 1px rgba(127,174,195,.25) }
+.s13-camp-frame img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40% }
+@media (max-width: 900px) { .s13-camp-grid { grid-template-columns: 1fr; min-height: 0 } .s13-camp-frame { justify-self: stretch; max-width: none; order: -1 } }
+.s13-talk, .s13-news { background: var(--deep) } .s13-talk .s13-label i { background: var(--ice) } .s13-talk .s13-h2 em { color: var(--ice) }
+.s13-talk .s13-btn:hover { background: var(--ice); color: var(--deep) }
+
+/* footer wordmark in logo steel */
+.s13-foot { background: #F7FAFB }
+.s13-foot .foot-mark span { background: linear-gradient(90deg, var(--black) 0%, var(--deep2) 45%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; color: transparent }
+.foot-ig svg { color: var(--accent) }
+
+/* product + gallery photography keeps its real colours */
+.media, .pcard-frame img, .cc-photo img, .s13-craft-photos img, .s13-lens .media, .s-thumb .media { filter: none !important }
+.pcard-frame { background: #EEF3F6 }
+.s13-brandpanel { position: relative; width: 100%; height: 100%; min-height: 100%; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 14px; padding: clamp(18px, 3vw, 36px); background: linear-gradient(155deg, #12232C 0%, #1B3340 58%, #477E90 130%); color: #fff }
+.s13-brandpanel .bp-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(127,174,195,.16) 1px, transparent 1px), linear-gradient(90deg, rgba(127,174,195,.16) 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(180deg, #000, transparent 90%); -webkit-mask-image: linear-gradient(180deg, #000, transparent 90%) }
+.s13-brandpanel b { position: relative; font: 700 clamp(48px, 9vw, 140px)/.82 var(--display); letter-spacing: -.06em }
+.s13-brandpanel small { position: relative; font: 600 10px/1 var(--display); letter-spacing: .3em; color: #7FAEC3 }
+.s13-h-flat .s13-brandpanel { padding-bottom: 36% }
+/* ---- fixes from visual review ---- */
+.eq, .eq-info, .eq-info h2, .eq-p, .eq-links a { color: var(--charcoal) } .eq-label { color: var(--accent) } .eq-p { color: #555; max-width: 420px; line-height: 1.65 } .eq-links svg { color: var(--accent) }
+.eq-info h2 { color: var(--black) }
+@media (max-width: 900px) {
+  .s13-h-stage { height: 46svh }
+  .s13-h-copy { padding-top: 48svh }
+  .s13-h-flat .s13-brandpanel { padding: 20px; justify-content: flex-end } .s13-h-flat .s13-brandpanel b { font-size: clamp(40px, 13vw, 72px) }
+  .s13-hero::after { background: linear-gradient(0deg, #fff 0%, rgba(255,255,255,.96) 40%, rgba(255,255,255,0) 56%) }
+}
+/* catalogue header on the shared grid */
+.cat-hero { background: transparent !important; border-radius: 0 !important; box-shadow: none !important; padding: 128px var(--pad) 26px !important; max-width: var(--max); margin: 0 auto; overflow: visible } .cat-hero::before, .cat-hero::after, .cat-hero-in::before, .cat-hero-in::after { display: none !important }
+.cat-hero h1 { font-size: clamp(40px, 6vw, 88px) !important } .cat-intro, .cat-hero .eyebrow { color: #555 }
+.cat-tabs { max-width: var(--max); margin: 0 auto; justify-content: flex-start; flex-wrap: wrap; padding: 0 var(--pad) 20px }
+.toolbar { background: rgba(255,255,255,.92) !important; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line) }
+.pgrid { max-width: var(--max); margin-inline: auto; padding-inline: var(--pad) }
+.cat-hero { border: 0 !important; width: 100%; margin-inline: auto !important; box-sizing: border-box; outline: 0 }
+.catalog .toolbar { max-width: none } .catalog .toolbar > * { }
+@media (max-width: 900px) {
+  .s13-h-grid { padding: 0 var(--pad) 70px !important }
+  .site-header .hdr { background: rgba(255,255,255,.9) !important; backdrop-filter: blur(16px); box-shadow: inset 0 0 0 1px rgba(36,36,36,.1) }
+}

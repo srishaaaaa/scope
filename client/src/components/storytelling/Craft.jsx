@@ -31,7 +31,8 @@ export default function Craft() {
   const p = catalog.featured[0];
   return (
     <section className="s13-sec s13-craft" id="craft" aria-labelledby="craft-h">
-      <Reveal className="s13-head"><p className="s13-eyebrow"><i />FABRIC &amp; CRAFTSMANSHIP</p><h2 id="craft-h" className="s13-h2">Look <em>closer.</em></h2><p className="s13-sub">Details are where a garment earns its place. Come and feel them in the boutique, or inspect them here.</p></Reveal>
+      <div className="s13-wrap">
+      <Reveal className="s13-head"><p className="s13-label"><i />FABRIC &amp; CRAFTSMANSHIP</p><h2 id="craft-h" className="s13-h2">Look <em>closer.</em></h2><p className="s13-sub">Details are where a garment earns its place. Come and feel them in store, or inspect them here.</p></Reveal>
       <div className="s13-craft-grid">
         {media.details.length > 0
           ? <div className="s13-craft-photos">{media.details.map((d, i) => <Reveal key={d.src} delay={i * 0.06}><img src={d.src} alt={d.alt} loading="lazy" /></Reveal>)}</div>
@@ -41,6 +42,7 @@ export default function Craft() {
           <ul>{LOOK_AT.map((t, i) => <li key={t}><span>{String(i + 1).padStart(2, '0')}</span>{t}</li>)}</ul>
           {p && <Link className="s13-link" to={`/product/${p.slug}`} data-cursor="VIEW">VIEW {p.name.toUpperCase()} →</Link>}
         </Reveal>
+      </div>
       </div>
     </section>
   );

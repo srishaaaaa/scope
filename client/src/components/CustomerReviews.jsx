@@ -110,8 +110,8 @@ export default function CustomerReviews() {
   return (
     <section className="reviews light-sec" aria-labelledby="rev-h">
       <Reveal className="rev-head">
-        <p className="eyebrow">OUR COMMUNITY</p>
-        <h2 id="rev-h">LOVED BEYOND THE FIRST LOOK.</h2>
+        <p className="eyebrow">CUSTOMER REVIEWS</p>
+        <h2 id="rev-h">WORN. LOVED. REPEATED.</h2>
         <div className="rev-bar">
           {data.count > 0 && <span className="rev-pill"><Stars n={Math.round(data.average)} /><strong>{data.average.toFixed(1)} / 5</strong><span className="muted">FROM {data.count} {data.onlySamples ? 'SAMPLE' : 'VERIFIED'} {data.count === 1 ? 'REVIEW' : 'REVIEWS'}</span></span>}
           <button className="btn solid pill" onClick={() => setReviewOpen(true)} data-cursor="WRITE">WRITE A REVIEW</button>

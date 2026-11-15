@@ -36,7 +36,6 @@ export function Newsletter({ id = 'nl' }) {
 
 // Oversized footer: a wordmark that slides with scroll, shop + support columns, contact, Instagram and newsletter.
 export default function LuxuryFooter() {
-  const { catalog } = useApp();
   const ref = useRef();
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] });
   const mx = useTransform(scrollYProgress, [0, 1], ['-8%', '0%']);
@@ -48,21 +47,23 @@ export default function LuxuryFooter() {
           <p className="foot-statement">{brand.promise}</p>
           <Newsletter id="ft" />
         </div>
-        <nav aria-label="Shop"><h2 className="foot-h">Shop</h2><ul>
-          <li><Link to="/shop">All Products</Link></li>
-          <li><Link to={catalog.collections.some(c => c.slug === 'new-arrivals') ? '/collections/new-arrivals' : '/shop?sort=newest'}>New Arrivals</Link></li>
-          <li><Link to="/shop?flag=best">Bestsellers</Link></li>
-          {menCategories.slice(0, 6).map(c => <li key={c}><Link to={`/search?q=${encodeURIComponent(c)}`}>{c}</Link></li>)}
+        <nav aria-label="Explore"><h2 className="foot-h">Explore</h2><ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/collections">Collections</Link></li>
+          <li><Link to="/collections/new-arrivals">New Arrivals</Link></li>
+          <li><Link to="/shop?flag=best">Best Sellers</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/enquiry">Enquiry</Link></li>
         </ul></nav>
         <nav aria-label="Customer support"><h2 className="foot-h">Support</h2><ul>
           <li><Link to="/account">My Account</Link></li>
           <li><Link to="/wishlist">Wishlist</Link></li>
           <li><Link to="/cart">Shopping Bag</Link></li>
           <li><Link to="/shipping-returns">Shipping &amp; Returns</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/#contact">Contact</Link></li>
+          <li><Link to="/privacy">Privacy</Link></li>
+          <li><Link to="/terms">Terms</Link></li>
         </ul></nav>
-        <div><h2 className="foot-h">Visit &amp; Contact</h2>
+        <div><h2 className="foot-h">Find us</h2>
           <address>{contact.address.join(', ')}</address>
           <ul>
             <li><a href={tel}>{contact.phone}</a></li>

@@ -3,12 +3,12 @@ import { brand } from '../config/content';
 
 // Built-in website wording. Anything filled in under Admin → Site text replaces the matching line.
 export const TEXT_DEFAULTS = {
-  storyTitle: 'The Boutique', story: brand.story,
+  storyTitle: 'More than what you wear.', story: brand.story,
   trendingEyebrow: 'TRENDING NOW', trendingTitle: 'TRENDING COLLECTIONS', trendingSub: 'Handpicked pieces from the SCOPE 13 collection.',
   worldEyebrow: 'COLLECTIONS', worldTitle: 'CHOOSE YOUR WORLD.',
-  instaTitle: 'INSIDE SCOPE 13', instaSub: 'Moments from the boutique and the collection. Follow @scope13.in on Instagram.',
-  contactEyebrow: 'GET IN TOUCH', contactTitle: 'ENQUIRE WITH\nSCOPE 13.', contactSub: 'Looking for a particular piece or size? Tell us what you need and we will get back to you.',
-  aboutTitle: 'MODERN MENSWEAR.\nA CLOTHING ERA.', aboutLead: brand.positioning, aboutSub: brand.promise,
+  instaTitle: 'THE SCOPE 13 FEED.', instaSub: 'A closer look at the style.',
+  contactEyebrow: 'ENQUIRIES', contactTitle: "LET'S TALK.", contactSub: 'Questions about a piece, your size or an order? Send us a message and we will get back to you.',
+  aboutTitle: 'A NEW ERA OF\nEVERYDAY STYLE.', aboutLead: brand.positioning, aboutSub: brand.promise,
 };
 
 export function useSiteText() {

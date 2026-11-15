@@ -9,6 +9,7 @@ import { ProductMedia } from '../components/ProductCard3D';
 import ServiceHighlights from '../components/ServiceHighlights';
 import { useSiteText } from '../lib/siteText';
 import StoreLocationMap from '../components/StoreLocationMap';
+import BrandPanel from '../components/home/BrandPanel';
 
 export function About() {
   const { catalog } = useApp();
@@ -32,7 +33,7 @@ export function About() {
           <div className="ab-cta"><Link className="btn solid pill" to="/shop" data-cursor="SHOP">EXPLORE COLLECTION</Link><Link className="hl-link" to="/collections" data-cursor="EXPLORE">VIEW CATEGORIES</Link></div>
         </div>
         <div className="ab-photo cut">
-          <img src="/images/scope13-logo.jpg" alt="SCOPE 13, a clothing era" />
+          <BrandPanel />
           {total > 0 && <span className="ab-chip c1"><b>{total}</b> pieces</span>}
           {cols.length > 0 && <span className="ab-chip c2"><b>{cols.length}</b> categories</span>}
         </div>
@@ -105,7 +106,7 @@ export function Policy({ slug, title }) {
       <p className="eyebrow">POLICIES</p>
       <h1 className="serif">{state.title || title}</h1>
       {state.s === 'loading' && <p className="muted">Loading…</p>}
-      {state.s === 'missing' && <p className="muted">This policy has not been published yet. Please check back soon, or contact the boutique.</p>}
+      {state.s === 'missing' && <p className="muted">This policy has not been published yet. Please check back soon, or contact SCOPE 13.</p>}
       {state.s === 'error' && <p role="alert" className="err">This page could not be loaded.</p>}
       {state.s === 'ready' && state.body.split(/\n{2,}/).map((p, i) => <p key={i}>{p}</p>)}
     </div>

@@ -61,7 +61,7 @@ function MobileMenu() {
   const { menuOpen, setMenuOpen, catalog, setSearchOpen, wish, user } = useApp();
   const ref = useRef(); const close = () => setMenuOpen(false);
   useModal(menuOpen, close, ref);
-  const links = [['Home', '/'], ['Shop', '/shop'], ['Collections', '/collections'], ['New Arrivals', '/collections/new-arrivals'], ['Lookbook', '/#lookbook'], ['About', '/about'], ['Contact', '/#contact']];
+  const links = [['Home', '/'], ['Collections', '/collections'], ['New Arrivals', '/collections/new-arrivals'], ['Best Sellers', '/shop?flag=best'], ['About', '/about'], ['Enquiry', '/enquiry']];
   return (
     <AnimatePresence>
       {menuOpen && (
@@ -90,16 +90,15 @@ function MobileMenu() {
 
 const LINKS = [
   { label: 'HOME', to: '/', on: (p, h) => p === '/' && !h },
-  { label: 'SHOP', to: '/shop', mega: 'categories', on: p => p === '/shop' || p.startsWith('/product') },
-  { label: 'COLLECTIONS', to: '/collections', mega: 'collections', on: p => p.startsWith('/collections') },
+  { label: 'COLLECTIONS', to: '/collections', mega: 'collections', on: p => p.startsWith('/collections') && p !== '/collections/new-arrivals' || p === '/shop' || p.startsWith('/product') },
   { label: 'NEW ARRIVALS', to: '/collections/new-arrivals', on: p => p === '/collections/new-arrivals' },
-  { label: 'LOOKBOOK', to: '/#lookbook', on: (p, h) => p === '/' && h === '#lookbook' },
+  { label: 'BEST SELLERS', to: '/shop?flag=best', on: (p, h, s) => p === '/shop' && /flag=best/.test(s) },
   { label: 'ABOUT', to: '/about', on: p => p === '/about' },
 ];
 
 export default function FloatingNavbar() {
   const { entered, bagCount, wish, setBagOpen, setSearchOpen, setMenuOpen, user } = useApp();
-  const { pathname, hash } = useLocation();
+  const { pathname, hash, search } = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [anchor, setAnchor] = useState(null); // x of the link the open dropdown hangs from
   const [mega, setMega] = useState(null); // which dropdown is open: 'collections' | 'categories' | null
@@ -120,7 +119,7 @@ export default function FloatingNavbar() {
           <Wordmark className="hdr-logo" />
           <nav className="primary" aria-label="Primary">
             {LINKS.map(({ label, to, mega: hasMega, on: isOn }) => {
-              const on = isOn(pathname, hash);
+              const on = isOn(pathname, hash, search);
               const link = (
                 <Link key={to} to={to} className={on ? 'active' : ''} aria-current={on ? 'page' : undefined} onMouseEnter={hasMega ? e => open(hasMega, e.currentTarget) : later} {...(hasMega ? { 'aria-haspopup': 'true', 'aria-expanded': mega === hasMega } : {})}>
                   {on && <motion.i className="nav-pill" layoutId="nav-pill" transition={{ type: 'spring', stiffness: 380, damping: 32 }} />}

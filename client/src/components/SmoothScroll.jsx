@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
 import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 // Smooth, eased scrolling for the website (mouse wheel and trackpad). Phones keep their own native scrolling,
 // and nothing changes for people who ask for reduced motion. Pop-ups (bag, search, menus, dialogs) scroll on their own,
@@ -22,12 +25,13 @@ export default function SmoothScroll() {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return; // touch screens: native scrolling
     lenis = new Lenis({ duration: 1.05, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, prevent: node => !!node.closest?.(OWN_SCROLL) });
-    let raf = requestAnimationFrame(function loop(t) { lenis?.raf(t); raf = requestAnimationFrame(loop) });
+    lenis.on('scroll', ScrollTrigger.update); // one clock: ScrollTrigger reads Lenis's position
+    const tick = t => lenis?.raf(t * 1000); gsap.ticker.add(tick); gsap.ticker.lagSmoothing(0);
     // A pop-up locks the page (body overflow hidden): pause smooth scrolling until it closes.
     const sync = () => { if (!lenis) return; document.body.style.overflow === 'hidden' ? lenis.stop() : lenis.start() };
     const mo = new MutationObserver(sync); mo.observe(document.body, { attributes: true, attributeFilter: ['style'] });
     document.documentElement.classList.add('smooth');
-    return () => { cancelAnimationFrame(raf); mo.disconnect(); lenis?.destroy(); lenis = null; document.documentElement.classList.remove('smooth') };
+    return () => { gsap.ticker.remove(tick); mo.disconnect(); lenis?.destroy(); lenis = null; document.documentElement.classList.remove('smooth') };
   }, []);
   return null;
 }
