@@ -86,7 +86,7 @@ export default function AdminShell({ title, sub, actions, children }) {
     }
   }, []);
   const { user, site } = useApp();
-  const nm = site?.store?.name || 'SCOPE 13';
+  const nm = 'SCOPE 13'; // admin chrome always carries the brand name, whatever the stored store name is
   const manager = !!user && ['owner', 'admin'].includes(user.role);
   const pages = useStaffAccess(user); const { pathname } = useLocation();
   const allNav = NAV.flatMap(g => g.items.map(i => i[0]));
@@ -96,7 +96,7 @@ export default function AdminShell({ title, sub, actions, children }) {
   return (
     <div className="dpos">
       <nav className="dpos-side" aria-label="Admin sections" ref={side} onScroll={e => { sideScroll.top = e.currentTarget.scrollTop; sideScroll.left = e.currentTarget.scrollLeft }}>
-        <Link to="/admin/billing" className="dpos-brand" aria-label={nm}><span className="wm-text"><b>{nm.split(' ')[0]}</b><i>{nm.split(' ').slice(1).join(' ') || 'Boutique'}</i></span><i className="dpos-role">{user?.role === 'inventory' ? 'STOCK' : manager ? 'ADMIN' : 'CASHIER'}</i></Link>
+        <Link to="/admin/billing" className="dpos-brand" aria-label={nm}><span className="wm-text"><b>{nm.split(' ')[0]}</b><i>{nm.split(' ').slice(1).join(' ')}</i></span><i className="dpos-role">{user?.role === 'inventory' ? 'STOCK' : manager ? 'ADMIN' : 'CASHIER'}</i></Link>
         {NAV.map(g => {
           const items = g.roles && !g.roles.includes(user?.role) ? [] : g.items.filter(i => pages ? pages.includes(i[0]) : (!i[3] || manager));
           return items.length ? (
@@ -113,7 +113,7 @@ export default function AdminShell({ title, sub, actions, children }) {
         <footer className="dpos-foot">
           <span>© {new Date().getFullYear()} ALL RIGHTS RESERVED. {nm.toUpperCase()}.</span>
           <span>POWERED BY <b>CENEXA SYSTEMS</b> ©{new Date().getFullYear()}</span>
-          <em>• Boutique &amp; Tailoring</em>
+          <em>• Contemporary Menswear</em>
         </footer>
       </main>
     </div>
