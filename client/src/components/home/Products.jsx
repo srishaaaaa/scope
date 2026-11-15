@@ -40,5 +40,5 @@ export function TrendingNow() {
 // Best sellers: only products flagged as best sellers. No invented rankings; the shelf stays out of the way if none are.
 export function Bestsellers() {
   const items = useProducts(['/products?flag=best&limit=10']);
-  return <Shelf id="best-sellers" label="BEST SELLERS" title="Most wanted" link={['/shop?flag=best', 'VIEW ALL →']} items={items} aria="best sellers" badge="BEST SELLER" ghost="BEST SELLERS" dark />;
+  return <Shelf id="best-sellers" label="BEST SELLERS" title="Most wanted" link={['/shop?flag=best', 'VIEW ALL →']} items={items} aria="best sellers" badge="BEST SELLER" ghost="BEST" />;
 }

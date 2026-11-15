@@ -457,3 +457,11 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .s13-pslide .pcard, .s13-pslide .pcard-frame, .pcard, .pcard-layer { transform: none !important; will-change: auto }
 .s13-pslide .pcard:hover .pcard-frame { transform: none !important }
 .pcard:hover { transform: none !important }
+
+/* ---- no blue bands: shelves and benefits on white / soft neutral; ghost word kept inside the grid ---- */
+.s13-shelf.dark, #best-sellers { background: #F5F5F3 !important; color: #0b0b0b }
+.s13-features { background: #fff !important }
+.s13-shelf .s13-gw { right: var(--pad); top: -.05em; font-size: clamp(60px, 9vw, 150px); -webkit-text-stroke: 1px rgba(11,11,11,.1) !important; overflow: hidden; max-width: 60% }
+.s13-shelf .s13-sh { padding-top: 6px }
+.s13-pscroll .s13-scroller-track { padding-right: var(--pad) !important }
+.s13-gw { display: none !important }
