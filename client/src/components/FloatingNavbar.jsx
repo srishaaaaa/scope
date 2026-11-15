@@ -24,7 +24,7 @@ function MegaMenu({ kind, x, onNavigate }) {
   const rows = ordered(catalog.categories, hp.categories).map(c => ({ name: c.name, to: `/shop?category=${c.slug}` }));
   const label = 'Collections';
   return (
-    <motion.div className={`mega mega-sm mega-${kind}`} style={x != null ? { left: `clamp(12px, ${Math.round(x - 270)}px, calc(100vw - 552px))` } : undefined} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
+    <motion.div className={`mega mega-sm mega-${kind}`} style={x != null ? { left: `clamp(12px, ${Math.round(x - 230)}px, calc(100vw - 482px))` } : undefined} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
       <div className="mega-in">
         <div className="mega-col">
           <p className="mega-label">{label}</p>
@@ -45,7 +45,7 @@ function MobileMenu() {
   const { menuOpen, setMenuOpen, catalog, setSearchOpen, wish, user } = useApp();
   const ref = useRef(); const close = () => setMenuOpen(false);
   useModal(menuOpen, close, ref);
-  const links = [['Home', '/'], ['Collections', '/collections'], ['New Arrivals', '/collections/new-arrivals'], ['Best Sellers', '/shop?flag=best'], ['About', '/about'], ['Enquiry', '/enquiry']];
+  const links = [['Home', '/'], ['Collections', '/shop'], ['New Arrivals', '/collections/new-arrivals'], ['Best Sellers', '/shop?flag=best'], ['About', '/about'], ['Enquiry', '/enquiry']];
   return (
     <AnimatePresence>
       {menuOpen && (
@@ -74,7 +74,7 @@ function MobileMenu() {
 
 const LINKS = [
   { label: 'HOME', to: '/', on: (p, h) => p === '/' && !h },
-  { label: 'COLLECTIONS', to: '/collections', mega: 'collections', on: p => p.startsWith('/collections') && p !== '/collections/new-arrivals' || p === '/shop' || p.startsWith('/product') },
+  { label: 'COLLECTIONS', to: '/shop', mega: 'collections', on: p => p.startsWith('/collections') && p !== '/collections/new-arrivals' || p === '/shop' || p.startsWith('/product') },
   { label: 'NEW ARRIVALS', to: '/collections/new-arrivals', on: p => p === '/collections/new-arrivals' },
   { label: 'BEST SELLERS', to: '/shop?flag=best', on: (p, h, s) => p === '/shop' && /flag=best/.test(s) },
   { label: 'ABOUT', to: '/about', on: p => p === '/about' },

@@ -35,6 +35,9 @@ export default function Catalog({ base = {}, title, eyebrow, intro, emptyNote })
   useEffect(() => { const t = setTimeout(() => load(1, false), 120); return () => clearTimeout(t) }, [key]); // eslint-disable-line
 
   const { items, total, facets: fx, status } = state;
+  const nf = count - f.category.length; // the category is already shown by the tabs; the filter button counts the rest
+  const picked = f.category.length === 1 && !base.q && !base.collection ? fx.categories.find(c => c.slug === f.category[0]) : null;
+  if (picked) { title = picked.name; intro = `${picked.name} from SCOPE 13.` }
   const loading = status === 'loading';
   return (
     <div className="catalog">
@@ -53,7 +56,7 @@ export default function Catalog({ base = {}, title, eyebrow, intro, emptyNote })
         </nav>)}
       <div className="toolbar" role="region" aria-label="Sort and view">
         <p className="muted small" aria-live="polite">{loading && !items.length ? 'Loading…' : `${total} ${total === 1 ? 'piece' : 'pieces'}`}</p>
-        <button type="button" className="btn s13-filter-btn" onClick={() => setDrawer(true)} aria-haspopup="dialog">FILTER{count > 0 ? ` (${count})` : ''}</button>
+        <button type="button" className="btn s13-filter-btn" onClick={() => setDrawer(true)} aria-haspopup="dialog">FILTER{nf > 0 ? ` (${nf})` : ''}</button>
         <div className="toolbar-r">
           <label className="sel"><span className="sr">Sort by</span>
             <select value={f.sort} onChange={e => set({ sort: e.target.value })} aria-label="Sort by">{SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select></label>
@@ -63,7 +66,7 @@ export default function Catalog({ base = {}, title, eyebrow, intro, emptyNote })
         </div>
       </div>
 
-      <ActiveFilters f={f} set={set} clear={clear} count={count} />
+      <ActiveFilters f={f} set={set} clear={clear} count={nf} />
       <FilterDrawer open={drawer} onClose={() => setDrawer(false)} f={f} set={set} clear={clear} count={count} facets={fx} total={total} />
       <LayoutGroup>
         <motion.div layout className={`pgrid cols-${f.view}`}>
