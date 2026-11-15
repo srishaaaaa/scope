@@ -353,3 +353,15 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 @media (min-width: 1800px) { .s13-foot .foot-mark span { font-size: 220px !important } }
 .adm-cover { aspect-ratio: auto !important; height: auto !important; overflow: visible !important; background: none !important }
 .adm-cover .adj-box { border-radius: 14px }
+
+/* ---- category cards: photo area is the same 3:4 shape as the admin framing preview ---- */
+:root { --hs-h: min(74vh, 640px) }
+.hs-card { justify-content: flex-start !important; height: var(--hs-h) !important; width: calc((var(--hs-h) - 112px) * .75 + 28px) !important; padding: 14px !important }
+.hs-img { position: relative !important; left: auto !important; right: auto !important; top: auto !important; bottom: auto !important; flex: none; width: 100%; aspect-ratio: 3 / 4; border-radius: 12px }
+.hs-img > span { position: absolute !important; inset: 0 !important; transform: none !important }
+.hs-no { left: 26px !important; top: 22px !important; font-size: clamp(38px, 3.6vw, 56px) !important; color: rgba(255,255,255,.92) !important; text-shadow: 0 2px 18px rgba(0,0,0,.35) }
+.hs-card.on .hs-no { color: #fff !important }
+.hs-go { right: 26px !important; top: 24px !important; background: rgba(255,255,255,.9); color: #0b0b0b; border-color: transparent }
+.hs-meta { padding: 12px 6px 0; margin-top: auto }
+.hs-meta strong { font-size: clamp(18px, 1.6vw, 24px) !important }
+@media (max-width: 900px) { .hs-card { height: auto !important; width: 70vw !important } }
