@@ -26,7 +26,7 @@ export const contact = {
 // Drop real campaign photography into client/public/images/ (or upload it in Admin → Storefront images).
 // Menswear campaign imagery has not been supplied yet, so frames stay as elegant placeholders until it is.
 export const media = {
-  heroCenter: null, heroCutout: null, heroSides: [], heroDepth: null, heroCutoutWebp: null,
+  heroCenter: null, heroCutout: '/images/hero-model.webp', heroSides: [], heroDepth: null, heroCutoutWebp: null,
   heroAlt: 'SCOPE 13 menswear campaign', storyImage: null, storyAlt: 'SCOPE 13',
   details: [],
 };

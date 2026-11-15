@@ -60,3 +60,26 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
   .s13-h-note { right: var(--pad); bottom: 5%; display: none }
 }
 @media (prefers-reduced-motion: reduce) { .s13-h-word-in, .s13-h-fig { transform: none !important } }
+.cursor { display: none !important }
+
+/* ---- search: compact panel over a dimmed page ---- */
+.overlay-root.top { display: grid !important; justify-items: center; align-items: start; padding: 76px 16px 0 !important }
+.overlay-root.top .scrim { background: rgba(16,16,16,.5) !important; backdrop-filter: blur(4px) !important; -webkit-backdrop-filter: blur(4px) !important }
+.search.glass { position: relative !important; inset: auto !important; width: min(820px, 100%) !important; max-height: calc(100vh - 110px) !important; overflow: auto; border-radius: 14px !important; background: #fff !important; padding: 0 !important; border: 1px solid rgba(36,36,36,.08) !important; box-shadow: 0 40px 90px -30px rgba(16,16,16,.55) !important }
+.search.glass::before { display: none !important }
+.search .search-bar { max-width: none !important; margin: 0 !important; padding: 12px 14px 12px 20px !important; border-bottom: 1px solid rgba(36,36,36,.12) !important; display: flex; align-items: center; gap: 8px }
+.search .search-bar input { font: 500 18px/1.3 var(--sans) !important; letter-spacing: 0 !important; padding: 10px 4px !important; color: var(--charcoal) }
+.search .search-bar input::placeholder { color: #8a8f93 !important }
+.search .search-bar .icon-btn { position: static !important; flex: none; width: 38px; height: 38px; border: 0 !important; background: rgba(36,36,36,.06) !important; font-size: 13px }
+.search .search-bar .icon-btn:hover { background: var(--deep) !important; color: #fff }
+.search-body { max-width: none !important; margin: 0 !important; padding: 16px 20px 22px !important; gap: 4px }
+.search-body > p { font-size: 13px; margin: 0 0 8px }
+.search-body .eyebrow { margin: 12px 0 8px; font: 600 10px/1 var(--display); letter-spacing: .26em; color: #7a8187 }
+.search-body .chips { gap: 8px; margin: 0 0 6px }
+.search-body .chip { min-height: 34px; padding: 7px 14px; font: 500 12.5px/1 var(--sans); letter-spacing: 0; text-transform: none; border-radius: 999px; border-color: rgba(36,36,36,.18) }
+.search-body .chip:hover { background: var(--deep); color: #fff; border-color: var(--deep) }
+.s-item { padding: 10px 8px !important }
+.s-item:hover, .s-item.on { background: #F1F6F9 !important; padding-left: 12px !important }
+.s-thumb { width: 48px !important }
+.s-text .serif { font: 500 15px/1.25 var(--sans) !important; letter-spacing: 0 !important }
+@media (max-width: 700px) { .overlay-root.top { padding-top: 64px !important } .search .search-bar input { font-size: 16px !important } }

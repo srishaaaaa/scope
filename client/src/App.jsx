@@ -14,7 +14,6 @@ import QuickView from './components/QuickView';
 import PageTransition from './components/PageTransition';
 import Home from './pages/Home';
 import SmoothScroll from './components/SmoothScroll';
-import Cursor from './components/Cursor';
 import { Shop, Collections, CollectionPage, Search } from './pages/Browse';
 import Product from './pages/Product';
 import { Wishlist, CartPage, Checkout, Auth } from './pages/Shopping';
@@ -73,7 +72,6 @@ export default function App() {
       <AnimatePresence>{!entered && site && <Intro key="intro" onDone={enter} />}</AnimatePresence>
       {site && <FloatingNavbar />}
       {site && <SmoothScroll />}
-      {site && <Cursor />}
       <PageTransition>
         <Routes location={location}>
           <Route path="/" element={<Home />} />

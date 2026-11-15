@@ -5,6 +5,7 @@ import { useApp } from '../../context/App';
 import { useFinePointer, useReduced } from '../../lib/hooks';
 import { Magnetic } from '../Motion';
 import FigurePlaceholder from '../home/FigurePlaceholder';
+import { media } from '../../config/content';
 
 const EASE = [0.22, 1, 0.36, 1];
 const WORD = ['S', 'C', 'O', 'P', 'E', ' ', '1', '3'];
@@ -16,7 +17,7 @@ const WORD = ['S', 'C', 'O', 'P', 'E', ' ', '1', '3'];
 // ordinary photo on a light background is blended into it), else a product photo, else a neutral placeholder figure.
 export default function ScopeHero() {
   const { entered, site, catalog } = useApp();
-  const photo = site.branding?.heroModel || catalog.featured.find(p => p.image)?.image || null;
+  const photo = site.branding?.heroModel || media.heroCutout || catalog.featured.find(p => p.image)?.image || null;
   const cutout = !!photo && /\.(png|webp|avif)(\?|#|$)/i.test(photo);
   const reduced = useReduced(), fine = useFinePointer();
   const ref = useRef();

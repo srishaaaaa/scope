@@ -45,7 +45,7 @@ function MobileMenu() {
   const { menuOpen, setMenuOpen, catalog, setSearchOpen, wish, user } = useApp();
   const ref = useRef(); const close = () => setMenuOpen(false);
   useModal(menuOpen, close, ref);
-  const links = [['Home', '/'], ['Collections', '/shop'], ['New Arrivals', '/collections/new-arrivals'], ['Best Sellers', '/shop?flag=best'], ['About', '/about'], ['Enquiry', '/enquiry']];
+  const links = [['Home', '/'], ['Collections', '/shop'], ['About', '/about'], ['Contact', '/enquiry']];
   return (
     <AnimatePresence>
       {menuOpen && (
@@ -74,10 +74,9 @@ function MobileMenu() {
 
 const LINKS = [
   { label: 'HOME', to: '/', on: (p, h) => p === '/' && !h },
-  { label: 'COLLECTIONS', to: '/shop', mega: 'collections', on: p => p.startsWith('/collections') && p !== '/collections/new-arrivals' || p === '/shop' || p.startsWith('/product') },
-  { label: 'NEW ARRIVALS', to: '/collections/new-arrivals', on: p => p === '/collections/new-arrivals' },
-  { label: 'BEST SELLERS', to: '/shop?flag=best', on: (p, h, s) => p === '/shop' && /flag=best/.test(s) },
+  { label: 'COLLECTIONS', to: '/shop', mega: 'collections', on: p => p.startsWith('/collections') || p === '/shop' || p.startsWith('/product') },
   { label: 'ABOUT', to: '/about', on: p => p === '/about' },
+  { label: 'CONTACT', to: '/enquiry', on: p => p === '/enquiry' },
 ];
 
 export default function FloatingNavbar() {
