@@ -15,3 +15,14 @@ export function coverStyle(pos) {
   const { x, y, z } = decodePos(pos);
   return { objectFit: 'cover', objectPosition: `${x}% ${y}%`, transformOrigin: `${x}% ${y}%`, transform: z > 1 ? `scale(${z})` : undefined };
 }
+
+// Reels and gallery photos have no framing field in the API, so the framing rides at the end of the description text
+// ("Alt text ¦50% 220%") and is split off again before display. Descriptions without it read as unframed.
+const SEP = ' ¦';
+export function splitAlt(alt) {
+  const i = (alt || '').lastIndexOf(SEP);
+  if (i < 0) return { alt: alt || '', pos: null };
+  const pos = alt.slice(i + SEP.length);
+  return /^\d{1,3}% \d{1,3}%$/.test(pos) ? { alt: alt.slice(0, i), pos } : { alt: alt, pos: null };
+}
+export const joinAlt = (alt, pos) => (pos ? `${(alt || '').slice(0, 160 - SEP.length - pos.length)}${SEP}${pos}` : (alt || ''));

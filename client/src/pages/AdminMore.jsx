@@ -1,3 +1,5 @@
+import ImageAdjust from '../components/ImageAdjust';
+import { splitAlt, joinAlt } from '../lib/imgPos';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useApp } from '../context/App';
@@ -172,6 +174,8 @@ export function AdminReels() {
     setBusy('link'); setErr();
     try { await save({ ...lists, video: [...lists.video, { video: url, alt: 'Boutique reel' }] }); setLink(''); toast('Reel added.') } catch (e) { setErr(e.message) } finally { setBusy(null) }
   };
+  const frame = (kind, i, pos) => run2(kind + i, async () => { const cur = lists[kind]; await save({ ...lists, [kind]: cur.map((p, n) => n === i ? { ...p, alt: joinAlt(splitAlt(p.alt).alt, pos) } : p) }); toast(pos ? 'Framing saved.' : 'Framing reset.') });
+  const run2 = async (key, fn) => { setBusy(key); setErr(); try { await fn() } catch (e) { setErr(e.message) } finally { setBusy(null) } };
   const pick = (kind, i) => { target.current = { kind, i }; input.current.accept = kind === 'video' ? 'video/mp4,video/webm' : 'image/jpeg,image/png,image/webp'; input.current.click() };
   const grid = (kind, max, noun) => {
     const cur = lists[kind];
@@ -183,6 +187,7 @@ export function AdminReels() {
             <section className="dpos-reel" key={key}>
               <header><span>{noun.toUpperCase()} {i + 1}</span>{live && <span className="dpos-live">LIVE</span>}</header>
               <div className="media">{!s ? 'Loading…' : p?.video ? (isEmbed(p.video) ? <iframe src={parseVideo(p.video).embed.replace('autoplay=1', 'autoplay=0')} title={`Reel ${i + 1}`} allowFullScreen /> : <video src={p.video} muted loop playsInline controls preload="metadata" />) : p?.image ? <img src={p.image} alt={p.alt || `${noun} ${i + 1}`} /> : <span>{canAdd ? `Empty — add a ${noun.toLowerCase()}` : `Fill ${noun.toLowerCase()} ${cur.length + 1} first`}</span>}</div>
+              {live && !(p.video && isEmbed(p.video)) && <div className="dpos-adj"><ImageAdjust src={p.image || null} video={p.video && !isEmbed(p.video) ? p.video : null} pos={splitAlt(p.alt).pos} aspect={kind === 'video' ? 9 / 16 : 4 / 5} busy={busy !== null} onChange={v => frame(kind, i, v)} /></div>}
               <footer>
                 <button className="dpos-btn ghost sm" disabled={busy !== null || !canAdd || !s} onClick={() => pick(kind, i)}>{busy === key ? 'Uploading…' : live ? '↻ Replace' : '+ Upload'}</button>
                 {live && <a className="dpos-btn ghost sm" href={p.video || p.image} target="_blank" rel="noopener noreferrer" aria-label="Preview"><Icon n="eye" size={14} /></a>}

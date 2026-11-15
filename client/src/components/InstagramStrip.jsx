@@ -1,3 +1,4 @@
+import { coverStyle, splitAlt } from '../lib/imgPos';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
@@ -27,13 +28,13 @@ function Reel({ post, label, fallbackUrl }) {
     return () => { io.disconnect(); removeEventListener('dhanya:viewer', lock) };
   }, [reduced]);
   if (failed) {
-    if (post.image) return <img src={post.image} alt={label} loading="lazy" />;
+    if (post.image) return <img src={post.image} alt={label} loading="lazy" style={coverStyle(splitAlt(post.alt).pos)} />;
     const url = post.href || fallbackUrl;
     return <div className="reel-fail"><p>This video could not be loaded.</p>{url && <a className="btn solid pill" href={url} target="_blank" rel="noopener noreferrer">WATCH ON INSTAGRAM ↗</a>}</div>;
   }
   return (
     <>
-      <video ref={v} src={post.video} poster={post.image || undefined} muted={muted} loop playsInline preload="auto" controls={reduced} aria-label={label} onError={() => setFailed(true)} />
+      <video style={coverStyle(splitAlt(post.alt).pos)} ref={v} src={post.video} poster={post.image || undefined} muted={muted} loop playsInline preload="auto" controls={reduced} aria-label={label} onError={() => setFailed(true)} />
       {!reduced && <button className="reel-mute" onClick={e => { e.stopPropagation(); const next = !muted; setMuted(next); if (v.current) { v.current.muted = next; v.current.play().catch(() => {}) } }} aria-pressed={!muted} aria-label={muted ? 'Turn sound on' : 'Mute'}><Speaker off={muted} /></button>}
     </>
   );
@@ -67,9 +68,9 @@ function Viewer({ items, start, onClose }) {
       <button className="viewer-back" onClick={close} aria-label="Back to gallery"><Back /><span>BACK</span></button>
       {items.length > 1 && <span className="viewer-count">{i + 1} / {items.length}</span>}
       <div className="viewer-stage" key={i}>
-        {!pv ? <img src={cur.image} alt={cur.alt || 'SCOPE 13 photo'} />
+        {!pv ? <img src={cur.image} alt={splitAlt(cur.alt).alt || 'SCOPE 13 photo'} />
           : pv.kind === 'file' ? <video ref={vid} src={pv.src} poster={cur.image || undefined} autoPlay loop playsInline controls />
-          : <iframe src={pv.embed} title={cur.alt || 'Reel'} allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowFullScreen />}
+          : <iframe src={pv.embed} title={splitAlt(cur.alt).alt || 'Reel'} allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowFullScreen />}
       </div>
       {i > 0 && <button className="viewer-nav prev" onClick={() => setI(i - 1)} aria-label="Previous">‹</button>}
       {i < items.length - 1 && <button className="viewer-nav next" onClick={() => setI(i + 1)} aria-label="Next">›</button>}
@@ -102,7 +103,7 @@ export default function InstagramStrip() {
             return (
               <Reveal as="li" key={t.video + i} delay={(i % 3) * 0.1}>
                 <div className="insta-tile insta-click" onClick={() => setView({ list: videos, i })} role="button" tabIndex={0} aria-label="Play reel full screen" onKeyDown={e => { if (e.key === 'Enter') setView({ list: videos, i }) }}>
-                  <Reel post={t} label={t.alt || 'SCOPE 13 video'} fallbackUrl={ig?.url} />
+                  <Reel post={t} label={splitAlt(t.alt).alt || 'SCOPE 13 video'} fallbackUrl={ig?.url} />
                   {t.href && <a className="insta-open" onClick={e => e.stopPropagation()} href={t.href} target="_blank" rel="noopener noreferrer" aria-label="Open this post on Instagram">↗</a>}
                 </div>
               </Reveal>
@@ -117,7 +118,7 @@ export default function InstagramStrip() {
             return (
               <Reveal as="li" key={t.image + i} delay={(i % 3) * 0.1}>
                 <div className="insta-tile insta-click" onClick={() => setView({ list: photos, i })} role="button" tabIndex={0} aria-label="View photo full screen" onKeyDown={e => { if (e.key === 'Enter') setView({ list: photos, i }) }}>
-                  <img src={t.image} alt={t.alt || 'SCOPE 13 photo'} loading="lazy" />
+                  <img src={t.image} alt={splitAlt(t.alt).alt || 'SCOPE 13 photo'} loading="lazy" style={coverStyle(splitAlt(t.alt).pos)} />
                   {t.href && <a className="insta-open" onClick={e => e.stopPropagation()} href={t.href} target="_blank" rel="noopener noreferrer" aria-label="Open this post on Instagram">↗</a>}
                 </div>
               </Reveal>

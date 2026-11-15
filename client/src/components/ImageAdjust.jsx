@@ -4,7 +4,7 @@ import { decodePos, encodePos, coverStyle, ZOOMS } from '../lib/imgPos';
 // Admin image framing: a preview in the shape it is shown on the site. Click (or drag) to choose which part stays in
 // view, and use the zoom slider to crop in. `fit="contain"` previews cut-out figures (hero model) instead of cropping.
 // The preview updates instantly while you adjust; the value is saved once, a moment after you stop (one request, one toast).
-export default function ImageAdjust({ src, pos, aspect = 3 / 4, fit = 'cover', onChange, busy }) {
+export default function ImageAdjust({ src, video, pos, aspect = 3 / 4, fit = 'cover', onChange, busy }) {
   const [local, setLocal] = useState(pos || null);
   const timer = useRef(), pending = useRef(false), latest = useRef(onChange);
   latest.current = onChange;
@@ -25,7 +25,7 @@ export default function ImageAdjust({ src, pos, aspect = 3 / 4, fit = 'cover', o
   return (
     <div className="adj">
       <div className="adj-box" style={{ aspectRatio: String(aspect) }} onPointerDown={e => { e.currentTarget.setPointerCapture?.(e.pointerId); pick(e) }} onPointerMove={e => e.buttons === 1 && pick(e)} role="img" aria-label="Preview. Click to choose the part of the photo that stays in view.">
-        <img src={src} alt="" draggable={false} style={fit === 'cover' ? coverStyle(local) : { objectFit: 'contain', objectPosition: 'center bottom', transformOrigin: `${d.x}% 100%`, transform: d.z > 1 ? `scale(${d.z})` : undefined }} />
+        {video ? <video src={video} poster={src || undefined} muted playsInline preload="metadata" style={coverStyle(local)} /> : <img src={src} alt="" draggable={false} style={fit === 'cover' ? coverStyle(local) : { objectFit: 'contain', objectPosition: 'center bottom', transformOrigin: `${d.x}% 100%`, transform: d.z > 1 ? `scale(${d.z})` : undefined }} />}
         <span className="adj-dot" style={{ left: `${d.x}%`, top: `${d.y}%` }} aria-hidden="true" />
       </div>
       <label className="adj-zoom"><span>Zoom <b>{d.z.toFixed(1)}×</b></span>

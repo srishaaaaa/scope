@@ -496,3 +496,6 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .adm-sf .adm-cover { aspect-ratio: auto; display: block; background: none }
 @media (max-width: 1100px) { .adm-sf .adm-slots { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
 @media (max-width: 700px) { .adm-sf .adm-slots { grid-template-columns: 1fr } }
+
+/* ---- reels / gallery framing controls in the admin ---- */
+.dpos-adj { padding: 10px 12px 2px } .dpos-adj .adj-box { max-height: 300px } .dpos-adj .adj-row .muted { display: none }
