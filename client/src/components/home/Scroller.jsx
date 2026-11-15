@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 // card. It never captures the wheel, so vertical page scrolling is never fought.
 export default function Scroller({ children, className = '', label, arrows = true }) {
   const ref = useRef();
-  const [edge, setEdge] = useState({ start: true, end: false });
+  const [edge, setEdge] = useState({ start: true, end: false, can: false });
   useEffect(() => {
     const el = ref.current; if (!el) return;
     let down = false, moved = false, sx = 0, sl = 0;
-    const upd = () => setEdge({ start: el.scrollLeft < 4, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 4 });
+    const upd = () => setEdge({ start: el.scrollLeft < 4, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 4, can: el.scrollWidth > el.clientWidth + 8 });
     const pd = e => { if (e.pointerType !== 'mouse' || e.button !== 0) return; down = true; moved = false; sx = e.clientX; sl = el.scrollLeft };
     const pm = e => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 5) { moved = true; el.classList.add('drag') } if (moved) el.scrollLeft = sl - dx };
     const pu = () => { down = false; el.classList.remove('drag') };
@@ -22,7 +22,7 @@ export default function Scroller({ children, className = '', label, arrows = tru
   return (
     <div className={`s13-scroller ${className}`}>
       <div className="s13-scroller-track" ref={ref} tabIndex={0} role="region" aria-label={label}>{children}</div>
-      {arrows && (
+      {arrows && edge.can && (
         <div className="s13-scroller-ctl">
           <button className="s13-round" onClick={() => go(-1)} disabled={edge.start} aria-label={`Previous ${label || 'items'}`}>←</button>
           <button className="s13-round" onClick={() => go(1)} disabled={edge.end} aria-label={`Next ${label || 'items'}`}>→</button>

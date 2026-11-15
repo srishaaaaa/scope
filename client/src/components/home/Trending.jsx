@@ -1,49 +1,45 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { apiRetry } from '../../lib/api';
-import { Reveal } from '../Motion';
 import { ProductMedia } from '../ProductCard3D';
-import Scroller from './Scroller';
+import SectionHead from './SectionHead';
 
-// Trending collections. Each links to the real catalogue filtered by category slugs, and its photography is the lead
-// pieces of that category (never invented). Cards use different compositions so the strip has an editorial rhythm.
-const COLS = [
-  ['Oversized Tees', 'oversized-t-shirts', 'tall'], ['Casual Shirts', 'casual-shirts', 'wide'], ['Streetwear', 'hoodies,jackets,cargo-pants', 'sq'],
-  ['Everyday Essentials', 't-shirts,polo-t-shirts', 'tall'], ['Co-ord Sets', 'co-ord-sets', 'wide'], ['Premium Bottomwear', 'jeans,trousers', 'sq'],
+// Shop by category: six portrait tiles. Each links to the real catalogue (category slugs), and its photograph is the lead
+// piece of that category, so the tiles always match what is in stock.
+const TILES = [
+  ['New Arrivals', '/collections/new-arrivals', '/products?sort=newest&limit=1'],
+  ['Shirts', '/shop?category=shirts,casual-shirts,formal-shirts', '/products?category=shirts,casual-shirts,formal-shirts&limit=1'],
+  ['Pants', '/shop?category=jeans,trousers,cargo-pants', '/products?category=jeans,trousers,cargo-pants&limit=1'],
+  ['Outerwear', '/shop?category=jackets,hoodies', '/products?category=jackets,hoodies&limit=1'],
+  ['T-Shirts', '/shop?category=t-shirts,oversized-t-shirts,polo-t-shirts', '/products?category=t-shirts,oversized-t-shirts,polo-t-shirts&limit=1'],
+  ['Co-ord Sets', '/shop?category=co-ord-sets', '/products?category=co-ord-sets&limit=1'],
 ];
 
-export default function Trending() {
-  const [data, setData] = useState({});
+export default function ShopCategories() {
+  const [lead, setLead] = useState({});
   useEffect(() => {
     let dead = false;
-    Promise.all(COLS.map(([, cat]) => apiRetry(`/products?category=${cat}&limit=2`).catch(() => ({ items: [], total: 0 }))))
-      .then(r => !dead && setData(Object.fromEntries(COLS.map(([n], i) => [n, r[i]]))));
+    Promise.all(TILES.map(([, , q]) => apiRetry(q).then(d => d.items?.[0] || null).catch(() => null)))
+      .then(r => !dead && setLead(Object.fromEntries(TILES.map(([n], i) => [n, r[i]]))));
     return () => { dead = true };
   }, []);
   return (
-    <section className="s13-sec s13-trend" id="trending" aria-labelledby="trend-h">
+    <section className="s13-sec s13-cats" id="categories" aria-labelledby="cats-h">
       <div className="s13-wrap">
-        <Reveal className="s13-head s13-head-row">
-          <div><p className="s13-label"><i />TRENDING NOW</p><h2 id="trend-h" className="s13-h2">What everyone is <em>wearing.</em></h2></div>
-          <Link className="s13-link" to="/collections" data-cursor="VIEW">VIEW ALL COLLECTIONS →</Link>
-        </Reveal>
+        <SectionHead id="cats-h" center label="SHOP BY CATEGORY" title="Explore our collections" />
+        <ul className="s13-cat-grid">
+          {TILES.map(([name, to], i) => (
+            <motion.li key={name} initial={{ opacity: 0, y: 26 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '0px 0px -8% 0px' }} transition={{ duration: 0.8, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}>
+              <Link to={to} className="s13-cat" data-cursor="SHOP">
+                <span className="s13-cat-img"><ProductMedia p={lead[name] || { slug: name, name }} /></span>
+                <strong>{name}</strong>
+                <em>Shop now <i aria-hidden="true">→</i></em>
+              </Link>
+            </motion.li>
+          ))}
+        </ul>
       </div>
-      <Scroller className="s13-trend-scroll" label="trending collections">
-        {COLS.map(([name, cat, tone], i) => {
-          const d = data[name] || { items: [], total: 0 };
-          const [a, b] = d.items;
-          return (
-            <Link key={name} to={`/shop?category=${cat}`} className={`s13-tcard ${tone}`} draggable={false} data-cursor="SHOP">
-              <span className="s13-tcard-img">
-                <span className="a"><ProductMedia p={a || { slug: name, name }} view={0} /></span>
-                <span className="b"><ProductMedia p={b || a || { slug: name + 'b', name }} view={1} /></span>
-              </span>
-              <span className="s13-tcard-no">{String(i + 1).padStart(2, '0')}</span>
-              <span className="s13-tcard-t"><strong>{name}</strong><em>{d.total ? `${d.total} ${d.total === 1 ? 'piece' : 'pieces'}` : 'Explore'}</em><i aria-hidden="true">↗</i></span>
-            </Link>
-          );
-        })}
-      </Scroller>
     </section>
   );
 }

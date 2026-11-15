@@ -26,7 +26,7 @@ export default function StoreLocationMap() {
   if (site.status === 'loading') return null;
   if (site.status === 'error') return (
     <section className="studio ivory-sec" aria-labelledby="st-h"><div className="studio-card"><div className="studio-info">
-      <p className="eyebrow">VISIT THE STORE</p><h2 id="st-h" className="serif">FIND<br />US.</h2>
+      <p className="eyebrow">VISIT THE STORE</p><h2 id="st-h" className="serif">FIND US.</h2>
       <p role="alert" className="muted">The store location could not be loaded right now.</p>
       <button className="btn solid pill" onClick={loadSite}>TRY AGAIN</button></div><div className="studio-map"><div className="map-placeholder" aria-hidden="true"><Emblem size={120} /></div></div></div></section>
   );
@@ -38,7 +38,7 @@ export default function StoreLocationMap() {
       <div className="studio-card">
         <Reveal className="studio-info">
           <p className="eyebrow">VISIT THE STORE</p>
-          <h2 id="st-h" className="serif">FIND<br />US.</h2>
+          <h2 id="st-h" className="serif">FIND US.</h2>
           <p className="studio-lead">Experience {store?.name || 'SCOPE 13'} in person. Explore the collections and find the pieces that suit you.</p>
           {configured ? (
             <>

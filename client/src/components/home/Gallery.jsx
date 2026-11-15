@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useApp } from '../../context/App';
 import { Reveal } from '../Motion';
+import SectionHead from './SectionHead';
 import { ProductMedia } from '../ProductCard3D';
 import { useModal } from '../../lib/hooks';
 
@@ -37,7 +38,7 @@ export default function Gallery() {
   return (
     <section className="s13-sec s13-gallery" id="gallery" aria-labelledby="gal-h">
       <div className="s13-wrap">
-        <Reveal className="s13-head"><p className="s13-label"><i />EDITORIAL</p><h2 id="gal-h" className="s13-h2">Style, <em>in frame.</em></h2></Reveal>
+        <SectionHead id="gal-h" center label="IMAGE GALLERY" title="Style, in frame" />
         <div className="s13-gal-grid">
           {items.map((it, i) => (
             <Reveal key={i} className={`s13-gal ${SPANS[i % SPANS.length]}`} delay={(i % 3) * 0.07}>

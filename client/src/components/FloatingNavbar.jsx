@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useApp } from '../context/App';
 import { useModal, useReduced } from '../lib/hooks';
 import Wordmark from './Wordmark';
+import AnnouncementBar from './AnnouncementBar';
 import ProductArt from './ProductArt';
 import { ProductMedia } from './ProductCard3D';
 import { inr } from '../lib/format';
@@ -114,6 +115,7 @@ export default function FloatingNavbar() {
     <>
       <motion.header className={`site-header ${scrolled ? 'compact' : ''}`} initial={{ opacity: 0, y: -24 }} animate={entered ? { opacity: 1, y: 0 } : { opacity: 0, y: -24 }} transition={{ duration: 0.9, delay: entered ? 0.2 : 0, ease: [0.22, 1, 0.36, 1] }}
         onMouseLeave={later} onMouseEnter={() => mega && open(mega)}>
+        <AnnouncementBar />
         <div className="hdr">
           <button className="icon-btn burger" onClick={() => setMenuOpen(true)} aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.4" fill="none" aria-hidden="true"><path d="M3 8h18M3 16h18" /></svg></button>
           <Wordmark className="hdr-logo" />

@@ -42,10 +42,11 @@ export default function LuxuryFooter() {
   const tel = `tel:${contact.phone}`;
   return (
     <footer className="site-footer s13-foot" ref={ref}>
+      <div className="s13-foot-news"><div className="s13-wrap s13-foot-news-in"><div><p className="s13-label light"><i />NEWSLETTER</p><h2>Join the SCOPE 13 community</h2></div><Newsletter id="ft" /></div></div>
       <div className="foot-grid">
         <div className="foot-brandcol">
+          <p className="foot-wordmark">SCOPE 13</p>
           <p className="foot-statement">{brand.promise}</p>
-          <Newsletter id="ft" />
         </div>
         <nav aria-label="Explore"><h2 className="foot-h">Explore</h2><ul>
           <li><Link to="/">Home</Link></li>

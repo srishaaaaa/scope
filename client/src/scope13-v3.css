@@ -1,0 +1,153 @@
+/* ==========================================================================
+   SCOPE 13 v3 — storefront layout in the manner of a classic premium menswear shop:
+   announcement bar, flat white header, dark full-bleed hero, tidy 5-up product shelves, portrait category tiles,
+   benefits strip, story split, dark footer. Everything on one 1320px grid. Loaded last.
+   ========================================================================== */
+:root { --serif-d: 'Cormorant Garamond', Georgia, serif; --ann: 38px; --hdr: 72px; --rhythm: clamp(56px, 6.5vw, 96px); --gap: clamp(12px, 1.4vw, 20px) }
+
+/* ---- headings: small caps label over a serif title ---- */
+.s13-h2 { font: 600 clamp(32px, 3.6vw, 50px)/1.1 var(--serif-d); letter-spacing: 0 }
+.s13-h2 em { font-style: italic; font-weight: 500; color: var(--accent) }
+.s13-sh { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(24px, 3vw, 40px) }
+.s13-sh .s13-label { margin: 0 0 10px; font-size: 10.5px; letter-spacing: .3em }
+.s13-sh.c { flex-direction: column; align-items: center; text-align: center; justify-content: center } .s13-sh.c .s13-sub { margin-inline: auto }
+.s13-link { font: 600 11px/1 var(--display); letter-spacing: .2em }
+.s13-solid, .s13-ghost { display: inline-flex; align-items: center; justify-content: center; padding: 16px 30px; font: 600 11px/1 var(--display); letter-spacing: .18em; text-transform: uppercase; border: 1px solid transparent; transition: background .35s var(--ease), color .35s var(--ease), border-color .35s, transform .35s var(--ease) }
+.s13-solid { background: #fff; color: var(--deep) } .s13-solid:hover { background: var(--ice); transform: translateY(-2px) }
+.s13-ghost { color: #fff; border-color: rgba(255,255,255,.55) } .s13-ghost:hover { background: #fff; color: var(--deep); border-color: #fff }
+
+/* ---- announcement bar + flat white header ---- */
+.s13-ann { background: var(--deep); color: #fff; font: 500 10.5px/1 var(--display); letter-spacing: .16em; text-transform: uppercase; height: var(--ann); overflow: hidden; transition: height .45s var(--ease) }
+.s13-ann-in { max-width: var(--max); margin: 0 auto; padding-inline: var(--pad); height: var(--ann); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center }
+.s13-ann-c { text-align: center } .s13-ann-r { justify-self: end; display: flex; gap: 22px } .s13-ann a { transition: color .3s } .s13-ann a:hover { color: var(--ice) }
+.site-header.compact .s13-ann { height: 0 }
+.site-header, .site-header.solid { padding: 0 !important; background: #fff !important; box-shadow: 0 1px 0 rgba(36,36,36,.08) !important; backdrop-filter: none !important }
+.site-header.compact { box-shadow: 0 10px 30px -18px rgba(16,16,16,.35) !important }
+.site-header .hdr { max-width: var(--max) !important; width: 100%; margin: 0 auto !important; height: var(--hdr); padding: 0 var(--pad) !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; transform: none !important; grid-template-columns: auto 1fr auto; gap: 28px }
+.site-header .hdr::before, .site-header .hdr::after { display: none !important }
+.site-header .wm-logo { width: 40px; height: 40px }
+.site-header .primary { justify-self: center; gap: 4px } .site-header .primary a { padding: 12px 16px; font-size: 11px; letter-spacing: .16em; border-radius: 0; background: transparent !important; color: var(--charcoal); opacity: .85 }
+.site-header .primary a:hover, .site-header .primary a.active { opacity: 1; color: var(--deep) }
+.site-header .nav-pill { inset: auto 16px 6px 16px !important; height: 1px !important; border-radius: 0 !important; background: var(--deep) !important; box-shadow: none !important } .site-header .nav-pill::after { display: none }
+.site-header .tools-pill { background: transparent !important; box-shadow: none !important; padding: 0; gap: 2px }
+.site-header .sep, .site-header .tool span, .site-header .cart-pill span { display: none }
+.site-header .tool, .site-header .cart-pill { position: relative; width: 44px; height: 44px; padding: 0; justify-content: center; border-radius: 50%; background: transparent !important; box-shadow: none !important; color: var(--charcoal) !important; overflow: visible }
+.site-header .tool:hover, .site-header .cart-pill:hover { background: rgba(36,36,36,.06) !important; transform: none }
+.site-header .cart-pill::after { display: none }
+.site-header .tool svg, .site-header .cart-pill svg { width: 21px; height: 21px }
+.site-header .count, .site-header .cart-n { position: absolute; top: 4px; right: 2px; min-width: 17px; height: 17px; border-radius: 9px; padding: 0 4px; font: 600 10px/17px var(--sans); text-align: center }
+.site-header .burger { box-shadow: none !important; background: transparent !important }
+@media (max-width: 900px) { .s13-ann-in { grid-template-columns: 1fr } .site-header .hdr { gap: 8px; --hdr: 64px } }
+
+/* ---- hero ---- */
+.s13-home { padding-top: calc(var(--ann) + var(--hdr)) }
+.s13-hero { position: relative !important; top: auto; z-index: auto; height: clamp(480px, 44vw, 700px) !important; min-height: 0 !important; background: var(--deep); color: #fff; overflow: hidden }
+.s13-hero::after { display: none !important }
+.s13-h-media { position: absolute; inset: 0 0 0 auto; width: 64%; overflow: hidden }
+.s13-h-img { position: absolute; inset: -2%; will-change: transform } .s13-h-img img { width: 100%; height: 100%; object-fit: cover; display: block }
+.s13-h-fade { position: absolute; inset: 0; background: linear-gradient(90deg, var(--deep) 0%, rgba(18,35,44,.78) 18%, rgba(18,35,44,0) 55%), linear-gradient(0deg, rgba(18,35,44,.5), transparent 30%) }
+.s13-h-grid { position: relative; z-index: 2; height: 100%; display: flex !important; align-items: center; padding-top: 0 !important }
+.s13-h-copy { max-width: 480px !important; will-change: auto }
+.s13-hero .s13-label { color: var(--ice) } .s13-hero .s13-label i { background: var(--ice) }
+.s13-h-title { font: 500 clamp(38px, 4.8vw, 72px)/1.02 var(--display) !important; letter-spacing: -.035em !important; margin: 0 0 22px !important; color: #fff; background: none !important; -webkit-text-fill-color: #fff }
+.s13-h-desc { max-width: 360px !important; margin: 0 0 30px !important; color: rgba(255,255,255,.82) !important; font-size: clamp(14px, 1.1vw, 16px) }
+.s13-h-cta { display: flex; flex-wrap: wrap; gap: 14px }
+.s13-brandpanel.big { position: absolute; inset: 0; width: 100%; height: 100%; align-items: flex-end; justify-content: center; padding: 0 6% 0 0; background: linear-gradient(120deg, #12232C 0%, #1B3340 50%, #2a5566 120%) }
+.s13-brandpanel.big b { font-size: clamp(160px, 24vw, 380px); color: rgba(127,174,195,.2); text-align: right; line-height: .78; margin-bottom: -2%; letter-spacing: -.07em } .s13-brandpanel.big small { display: none }
+@media (max-width: 900px) {
+  .s13-hero { height: auto !important }
+  .s13-h-media { position: relative; inset: auto; width: 100%; height: 66vw; min-height: 240px }
+  .s13-h-fade { background: linear-gradient(0deg, var(--deep) 0%, rgba(18,35,44,0) 60%) }
+  .s13-h-grid { display: block !important; padding-block: 8px 44px !important } .s13-h-copy { max-width: 100% !important }
+  .s13-h-title { font-size: clamp(36px, 11vw, 56px) !important }
+}
+
+/* ---- flow + rhythm ---- */
+.s13-flow { border-radius: 0 !important; box-shadow: none !important; margin: 0 !important; background: #fff }
+.s13-sec { padding: var(--rhythm) 0 }
+#best-sellers, .reviews.light-sec, .studio.ivory-sec { background: #F5F8FA }
+.s13-flow > section:not(.s13-features):not(.s13-sec) { padding-block: var(--rhythm) }
+
+/* ---- product shelves: five across on desktop ---- */
+.s13-shelf { padding-top: var(--rhythm); padding-bottom: var(--rhythm) }
+.s13-pslide { width: clamp(220px, calc((min(100vw, var(--max)) - 2 * var(--pad) - 4 * var(--gap)) / 5), 290px) }
+.s13-pscroll .s13-scroller-track { align-items: flex-start }
+.pcard-frame { border-radius: 0 !important; background: #EEF2F4; aspect-ratio: 4 / 4.6 }
+.pcard-no, .pcard-from { display: none !important }
+.pcard-meta { display: block; padding: 12px 2px 0 } .pcard-meta h3 { font: 500 13.5px/1.3 var(--sans) !important; letter-spacing: 0 } .pcard-meta .muted { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin: 2px 0 }
+.pcard-price { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; font: 600 13.5px var(--sans) }
+.pcard-sizes { font-size: 11px; color: #777 }
+.s13-scroller-ctl:empty { display: none }
+
+/* ---- shop by category ---- */
+.s13-cats { background: #fff }
+.s13-cat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--gap) }
+.s13-cat { display: grid; gap: 10px; text-align: center }
+.s13-cat-img { display: block; aspect-ratio: 3 / 4; overflow: hidden; background: #EEF2F4 } .s13-cat-img .media, .s13-cat-img svg { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s var(--ease) } .s13-cat:hover .s13-cat-img .media, .s13-cat:hover .s13-cat-img svg { transform: scale(1.06) }
+.s13-cat strong { font: 600 11.5px/1.2 var(--display); letter-spacing: .16em; text-transform: uppercase; margin-top: 4px }
+.s13-cat em { font-style: normal; font-size: 12px; color: #666; display: inline-flex; gap: 6px; justify-content: center; transition: color .3s } .s13-cat em i { font-style: normal; transition: transform .4s var(--ease) } .s13-cat:hover em { color: var(--accent) } .s13-cat:hover em i { transform: translateX(4px) }
+@media (max-width: 1000px) { .s13-cat-grid { grid-template-columns: repeat(3, 1fr) } }
+@media (max-width: 560px) { .s13-cat-grid { grid-template-columns: repeat(2, 1fr) } }
+
+/* ---- benefits strip ---- */
+.s13-features { background: #F5F8FA !important; border-block: 1px solid var(--line); padding: 0 !important }
+.s13-feat-row { display: grid !important; grid-template-columns: repeat(4, 1fr); border: 0 !important; margin: 0 !important; padding: 0 !important; overflow: visible !important }
+.s13-feat { display: flex !important; align-items: center; gap: 16px; width: auto !important; padding: 26px 24px !important; border-right: 1px solid var(--line) !important; background: transparent !important }
+.s13-feat:first-child { padding-left: 0 !important } .s13-feat:last-child { border-right: 0 !important }
+.s13-feat svg { flex: none; color: var(--accent); margin: 0 !important } .s13-feat strong { display: block; font: 600 11.5px/1.3 var(--display); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 4px } .s13-feat span { display: block; font-size: 12.5px; color: #666; line-height: 1.45 }
+@media (max-width: 1000px) { .s13-feat-row { grid-template-columns: 1fr 1fr } .s13-feat { border-bottom: 1px solid var(--line) !important; padding: 20px 16px !important } .s13-feat:first-child { padding-left: 16px !important } .s13-feat:nth-child(2n) { border-right: 0 !important } }
+@media (max-width: 560px) { .s13-feat-row { grid-template-columns: 1fr } .s13-feat { border-right: 0 !important } }
+
+/* ---- story split ---- */
+.s13-sec.s13-story { display: block !important; grid-template-columns: none !important; background: #fff; gap: 0 }
+.s13-story-card { display: grid; grid-template-columns: 1.1fr 1fr; background: #F1F5F7; overflow: hidden }
+.s13-story-media { position: relative; min-height: clamp(340px, 36vw, 520px); background: #DDE5E9 } .s13-story-media > *, .s13-story-media .media, .s13-story-media svg, .s13-story-media img, .s13-story-media .s13-brandpanel { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+.s13-story-copy { padding: clamp(28px, 4.4vw, 68px); display: flex; flex-direction: column; justify-content: center }
+.s13-story-copy .s13-h2 { margin: 6px 0 20px } .s13-story-p { margin: 0 0 14px; color: #444; line-height: 1.7; font-size: 15px; max-width: 460px }
+.s13-stats { display: flex; flex-wrap: wrap; gap: 14px clamp(20px, 3vw, 44px); border-top: 1px solid rgba(36,36,36,.15); margin: 24px 0; padding-top: 22px } .s13-stats li { display: grid; gap: 4px } .s13-stats strong { font: 600 clamp(24px, 2.4vw, 32px)/1 var(--serif-d); color: var(--deep) } .s13-stats span { font-size: 11.5px; color: #666; max-width: 120px; line-height: 1.35 }
+@media (max-width: 900px) { .s13-story-card { grid-template-columns: 1fr } .s13-story-media { min-height: 320px } }
+
+/* ---- reviews / reels / gallery / map / enquiry: same heading voice ---- */
+.rev-head, .insta-head { text-align: center }
+.rev-head h2, .insta-head h2, .studio h2, .eq-info h2, .s13-gallery .s13-h2 { font: 600 clamp(32px, 3.6vw, 50px)/1.1 var(--serif-d) !important; letter-spacing: 0 !important; text-transform: none }
+.rev-head .eyebrow, .insta-head .eyebrow, .insta-head p:first-child { font: 600 10.5px/1 var(--display); letter-spacing: .3em; color: var(--charcoal) }
+.rev-head, .insta-head { max-width: var(--max); margin-inline: auto; padding-inline: var(--pad) }
+.s13-gallery { background: #fff }
+.eq { background: #fff }
+.studio { background: #F5F8FA }
+
+/* ---- footer: dark, newsletter band on top ---- */
+.s13-foot { background: var(--deep) !important; color: rgba(255,255,255,.82) !important; border-top: 0 !important; --ink: #fff; --paper: #12232C }
+.s13-foot-news { border-bottom: 1px solid rgba(255,255,255,.12); padding: clamp(28px, 3.4vw, 44px) 0 }
+.s13-foot-news-in { display: flex; align-items: center; justify-content: space-between; gap: 28px 48px; flex-wrap: wrap }
+.s13-foot-news .s13-label { margin: 0 0 8px; color: var(--ice) } .s13-foot-news .s13-label i { background: var(--ice) }
+.s13-foot .s13-foot-news h2 { font: 600 clamp(24px, 2.4vw, 32px)/1.15 var(--serif-d) !important; color: #fff !important; text-transform: none; letter-spacing: 0; margin: 0 }
+.s13-foot-news .news { min-width: min(100%, 460px); flex: 1 1 380px; max-width: 560px }
+.s13-foot .news .foot-sub { display: none }
+.s13-foot .news-row input { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.22); color: #fff; border-radius: 0 } .s13-foot .news-row input::placeholder { color: rgba(255,255,255,.5) }
+.s13-foot .news .btn, .s13-foot .news-row .btn { background: #fff; color: var(--deep); border-color: #fff; border-radius: 0 } .s13-foot .news .btn:hover:not(:disabled) { background: var(--ice); border-color: var(--ice); color: var(--deep) }
+.s13-foot .check, .s13-foot .news .muted, .s13-foot .news p { color: rgba(255,255,255,.65) } .s13-foot .check input { accent-color: var(--ice) }
+.s13-foot .foot-grid { padding-top: clamp(36px, 4vw, 56px) }
+.foot-wordmark { font: 700 26px/1 var(--display); letter-spacing: .22em; color: #fff; margin: 0 0 16px }
+.s13-foot .foot-statement { color: rgba(255,255,255,.7); font-size: clamp(18px, 1.6vw, 22px); margin: 0 }
+.s13-foot .foot-h, .s13-foot h2.foot-h { color: var(--ice) !important }
+.s13-foot a { color: rgba(255,255,255,.82) } .s13-foot a:hover { color: #fff } .s13-foot address { color: rgba(255,255,255,.72) } .foot-ig svg { color: var(--ice) }
+.s13-foot .foot-mark span { background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(127,174,195,.22)) !important; -webkit-background-clip: text; background-clip: text; color: transparent }
+.s13-foot .foot-base { border-top-color: rgba(255,255,255,.14) !important; color: rgba(255,255,255,.7) !important; opacity: 1 !important }
+.s13-foot .foot-base strong { color: #fff }
+.s13-enq-page { padding-top: 150px }
+
+/* the storefront renders at true size (the old global 90% zoom broke viewport-based widths) */
+@media (min-width: 900px) { body:not(:has(.dpos)) { zoom: 1 !important } }
+:root { --max: 1240px }
+.site-header .hdr { border: 0 !important }
+.s13-h2, .rev-head h2, .insta-head h2, .studio h2, .eq-info h2, .s13-story h2 { text-transform: none !important }
+.s13-brandpanel.big b { font-size: clamp(130px, 18vw, 290px) !important }
+.studio h2 { white-space: normal }
+.s13-foot .foot-mark span { background: none !important; background-image: linear-gradient(90deg, rgba(255,255,255,.07), rgba(127,174,195,.26)) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important }
+@media (max-width: 900px) {
+  .s13-ann-l, .s13-ann-r { display: none !important } .s13-ann-c { font-size: 10px; letter-spacing: .1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-inline: 10px }
+  .s13-h-grid { min-height: 0 !important; height: auto !important }
+  .s13-home { padding-top: calc(var(--ann) + 64px) }
+}
+@media (max-width: 900px) { .s13-h-copy { padding-top: 0 !important } .s13-h-stage { display: none } }
