@@ -440,3 +440,15 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 @keyframes s13-pulse { 0%, 100% { box-shadow: 0 0 0 1px rgba(127,174,195,.35), 0 0 0 0 rgba(127,174,195,.5) } 60% { box-shadow: 0 0 0 1px rgba(127,174,195,.35), 0 0 0 14px rgba(127,174,195,0) } }
 @media (max-width: 1000px) { .s13-feat { padding: 30px 20px !important; border-bottom: 1px solid rgba(255,255,255,.12) !important } .s13-feat:first-child { padding-left: 20px !important } }
 @media (max-width: 560px) { .s13-feat { flex-direction: row !important; align-items: center !important } .s13-feat svg.ico { width: 52px !important; height: 52px !important; padding: 11px !important; flex: none } .s13-feat .n { display: none } }
+
+/* ---- benefits band back on white (no separate colour) ---- */
+.s13-features { background: #fff !important; color: #0b0b0b; border-top: 1px solid rgba(11,11,11,.12) !important; border-bottom: 1px solid rgba(11,11,11,.12) !important }
+.s13-features::before, .s13-features::after { display: none !important }
+.s13-feat { border-right: 1px solid rgba(11,11,11,.1) !important; padding: 38px 30px 40px !important }
+.s13-feat:hover { background: #F6F8F9 !important }
+.s13-feat .n { -webkit-text-stroke: 1px rgba(11,11,11,.16) !important }
+.s13-feat svg.ico { background: #F1F4F6 !important; color: #12232C !important; box-shadow: 0 0 0 1px rgba(11,11,11,.12) !important }
+.s13-feat:hover svg.ico { background: #12232C !important; color: #fff !important }
+.s13-feat strong { color: #0b0b0b !important } .s13-feat strong::after { background: #12232C !important }
+.s13-feat span { color: #555 !important }
+@media (max-width: 1000px) { .s13-feat { border-bottom: 1px solid rgba(11,11,11,.1) !important } }
