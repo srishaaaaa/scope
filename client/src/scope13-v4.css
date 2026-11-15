@@ -527,3 +527,16 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
   .hs-card { --hs-h: min(64svh, 500px); height: var(--hs-h) !important; width: calc((var(--hs-h) - 104px) * .75 + 28px) !important; scroll-snap-align: none }
   .hs-prog { display: flex !important; left: var(--pad); right: var(--pad); bottom: 22px }
 }
+
+/* ---- steady sideways showcase: sticky panel, one transform, photos fill their frames ---- */
+.hs { overflow: visible !important }
+.hs-pin { position: sticky !important; top: 0; height: 100vh; height: 100svh; min-height: 0 !important; overflow: hidden; display: flex !important; flex-direction: column; justify-content: center }
+.hs-track { will-change: transform; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translate3d(0,0,0) }
+.hs-card, .hs-card.on { transition: background .45s var(--ease), color .45s var(--ease) !important; transform: none !important; will-change: auto }
+.hs-card.on { box-shadow: 0 24px 50px -30px rgba(11,11,11,.55) !important }
+.hs-img { overflow: hidden !important; background: #E9EDF0 }
+.hs-img > span { position: absolute !important; inset: 0 !important; display: block; transform: none !important; transition: none !important; overflow: hidden }
+.hs-img img, .hs-img .media, .hs-img svg, .hs-img .cov { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover; display: block; max-width: none; transition: none !important }
+.hs-card:hover .hs-img .media, .hs-card:hover .hs-img img { transform: none !important }
+.hs-prog i { transform: none !important; position: relative } .hs-prog i::after { transform: scaleX(var(--p, 0)) !important }
+.hs.plain { height: auto !important } .hs.plain .hs-pin { position: relative !important; height: auto; padding: 56px 0 } .hs.plain .hs-track { overflow-x: auto; width: 100% !important; transform: none }
