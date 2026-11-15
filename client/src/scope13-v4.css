@@ -540,3 +540,12 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .hs-card:hover .hs-img .media, .hs-card:hover .hs-img img { transform: none !important }
 .hs-prog i { transform: none !important; position: relative } .hs-prog i::after { transform: scaleX(var(--p, 0)) !important }
 .hs.plain { height: auto !important } .hs.plain .hs-pin { position: relative !important; height: auto; padding: 56px 0 } .hs.plain .hs-track { overflow-x: auto; width: 100% !important; transform: none }
+
+/* ---- admin brand: same Syne wordmark as the main site, on one line ---- */
+.dpos-brand { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px }
+.dpos-brand .wm-text { display: inline-flex !important; align-items: baseline; gap: 8px }
+.dpos-brand .wm-text b, .dpos-brand .wm-text i { font: 800 22px/1 'Syne', 'Space Grotesk', sans-serif !important; letter-spacing: .02em !important; color: #0b0b0b !important; font-style: normal; text-transform: none; padding: 0 !important; margin: 0 !important }
+.dpos-brand .dpos-role { flex-basis: 100%; font-size: 10px; letter-spacing: .3em }
+.dpos-brand { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important }
+.dpos-brand .wm-text { align-items: center !important }
+.dpos-brand .dpos-role { position: static !important; flex-basis: auto !important; color: #7a8187 }
