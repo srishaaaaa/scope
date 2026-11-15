@@ -86,7 +86,8 @@ export default function InstagramStrip() {
   const ig = site.social?.instagram;
   const all = (ig?.posts || []).filter(p => p.video || p.image);
   const videos = all.filter(p => p.video).slice(0, 6);
-  const photos = all.filter(p => !p.video).slice(0, 6);
+  const [dead, setDead] = useState(() => new Set()); // photos whose file no longer exists are hidden instead of showing a broken icon
+  const photos = all.filter(p => !p.video && !dead.has(p.image)).slice(0, 6);
   return (
     <section className="insta ivory-sec" id="reels" aria-labelledby="ig-h">
       <Reveal className="insta-head">
@@ -118,7 +119,7 @@ export default function InstagramStrip() {
             return (
               <Reveal as="li" key={t.image + i} delay={(i % 3) * 0.1}>
                 <div className="insta-tile insta-click" onClick={() => setView({ list: photos, i })} role="button" tabIndex={0} aria-label="View photo full screen" onKeyDown={e => { if (e.key === 'Enter') setView({ list: photos, i }) }}>
-                  <img src={t.image} alt={splitAlt(t.alt).alt || 'SCOPE 13 photo'} loading="lazy" style={coverStyle(splitAlt(t.alt).pos)} />
+                  <img src={t.image} onError={() => setDead(d => new Set(d).add(t.image))} alt={splitAlt(t.alt).alt || 'SCOPE 13 photo'} loading="lazy" style={coverStyle(splitAlt(t.alt).pos)} />
                   {t.href && <a className="insta-open" onClick={e => e.stopPropagation()} href={t.href} target="_blank" rel="noopener noreferrer" aria-label="Open this post on Instagram">↗</a>}
                 </div>
               </Reveal>
