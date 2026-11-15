@@ -39,5 +39,5 @@ export const campaign = {
 // Men's category wall (links go to the existing catalogue search so nothing depends on server category slugs).
 export const menCategories = [
   'T-Shirts', 'Oversized T-Shirts', 'Shirts', 'Casual Shirts', 'Formal Shirts', 'Polo T-Shirts', 'Jeans', 'Trousers', 'Cargo Pants',
-  'Co-ord Sets', 'Jackets', 'Hoodies', 'Sweatshirts', 'Ethnic Menswear', 'Accessories', 'New Arrivals', 'Bestsellers',
+  'Co-ord Sets', 'Jackets', 'Hoodies', 'Sweatshirts', 'Ethnic Menswear', 'Accessories', 'Perfumes', 'New Arrivals', 'Bestsellers',
 ];

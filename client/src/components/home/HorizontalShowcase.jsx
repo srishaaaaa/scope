@@ -14,7 +14,7 @@ export default function HorizontalShowcase() {
   const { catalog } = useApp();
   const reduced = useReduced();
   const root = useRef(), track = useRef(), bar = useRef(), count = useRef();
-  const cats = catalog.categories.filter(c => c.product_count > 0).slice(0, 9);
+  const cats = catalog.categories.filter(c => c.product_count > 0).slice(0, 12);
   const [lead, setLead] = useState({});
   const key = cats.map(c => c.slug).join(',');
 
