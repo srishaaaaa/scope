@@ -4,7 +4,6 @@ import ScopeHero from '../components/hero/ScopeHero';
 import { TrendingNow, Bestsellers } from '../components/home/Products';
 import HorizontalShowcase from '../components/home/HorizontalShowcase';
 import { Features, StorySplit } from '../components/home/Story';
-import Gallery from '../components/home/Gallery';
 import CustomerReviews from '../components/CustomerReviews';
 import InstagramStrip from '../components/InstagramStrip';
 import StoreLocationMap from '../components/StoreLocationMap';
@@ -17,7 +16,7 @@ export default function Home() {
   const { hash } = useLocation();
   useEffect(() => {
     if (!hash) return;
-    const alias = { lookbook: 'gallery', story: 'story', contact: 'enquiry' }; // links from earlier versions of the site
+    const alias = { lookbook: 'reels', gallery: 'reels', story: 'story', contact: 'enquiry' }; // links from earlier versions of the site
     const id = hash.slice(1);
     const t = setTimeout(() => scrollToEl(document.getElementById(id) || document.getElementById(alias[id])), 650);
     return () => clearTimeout(t);
@@ -34,7 +33,6 @@ export default function Home() {
         <StorySplit />
         <CustomerReviews />
         <InstagramStrip />
-        <Gallery />
         <StoreLocationMap />
         <EnquirySection />
       </div>
