@@ -17,7 +17,9 @@ export default function Home() {
   const { hash } = useLocation();
   useEffect(() => {
     if (!hash) return;
-    const t = setTimeout(() => scrollToEl(document.getElementById(hash.slice(1))), 650);
+    const alias = { lookbook: 'gallery', story: 'story', contact: 'enquiry' }; // links from earlier versions of the site
+    const id = hash.slice(1);
+    const t = setTimeout(() => scrollToEl(document.getElementById(id) || document.getElementById(alias[id])), 650);
     return () => clearTimeout(t);
   }, [hash]);
 
