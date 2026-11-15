@@ -549,3 +549,9 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .dpos-brand { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important }
 .dpos-brand .wm-text { align-items: center !important }
 .dpos-brand .dpos-role { position: static !important; flex-basis: auto !important; color: #7a8187 }
+
+/* ---- inventory grouped by category ---- */
+.inv-groups { display: grid; gap: 34px }
+.inv-cat-h { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 0 2px 12px; margin-bottom: 16px; border-bottom: 2px solid #0b0b0b }
+.inv-cat-h h3 { margin: 0; font: 700 22px/1.1 'Syne', var(--display); letter-spacing: -.01em; text-transform: none } .inv-cat-h span { font: 600 11px/1 var(--display); letter-spacing: .14em; text-transform: uppercase; color: #6b7780 }
+.inv-cat-h.list { margin: 22px 0 6px; padding-top: 6px }

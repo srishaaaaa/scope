@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api, uploadImage } from '../lib/api';
 import { inr } from '../lib/format';
 import { useApp } from '../context/App';
@@ -208,6 +208,14 @@ function ProductsStock({ manager, stocker }) {
   const lowOf = p => p.lowAlert ?? LOW;
   const shown = useMemo(() => (list || []).filter(p => (stock === 'all' || (stock === 'out' ? p.stock < 1 : stock === 'low' ? p.stock >= 1 && p.stock <= lowOf(p) : stock === 'best' ? p.bestSeller : p.stock > lowOf(p))) && (catF === 'all' || p.categorySlug === catF))
     .sort((a, b) => sortBy === 'stock-asc' ? a.stock - b.stock : sortBy === 'stock-desc' ? b.stock - a.stock : sortBy === 'price-asc' ? a.price - b.price : sortBy === 'price-desc' ? b.price - a.price : a.name.localeCompare(b.name)), [list, stock, catF, sortBy]);
+  // Everything is separated by category (in the store's category order); products with none go last.
+  const groups = useMemo(() => {
+    const order = new Map((cats || []).map((c, i) => [c.name, i]));
+    const m = new Map();
+    for (const p of shown) { const k = p.category || 'Uncategorised'; if (!m.has(k)) m.set(k, []); m.get(k).push(p) }
+    return [...m.entries()].map(([name, items]) => ({ name, items, units: items.reduce((n, p) => n + (p.stock || 0), 0) }))
+      .sort((x, y) => (order.get(x.name) ?? 999) - (order.get(y.name) ?? 999) || x.name.localeCompare(y.name));
+  }, [shown, cats]);
   const needs = useMemo(() => (list || []).filter(p => p.stock < 1 || p.stock <= lowOf(p) || p.variants.some(v => v.active && v.stock < 1)), [list]);
   useEffect(() => {
     if (!list || !needs.length) return;
@@ -243,7 +251,7 @@ function ProductsStock({ manager, stocker }) {
       </div>
       <Err>{err}</Err>
       {view === 'grid' && (!list ? <p className="dpos-empty">Loading…</p> : !shown.length ? <p className="dpos-empty">No products found.</p> : (
-        <div className="inv-grid">{shown.map(p => { const st = p.stock < 1 ? 'out' : p.stock <= lowOf(p) ? 'low' : 'in'; return (
+        <div className="inv-groups">{groups.map(g => (<section key={g.name} className="inv-cat"><header className="inv-cat-h"><h3>{g.name}</h3><span>{g.items.length} {g.items.length === 1 ? 'product' : 'products'} · {g.units} units</span></header><div className="inv-grid">{g.items.map(p => { const st = p.stock < 1 ? 'out' : p.stock <= lowOf(p) ? 'low' : 'in'; return (
           <article key={p.id} className={`inv-card ${st}`}>
             <div className="inv-ph">{p.image ? <img src={p.image} alt="" loading="lazy" /> : <span>No photo</span>}
               <em className={`inv-badge ${st}`}>{st === 'out' ? 'OUT OF STOCK' : st === 'low' ? 'LOW STOCK' : 'IN STOCK'}</em>
@@ -252,10 +260,10 @@ function ProductsStock({ manager, stocker }) {
               <div className="inv-cs"><span><em>Cost</em><b>{manager && p.costPrice ? inr(p.costPrice) : '—'}</b></span><span><em>Selling</em><b>{inr(p.price)}</b></span><span><em>Weight</em><b>{p.weightGrams ? `${p.weightGrams} g` : '—'}</b></span></div>
               <button type="button" className="inv-units" disabled={!stocker} onClick={() => setModal({ t: 'stock', p })}><b>{p.stock}</b> Total Units</button>
               <small className={`inv-note ${st}`}>{st === 'out' ? 'Sold out' : st === 'low' ? `Low · reorder at ${lowOf(p)}` : 'In stock'}</small></div>
-          </article>) })}</div>))}
+          </article>) })}</div></section>))}</div>))}
       {view === 'list' && <section className="dpos-card" style={{ padding: '8px 16px' }}>
         <div className="dpos-ph"><span /><span>Product</span><span>Type</span><span style={{ textAlign: 'right' }}>Stock</span><span style={{ textAlign: 'right' }}>Price</span><span style={{ textAlign: 'right' }}>Actions</span></div>
-        {!list ? <p className="dpos-empty">Loading…</p> : !shown.length ? <p className="dpos-empty">No products found.</p> : shown.map(p => (
+        {!list ? <p className="dpos-empty">Loading…</p> : !shown.length ? <p className="dpos-empty">No products found.</p> : groups.map(g => (<Fragment key={g.name}><div className="inv-cat-h list"><h3>{g.name}</h3><span>{g.items.length} {g.items.length === 1 ? 'product' : 'products'} · {g.units} units</span></div>{g.items.map(p => (
           <div className="dpos-prod" key={p.id}>
             <div className="dpos-prow">
               <button className={`chev ${open === p.id ? 'open' : ''}`} aria-expanded={open === p.id} aria-label={open === p.id ? 'Hide details' : 'Show details'} onClick={() => setOpen(open === p.id ? null : p.id)}><Icon n="chevron" size={16} /></button>
@@ -291,7 +299,7 @@ function ProductsStock({ manager, stocker }) {
                   <input aria-label="SKU" placeholder="SKU (auto)" value={nv.sku} onChange={e => setNv({ ...nv, sku: e.target.value })} /><input aria-label="Opening stock" inputMode="numeric" placeholder="Stock" value={nv.stock} onChange={e => setNv({ ...nv, stock: e.target.value.replace(/\D/g, '') })} />
                   <button className="dpos-btn sm">+ Add size</button></form>}
               </div>)}
-          </div>))}
+          </div>))}</Fragment>))}
       </section>}
       {alerts && <AlertsModal list={list || []} canStock={stocker} onClose={() => setAlerts(false)} onDone={load} onEdit={manager ? p => { setAlerts(false); setModal({ t: 'edit', p }) } : null} />}
       {modal?.t === 'stock' && <StockModal product={list.find(x => x.id === modal.p.id) || modal.p} variantId={modal.vid} onClose={() => setModal(null)} onDone={stockDone} />}
