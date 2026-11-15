@@ -187,7 +187,7 @@ export function AdminReels() {
             <section className="dpos-reel" key={key}>
               <header><span>{noun.toUpperCase()} {i + 1}</span>{live && <span className="dpos-live">LIVE</span>}</header>
               <div className="media">{!s ? 'Loading…' : p?.video ? (isEmbed(p.video) ? <iframe src={parseVideo(p.video).embed.replace('autoplay=1', 'autoplay=0')} title={`Reel ${i + 1}`} allowFullScreen /> : <video src={p.video} muted loop playsInline controls preload="metadata" />) : p?.image ? <img src={p.image} alt={p.alt || `${noun} ${i + 1}`} /> : <span>{canAdd ? `Empty — add a ${noun.toLowerCase()}` : `Fill ${noun.toLowerCase()} ${cur.length + 1} first`}</span>}</div>
-              {live && !(p.video && isEmbed(p.video)) && <div className="dpos-adj"><ImageAdjust src={p.image || null} video={p.video && !isEmbed(p.video) ? p.video : null} pos={splitAlt(p.alt).pos} aspect={kind === 'video' ? 9 / 16 : 4 / 5} busy={busy !== null} onChange={v => frame(kind, i, v)} /></div>}
+              {live && !(p.video && isEmbed(p.video)) && <div className="dpos-adj"><ImageAdjust src={p.image || null} video={p.video && !isEmbed(p.video) ? p.video : null} pos={splitAlt(p.alt).pos} aspect={9 / 16} busy={busy !== null} onChange={v => frame(kind, i, v)} /></div>}
               <footer>
                 <button className="dpos-btn ghost sm" disabled={busy !== null || !canAdd || !s} onClick={() => pick(kind, i)}>{busy === key ? 'Uploading…' : live ? '↻ Replace' : '+ Upload'}</button>
                 {live && <a className="dpos-btn ghost sm" href={p.video || p.image} target="_blank" rel="noopener noreferrer" aria-label="Preview"><Icon n="eye" size={14} /></a>}
