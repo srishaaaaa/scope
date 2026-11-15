@@ -477,3 +477,9 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .s13-story-copy .s13-link { font: 700 12px/1 var(--display); letter-spacing: .24em; color: #0f1d25; padding-bottom: 10px; border-bottom: 1.5px solid #0f1d25; align-self: flex-start }
 .s13-story-copy .s13-link::after { display: none }
 .s13-stats strong { font-variant-numeric: lining-nums; font-feature-settings: "lnum" 1 } .s13-stats li { align-content: start }
+
+/* ---- story photo blends into the panel: shared background and a soft fade on the photo's inner edge ---- */
+.s13-story-card { background: #F1F3F5 !important }
+.s13-story-media { background: #F1F3F5 !important }
+.s13-story-media img, .s13-story-media .cov { -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 72%, transparent 100%); mask-image: linear-gradient(90deg, #000 0%, #000 72%, transparent 100%); mix-blend-mode: multiply }
+@media (max-width: 900px) { .s13-story-media img { -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 100%) } }
