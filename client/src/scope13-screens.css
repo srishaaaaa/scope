@@ -1,0 +1,67 @@
+/* SCOPE 13 — search overlay, filter drawer / catalogue and product page. Loaded after scope13.css. */
+
+/* ===================== search overlay: full-screen ===================== */
+.overlay-root.top { padding: 0; display: block }
+.overlay-root.top .scrim { background: rgba(255, 255, 255, .6); backdrop-filter: blur(10px) }
+.search.glass { position: absolute; inset: 0; width: 100%; max-height: none; border: 0; border-radius: 0; background: rgba(255, 255, 255, .96); box-shadow: none; padding: 0 var(--pad) 40px; overflow: auto }
+.search.glass::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(36,36,36,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(36,36,36,.045) 1px, transparent 1px); background-size: 96px 96px; mask-image: linear-gradient(180deg, #000, transparent 70%); -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%) }
+.search-bar { position: relative; max-width: 1100px; margin: 0 auto; padding: clamp(60px, 12vh, 130px) 0 14px; border-bottom: 1px solid var(--charcoal) }
+.search-bar input { font: 500 clamp(32px, 6.5vw, 96px)/1.05 var(--display); letter-spacing: -.04em; padding: 6px 0; border: 0 }
+.search-bar input::placeholder { color: var(--silver) }
+.search-bar .icon-btn { position: absolute; right: 0; top: clamp(18px, 4vh, 40px); border: 1px solid var(--charcoal) }
+.search-body { position: relative; max-width: 1100px; margin: 0 auto; padding: 28px 0; gap: 4px }
+.search-body .eyebrow { color: var(--metal); margin: 8px 0 12px; font-family: var(--display) }
+.s-item { border-radius: 0; border-bottom: 1px solid var(--line); padding: 14px 6px; transition: padding .45s var(--ease), background .3s }
+.s-item:hover, .s-item.on { background: var(--pearl); padding-left: 18px }
+.s-thumb { width: 64px; background: var(--soft) } .s-thumb .media { filter: grayscale(1) }
+.s-text .serif { font: 500 clamp(18px, 2vw, 26px)/1.1 var(--display); letter-spacing: -.02em }
+.search-body .chip { border-radius: 999px }
+@media (max-width: 700px) { .search-bar { padding-top: 84px } }
+
+/* ===================== filter drawer + catalogue ===================== */
+.cat-hero h1 { font-weight: 500; letter-spacing: -.045em }
+.cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 0 var(--pad) 14px; scrollbar-width: none } .cat-tabs::-webkit-scrollbar { display: none }
+.cat-tabs button { flex: none; padding: 11px 20px; border-radius: 999px; border: 1px solid rgba(36,36,36,.2); font: 600 10.5px/1 var(--display); letter-spacing: .2em; text-transform: uppercase; transition: all .35s var(--ease) }
+.cat-tabs button:hover { border-color: var(--charcoal); transform: translateY(-2px) } .cat-tabs button.on { background: var(--charcoal); color: #fff; border-color: var(--charcoal) }
+.toolbar { gap: 12px } .s13-filter-btn { padding: 11px 22px; margin-left: auto; border-radius: 999px } .toolbar-r { margin-left: 0 }
+.sel select { border-radius: 999px; padding: 11px 18px; font: 600 11px var(--display); letter-spacing: .08em; background: #fff }
+.views button i { background: var(--charcoal) }
+.s13-active { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 0 var(--pad) 18px }
+.s13-active-chip { display: inline-flex; gap: 10px; align-items: center; padding: 9px 14px; border-radius: 999px; background: var(--charcoal); color: #fff; font: 600 10.5px/1 var(--display); letter-spacing: .14em; transition: background .3s, transform .3s var(--ease) }
+.s13-active-chip:hover { background: var(--black); transform: translateY(-1px) } .s13-active-chip span { opacity: .7; font-size: 9px }
+.s13-filter { width: min(440px, 100%) }
+.s13-filter .drawer-head h2 { font: 500 30px var(--display); letter-spacing: -.03em; display: flex; align-items: center; gap: 12px }
+.s13-fcount { display: grid; place-items: center; min-width: 26px; height: 26px; border-radius: 13px; background: var(--charcoal); color: #fff; font: 600 12px var(--display) }
+.s13-filter-body { display: grid; gap: 28px; align-content: start }
+.s13-filter-body fieldset { border: 0; padding: 0; margin: 0 } .s13-filter-body legend { color: var(--metal); margin-bottom: 10px; padding: 0; font-family: var(--display) }
+.s13-price { display: grid; grid-template-columns: 1fr 1fr; gap: 12px } .s13-price .field { margin: 0 }
+.s13-stock { padding-top: 6px; border-top: 1px solid var(--line) }
+.s13-empty { color: var(--charcoal) } .s13-empty svg { color: var(--silver) }
+
+/* ===================== product page ===================== */
+.pdp-wrap { background: var(--white) }
+.crumbs { font-family: var(--display); letter-spacing: .18em }
+.pdp-info { position: sticky; top: 112px; align-self: start; padding: clamp(0px, 1vw, 12px) 0 }
+.pdp-info h1 { font-weight: 500; letter-spacing: -.045em }
+.pdp-info .price { font: 500 clamp(24px, 2.4vw, 34px) var(--display); letter-spacing: -.02em } .pdp-info .price small { font: 500 11px var(--sans); color: var(--metal); letter-spacing: .06em }
+.pdp-info legend { color: var(--metal); font-family: var(--display) }
+.pdp-info .chip { border-radius: 0; min-width: 52px; transition: color .35s var(--ease), border-color .35s, transform .35s var(--ease), background .35s }
+.pdp-info .chip:hover:not(:disabled) { transform: translateY(-2px) }
+.pdp-info .chip.on { background: var(--charcoal); color: #fff; animation: s13-pop .4s var(--ease) }
+@keyframes s13-pop { 0% { transform: scale(.92) } 60% { transform: scale(1.06) } 100% { transform: scale(1) } }
+.pdp-actions .btn.solid { font-size: 12px; padding: 18px 30px }
+.pdp-actions .icon-btn.lg { border-radius: 0; border-color: var(--charcoal); transition: background .3s, color .3s, transform .35s var(--ease) } .pdp-actions .icon-btn.lg:hover { background: var(--charcoal); color: #fff } .pdp-actions .icon-btn.lg.on { background: var(--charcoal); color: #fff }
+.dr-box { background: var(--pearl); border: 1px solid var(--line); padding: 18px 20px; margin: 16px 0 } .dr-box h3 { font: 600 10.5px var(--display); letter-spacing: .28em; margin-bottom: 10px }
+.acc summary { font-family: var(--display) } .acc { border-color: var(--line) !important }
+.gallery .stage { border-radius: 2px; box-shadow: var(--shadow-m) }
+.thumbs button { border-radius: 0; transition: opacity .3s, border-color .3s, transform .35s var(--ease) } .thumbs button:hover { opacity: 1; transform: translateX(3px) } .thumbs button.on { opacity: 1; border-color: var(--charcoal) }
+.stage-count { background: rgba(255,255,255,.9); color: var(--charcoal); font-family: var(--display) }
+.lightbox { background: rgba(255, 255, 255, .98); color: var(--charcoal) } .lightbox .icon-btn { border: 1px solid var(--line); background: #fff } .lb-count { font-family: var(--display); letter-spacing: .3em; color: var(--metal) }
+.sticky-buy { background: rgba(255,255,255,.94) !important; backdrop-filter: blur(16px); border-top: 1px solid var(--line) !important; color: var(--charcoal) }
+.sticky-buy .btn { background: var(--charcoal) !important; color: #fff !important; border-color: var(--charcoal) !important }
+.related h2 { font: 500 clamp(30px, 4vw, 56px) var(--display); letter-spacing: -.04em }
+.s13-recent-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding: 0 var(--pad) 70px }
+.s13-recent-row a { display: grid; gap: 6px } .s13-recent-img { display: block; aspect-ratio: 3/4; background: var(--soft); overflow: hidden }
+.s13-recent-img .media, .s13-recent-img svg { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease) } .s13-recent-row a:hover .s13-recent-img .media { transform: scale(1.05) }
+.s13-recent-row strong { font: 600 13px var(--display) } .s13-recent-row em { font-style: normal; color: #5C5C5C; font-size: 13px }
+@media (max-width: 800px) { .s13-recent-row { grid-template-columns: repeat(2, 1fr) } .pdp-info { position: static } }

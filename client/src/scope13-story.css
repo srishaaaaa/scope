@@ -1,0 +1,44 @@
+/* SCOPE 13 — story sections inspired by the reference: counter intro, numbered steps, FAQ, linked cards, order CTA. */
+.s13-intro-pct { margin: 0; font: 500 12px/1 var(--display); letter-spacing: .4em; padding-left: .4em; color: var(--charcoal); font-variant-numeric: tabular-nums }
+
+/* search input: no box, big type on a single underline */
+.search .search-bar input { border: 0 !important; border-radius: 0 !important; padding: 6px 0 !important; background: transparent !important; outline: none }
+.search .search-bar .icon-btn { background: #fff }
+
+/* steps */
+.s13-steps { background: var(--pearl) }
+.s13-steps-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--charcoal) }
+.s13-step { padding: 28px 24px 40px 0; border-right: 1px solid var(--line); position: relative; transition: background .4s var(--ease), padding .5s var(--ease) }
+.s13-step:last-child { border-right: 0 } .s13-step:hover { background: #fff; padding-left: 18px }
+.s13-step span { font: 500 clamp(54px, 6vw, 96px)/1 var(--display); letter-spacing: -.06em; color: transparent; -webkit-text-stroke: 1px var(--charcoal) }
+.s13-step h3 { font: 600 22px var(--display); letter-spacing: -.02em; margin: 18px 0 8px } .s13-step p { color: #5C5C5C; font-size: 14px; max-width: 260px }
+@media (max-width: 900px) { .s13-steps-row { grid-template-columns: 1fr 1fr } .s13-step:nth-child(2) { border-right: 0 } .s13-step { border-bottom: 1px solid var(--line) } }
+@media (max-width: 520px) { .s13-steps-row { grid-template-columns: 1fr } .s13-step { border-right: 0 } }
+
+/* FAQ */
+.s13-faq-list { max-width: 960px; border-top: 1px solid var(--charcoal) }
+.s13-q { border-bottom: 1px solid var(--line) }
+.s13-q summary { display: flex; align-items: center; gap: 22px; padding: 26px 0; cursor: pointer; list-style: none; font: 500 clamp(20px, 2.2vw, 30px)/1.15 var(--display); letter-spacing: -.025em; transition: padding .45s var(--ease) }
+.s13-q summary::-webkit-details-marker { display: none } .s13-q summary:hover { padding-left: 12px }
+.s13-q summary span { font: 500 11px var(--display); letter-spacing: .2em; color: var(--metal) }
+.s13-q summary i { margin-left: auto; position: relative; width: 22px; height: 22px; flex: none } .s13-q summary i::before, .s13-q summary i::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--charcoal); transition: transform .4s var(--ease) } .s13-q summary i::after { transform: rotate(90deg) } .s13-q[open] summary i::after { transform: rotate(0) }
+.s13-q p { padding: 0 0 28px 54px; max-width: 680px; color: #4a4a4a }
+
+/* two big cards */
+.s13-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 var(--pad) clamp(70px, 9vw, 140px); background: var(--white) }
+.s13-card { position: relative; display: grid; align-content: end; gap: 8px; min-height: clamp(280px, 34vw, 460px); padding: clamp(24px, 3vw, 44px); background: var(--soft); border-radius: 6px; overflow: hidden; transition: transform .6s var(--ease), background .5s, color .5s; box-shadow: inset 0 0 0 1px rgba(36,36,36,.08) }
+.s13-card.dark { background: var(--charcoal); color: #fff } .s13-card:hover { transform: translateY(-6px) } .s13-card:not(.dark):hover { background: var(--charcoal); color: #fff }
+.s13-card-no { position: absolute; left: clamp(24px, 3vw, 44px); top: clamp(22px, 3vw, 40px); font: 500 11px var(--display); letter-spacing: .3em; opacity: .6 }
+.s13-card h3 { font: 500 clamp(30px, 4vw, 60px)/1 var(--display); letter-spacing: -.04em } .s13-card p { opacity: .75; max-width: 320px; margin: 0 }
+.s13-card b { position: absolute; right: clamp(22px, 3vw, 40px); top: clamp(18px, 2.4vw, 34px); display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; border: 1px solid currentColor; font-weight: 400; transition: transform .5s var(--ease) } .s13-card:hover b { transform: rotate(-45deg) scale(1.08) }
+@media (max-width: 800px) { .s13-cards { grid-template-columns: 1fr } }
+
+/* closing order CTA */
+.s13-order { background: var(--white); padding: clamp(70px, 9vw, 150px) var(--pad); text-align: center; border-top: 1px solid var(--line) }
+.s13-order-in { max-width: 900px; margin: auto } .s13-order .s13-eyebrow { justify-content: center } .s13-order .s13-h2 { font-size: clamp(54px, 10vw, 170px) }
+.s13-order-cta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 22px 34px; margin: 36px 0 }
+.s13-btn.light, .s13-link.light { }
+.s13-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px } .s13-badges li { padding: 11px 18px; border: 1px solid var(--silver); border-radius: 999px; font: 600 10px/1 var(--display); letter-spacing: .2em; text-transform: uppercase; transition: background .3s, color .3s } .s13-badges li:hover { background: var(--charcoal); color: #fff }
+.search .search-bar input { font: 500 clamp(32px, 6.5vw, 96px)/1.1 var(--display) !important; letter-spacing: -.04em !important; outline: none !important; box-shadow: none !important; height: auto !important }
+.search .search-bar { border-bottom: 1px solid var(--charcoal) !important }
+.search .search-bar input { font-size: clamp(26px, 4.6vw, 68px) !important; padding-right: 64px !important }
