@@ -282,3 +282,9 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .s13-h-tag, .s13-h-cta { left: max(var(--pad), 5vw) !important }
 .s13-h-badge { left: 71% !important; top: 12% !important }
 @media (max-width: 900px) { .s13-h-word-in { font-size: 16vw !important } .s13-h-tag, .s13-h-cta { left: var(--pad) !important } }
+
+/* ---- soft reflection under the model ---- */
+.s13-h-fig .refl { display: block !important; position: absolute; left: 0; top: 100%; width: 100%; height: 17%; overflow: hidden; transform: scaleY(-1); -webkit-mask-image: linear-gradient(180deg, transparent 10%, rgba(0,0,0,.34)); mask-image: linear-gradient(180deg, transparent 10%, rgba(0,0,0,.34)); filter: blur(1.4px) }
+.s13-h-fig .refl img { position: absolute; left: 0; bottom: 0; width: 100%; height: auto; max-width: none; filter: none }
+.s13-h-fig { bottom: 13% !important; height: 78% !important } .s13-h-ground { bottom: 11.5% !important }
+@media (max-width: 900px) { .s13-h-fig { bottom: calc(32px + 10%) !important; height: 56% !important } .s13-h-ground { bottom: calc(32px + 8.5%) !important } }

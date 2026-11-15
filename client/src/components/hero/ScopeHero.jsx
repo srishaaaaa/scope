@@ -62,6 +62,7 @@ export default function ScopeHero() {
         <motion.div className="s13-h-fig" style={{ x: figX, y: figY, rotateY: rotY }} initial={{ opacity: 0, y: 40 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 1.3, delay: 0.5, ease: EASE }}>
           <motion.div style={{ y: figScroll }} className="s13-h-fig-in">
             {photo ? <img src={photo} alt="" className={cutout ? 'cut' : 'blend'} fetchpriority="high" decoding="async" /> : <FigurePlaceholder />}
+            {photo && cutout && <span className="refl"><img src={photo} alt="" /></span>}
           </motion.div>
         </motion.div>
       </div>
