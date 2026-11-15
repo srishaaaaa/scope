@@ -328,3 +328,28 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .wordmark .wm-logo, .site-header .wm-logo, .mm-top .wm-logo { width: auto !important; height: 40px !important; aspect-ratio: 922 / 1152; border-radius: 4px !important; object-fit: contain !important; object-position: center; filter: none !important; box-shadow: 0 0 0 1px rgba(11,11,11,.12) !important; background: #0b0b0b }
 .site-header .wordmark { gap: 11px }
 @media (max-width: 900px) { .wordmark .wm-logo, .site-header .wm-logo { height: 36px !important } }
+
+/* ---- category cover images on the sideways showcase ---- */
+.hs-img .cov { width: 100%; height: 100%; display: block; transition: transform .9s var(--ease) }
+.hs-img > span { overflow: hidden }
+
+/* ---- admin image adjuster ---- */
+.adj { display: grid; gap: 10px }
+.adj-box { position: relative; width: 100%; max-height: 420px; overflow: hidden; border-radius: 12px; background: #ECEEF0; cursor: crosshair; touch-action: none; user-select: none }
+.adj-box img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none }
+.adj-dot { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; border: 2px solid #fff; background: rgba(11,11,11,.55); box-shadow: 0 0 0 1px rgba(11,11,11,.4); pointer-events: none }
+.adj-zoom { display: grid; gap: 6px } .adj-zoom span { display: flex; justify-content: space-between; font: 600 11px/1 var(--display); letter-spacing: .14em; text-transform: uppercase } .adj-zoom input { width: 100%; accent-color: #12232C }
+.adj-row { display: flex; justify-content: space-between; align-items: center; gap: 10px }
+
+/* ---- alignment fixes: hero index clear of the wordmark; footer wordmark fits ---- */
+.s13-h-index { top: 13% !important; width: 176px }
+.s13-h-index a { padding: 6px 0 !important }
+.s13-h-badge { top: 11% !important; left: 66% !important }
+@media (max-width: 1240px), (max-height: 740px) { .s13-h-index { display: none !important } }
+@media (max-width: 1240px) { .s13-h-badge { left: auto !important; right: 6vw !important } }
+
+.s13-foot .foot-mark { margin: 48px 0 0 !important; padding: 0 var(--pad); overflow: hidden; text-align: center }
+.s13-foot .foot-mark span { font-size: 12.2vw !important; line-height: .95 !important; letter-spacing: -.03em !important; white-space: nowrap; display: block; text-align: center }
+@media (min-width: 1800px) { .s13-foot .foot-mark span { font-size: 220px !important } }
+.adm-cover { aspect-ratio: auto !important; height: auto !important; overflow: visible !important; background: none !important }
+.adm-cover .adj-box { border-radius: 14px }

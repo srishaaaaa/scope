@@ -8,6 +8,7 @@ import { Reveal } from '../Motion';
 import { ProductMedia } from '../ProductCard3D';
 import { brand, contact } from '../../config/content';
 import BrandPanel from './BrandPanel';
+import { coverStyle } from '../../lib/imgPos';
 
 const Ico = ({ children }) => (
   <svg width="34" height="34" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{children}</svg>
@@ -57,7 +58,7 @@ export function StorySplit() {
     <section className="s13-sec s13-story" id="story" aria-labelledby="story-h">
       <div className="s13-wrap">
         <div className="s13-story-card">
-          <Reveal className="s13-story-media">{photo ? <img src={photo} alt={site.branding?.storyAlt || 'SCOPE 13'} loading="lazy" /> : lead ? <ProductMedia p={lead} /> : <BrandPanel />}</Reveal>
+          <Reveal className="s13-story-media">{photo ? <img src={photo} alt={site.branding?.storyAlt || 'SCOPE 13'} loading="lazy" style={coverStyle(site.branding?.storyPos)} /> : lead ? <ProductMedia p={lead} /> : <BrandPanel />}</Reveal>
           <div className="s13-story-copy">
             <Reveal><p className="s13-label"><i />OUR STORY</p></Reveal>
             <h2 id="story-h" className="s13-h2">

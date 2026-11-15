@@ -7,7 +7,8 @@ import { Link, Navigate } from 'react-router-dom';
 import { api, uploadImage } from '../lib/api';
 import { useApp } from '../context/App';
 import AdminShell from '../components/AdminShell';
-import { Drop, FocusImage } from '../components/ProductPhotos';
+import { Drop } from '../components/ProductPhotos';
+import ImageAdjust from '../components/ImageAdjust';
 import { TEXT_DEFAULTS } from '../lib/siteText';
 import { Chips, PeriodFilter, inPeriod, usePeriod } from '../components/PeriodFilter';
 import StaffOnly from '../components/StaffOnly';
@@ -27,14 +28,14 @@ function Gate({ state, children }) {
 }
 
 // One single-image slot (hero model / story photo): preview, upload, reset.
-function Slot({ title, hint, value, fallback, onUpload, onReset, alt, onAlt, accept, busy, pos, onPos }) {
-  const pt = pos ? pos.split('% ').map(v => parseInt(v, 10)) : null;
+function Slot({ title, hint, value, fallback, onUpload, onReset, alt, onAlt, accept, busy, pos, onPos, aspect = 4 / 3, fit = 'cover' }) {
   return (
     <section className="adm-card">
       <h2 className="serif adm-h2">{title}</h2>
       <p className="muted small">{hint}</p>
-      <div className="adm-prev">{(value || fallback) ? (onPos ? <FocusImage src={value || fallback} alt="" x={pt?.[0]} y={pt?.[1]} box={4 / 3} onPick={(x, y) => onPos(`${x}% ${y}%`)} /> : <img src={value || fallback} alt="" />) : <span className="muted small">Blank — nothing added yet</span>}</div>
-      {onPos && (value || fallback) && <p className="muted small">Click the photo on the part that must stay visible (usually her face).{pos && <> <button className="link-u small" onClick={() => onPos(null)}>Reset focus</button></>}</p>}
+      {(value || fallback)
+        ? (onPos ? <ImageAdjust src={value || fallback} pos={pos} aspect={aspect} fit={fit} busy={busy} onChange={onPos} /> : <div className="adm-prev"><img src={value || fallback} alt="" /></div>)
+        : <div className="adm-prev"><span className="muted">Blank — nothing added yet</span></div>}
       <Drop onFiles={fs => fs[0] && onUpload(fs[0])} multiple={false} accept={accept} busy={busy} label={value ? 'Custom image in use' : 'Using the built-in image'} />
       <label className="field"><span>Describe the image (for screen readers)</span><input value={alt} onChange={e => onAlt(e.target.value)} /></label>
       {value && <button className="link-u small" onClick={onReset}>Reset to the built-in image</button>}
@@ -149,11 +150,11 @@ export function AdminStorefront() {
               hint="The SCOPE 13 logo, shown in the site header, menu and footer. It is shown whole, so a portrait or square image works best. The built-in SCOPE 13 logo is used until you upload another; you can replace it whenever you like."
               onUpload={f => run('logo', async () => { const up = await uploadImage(f); const next = { ...b, logo: up.url }; await saveBranding(next); setB(next) }, 'Logo updated.')}
               onReset={() => run('logo', async () => { const next = { ...b, logo: null, logoAlt: '' }; await saveBranding(next); setB(next) }, 'Logo removed. The text wordmark is back.')} />
-            <Slot title="Hero model photo" accept="image/png,image/webp,image/jpeg" busy={busy === 'hero'} value={b.heroModel} fallback={brandMedia.heroCutout} pos={b.heroModelPos} onPos={v => run('hero', async () => { const next = { ...b, heroModelPos: v }; await saveBranding(next); setB(next) }, 'Focus saved.')} alt={b.heroAlt} onAlt={v => setB({ ...b, heroAlt: v })}
+            <Slot title="Hero model photo" aspect={3 / 4} fit="contain" accept="image/png,image/webp,image/jpeg" busy={busy === 'hero'} value={b.heroModel} fallback={brandMedia.heroCutout} pos={b.heroModelPos} onPos={v => run('hero', async () => { const next = { ...b, heroModelPos: v }; await saveBranding(next); setB(next) }, 'Focus saved.')} alt={b.heroAlt} onAlt={v => setB({ ...b, heroAlt: v })}
               hint="The model photograph that stands in front of the big SCOPE 13 wordmark on the home page. A tall, full-length photo with the background removed (transparent PNG or WebP) works best. The built-in model photo is used until you upload another."
               onUpload={f => run('hero', async () => { const up = await uploadImage(f); const next = { ...b, heroModel: up.url }; await saveBranding(next); setB(next) }, 'Hero model updated.')}
               onReset={() => run('hero', async () => { const next = { ...b, heroModel: null, heroAlt: '' }; await saveBranding(next); setB(next) }, 'Hero model removed.')} />
-            <Slot title="Our Story photo" accept="image/jpeg,image/png,image/webp" busy={busy === 'story'} value={b.storyImage} fallback="" pos={b.storyPos} onPos={v => run('story', async () => { const next = { ...b, storyPos: v }; await saveBranding(next); setB(next) }, 'Position saved.')} alt={b.storyAlt} onAlt={v => setB({ ...b, storyAlt: v })}
+            <Slot title="Our Story photo" aspect={4 / 3} accept="image/jpeg,image/png,image/webp" busy={busy === 'story'} value={b.storyImage} fallback="" pos={b.storyPos} onPos={v => run('story', async () => { const next = { ...b, storyPos: v }; await saveBranding(next); setB(next) }, 'Position saved.')} alt={b.storyAlt} onAlt={v => setB({ ...b, storyAlt: v })}
               hint="A landscape or square photograph for the Our Story section on the home page. Until you add one, a product photo is used."
               onUpload={f => run('story', async () => { const up = await uploadImage(f); const next = { ...b, storyImage: up.url }; await saveBranding(next); setB(next) }, 'Story photo updated.')}
               onReset={() => run('story', async () => { const next = { ...b, storyImage: null, storyAlt: '' }; await saveBranding(next); setB(next) }, 'Story photo reset.')} />
@@ -164,13 +165,12 @@ export function AdminStorefront() {
         {[['Category covers', 'categories', cats], ['More category covers', 'collections', cols]].map(([title, kind, rows]) => (
           <section key={kind} className="adm-block">
             <h2 className="serif adm-h2">{title}</h2>
-            <p className="muted small">Click a photo on the part that must stay visible (a face, the zari border). The website frames the photo around that point.</p>
+            <p className="muted small">Upload a cover for each category. Click the photo to choose the part that stays in view and use Zoom to crop in. The home page cards use exactly this framing.</p>
             <ul className="adm-covers">{rows.map(c => (
               <li key={c.id}>
-                <div className="adm-cover">{(c.image || c.fallback) ? <FocusImage src={c.image || c.fallback} alt="" x={c.pos ? parseInt(c.pos, 10) : null} y={c.pos ? parseInt(c.pos.split('% ')[1], 10) : null} onPick={(x, y) => saveCoverFocus(kind, c.id, `${x}% ${y}%`)} /> : <i>Generated placeholder</i>}</div>
+                <div className="adm-cover">{(c.image || c.fallback) ? <ImageAdjust src={c.image || c.fallback} pos={c.pos} aspect={3 / 4} onChange={v => saveCoverFocus(kind, c.id, v)} /> : <span className="muted">Generated placeholder</span>}</div>
                 <b>{c.name}</b>
                 {!c.image && c.fallback && <span className="muted small">Showing a product photo</span>}
-                {c.pos && <button className="link-u small" onClick={() => saveCoverFocus(kind, c.id, null)}>Reset position</button>}
                 <div className="adm-act">
                   <label className="btn dark pill adm-file">{busy === `${kind}${c.id}` ? '…' : c.image ? 'REPLACE' : 'UPLOAD'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onChange={e => { const f = e.target.files[0]; e.target.value = ''; f && setCover(kind, c.id)(f) }} /></label>
                   {c.image && <button className="danger" onClick={() => clearCover(kind, c.id)}>Remove</button>}

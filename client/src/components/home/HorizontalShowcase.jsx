@@ -6,6 +6,7 @@ import { useApp } from '../../context/App';
 import { apiRetry } from '../../lib/api';
 import { useIsMobile, useReduced } from '../../lib/hooks';
 import { ProductMedia } from '../ProductCard3D';
+import { coverStyle } from '../../lib/imgPos';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -69,7 +70,7 @@ export default function HorizontalShowcase() {
             <Link key={c.slug} to={`/shop?category=${c.slug}`} className="hs-card" data-cursor="SHOP">
               <span className="hs-no" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
               <span className="hs-go" aria-hidden="true">↗</span>
-              <span className="hs-img"><span><ProductMedia p={lead[c.slug] || { slug: c.slug, name: c.name }} /></span></span>
+              <span className="hs-img"><span>{c.image_url ? <img className="cov" src={c.image_url} alt="" loading="lazy" style={coverStyle(c.image_pos)} /> : <ProductMedia p={lead[c.slug] || { slug: c.slug, name: c.name }} />}</span></span>
               <span className="hs-meta"><small>COLLECTION</small><strong>{c.name}</strong><em>{c.product_count} {c.product_count === 1 ? 'piece' : 'pieces'} · Shop now</em></span>
             </Link>
           ))}

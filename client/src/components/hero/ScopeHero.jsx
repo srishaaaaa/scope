@@ -6,6 +6,7 @@ import { useFinePointer, useReduced } from '../../lib/hooks';
 import { Magnetic } from '../Motion';
 import FigurePlaceholder from '../home/FigurePlaceholder';
 import { media } from '../../config/content';
+import { decodePos } from '../../lib/imgPos';
 import { inr } from '../../lib/format';
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -19,6 +20,7 @@ const WORD = ['S', 'C', 'O', 'P', 'E', ' ', '1', '3'];
 export default function ScopeHero() {
   const { entered, site, catalog } = useApp();
   const photo = site.branding?.heroModel || media.heroCutout || catalog.featured.find(p => p.image)?.image || null;
+  const fr = decodePos(site.branding?.heroModelPos);
   const cutout = !!photo && /\.(png|webp|avif)(\?|#|$)/i.test(photo);
   const reduced = useReduced(), fine = useFinePointer();
   const ref = useRef();
@@ -60,7 +62,7 @@ export default function ScopeHero() {
       <div className="s13-h-stage3d" aria-hidden="true">
         <motion.span className="s13-h-ground" style={{ x: shadowX }} initial={{ opacity: 0 }} animate={show ? { opacity: 1 } : undefined} transition={{ duration: 1.4, delay: 0.6 }} />
         <motion.div className="s13-h-fig" style={{ x: figX, y: figY, rotateY: rotY }} initial={{ opacity: 0, y: 40 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 1.3, delay: 0.5, ease: EASE }}>
-          <motion.div style={{ y: figScroll }} className="s13-h-fig-in">
+          <motion.div style={{ y: figScroll, scale: fr.z, originX: 0.5, originY: 1, x: `${(50 - fr.x) * 0.5}%` }} className="s13-h-fig-in">
             {photo ? <img src={photo} alt="" className={cutout ? 'cut' : 'blend'} fetchpriority="high" decoding="async" /> : <FigurePlaceholder />}
             {photo && cutout && <span className="refl"><img src={photo} alt="" /></span>}
           </motion.div>
