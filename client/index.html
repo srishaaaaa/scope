@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#0b0b0b">
 <meta name="description" content="SCOPE 13 — a contemporary menswear boutique in Madurai.">
 <title>SCOPE 13 — A Clothing Era</title>
 <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16">
@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet"></noscript>
 <link rel="preload" as="image" href="/images/scope13-logo.jpg" fetchpriority="high">
 <script>
@@ -20,12 +20,12 @@
 (function(){try{if(location.pathname.indexOf('/admin')===0)return;var H={"Content-Type":"application/json","X-Requested-With":"dhanya"},P={};["/store","/categories","/collections","/products?featured=1&limit=12"].forEach(function(p){P[p]=fetch("/api"+p,{credentials:"include",headers:H}).catch(function(){return null})});window.__pre=P}catch(e){}})();
 </script>
 <style>
-html,body{margin:0;background:#fff}
-.boot{position:fixed;inset:0;display:grid;place-content:center;justify-items:center;gap:16px;background:#fff;color:#242424;font-family:'Space Grotesk',system-ui,sans-serif}
-.boot b{font-weight:600;font-size:28px;letter-spacing:.42em;padding-left:.42em}
-.boot small{font:500 10px/1 Manrope,system-ui,sans-serif;letter-spacing:.5em;padding-left:.5em;color:#A9A9A9}
-.boot i{display:block;width:150px;height:1px;background:#D8D8D8;overflow:hidden;position:relative}
-.boot i::after{content:'';position:absolute;inset:0;width:40%;background:#242424;animation:boot-bar 1.3s ease-in-out infinite}
+html,body{margin:0;background:#0b0b0b}
+.boot{position:fixed;inset:0;display:grid;place-content:center;justify-items:center;gap:16px;background:#0b0b0b;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif}
+.boot b{font-family:Syne,'Space Grotesk',sans-serif;font-weight:800;font-size:clamp(34px,7vw,84px);letter-spacing:-.01em}
+.boot small{font:500 10px/1 Manrope,system-ui,sans-serif;letter-spacing:.5em;padding-left:.5em;color:#7FAEC3}
+.boot i{display:block;width:150px;height:1px;background:rgba(255,255,255,.18);overflow:hidden;position:relative}
+.boot i::after{content:'';position:absolute;inset:0;width:40%;background:#fff;animation:boot-bar 1.3s ease-in-out infinite}
 @keyframes boot-bar{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
 @media (prefers-reduced-motion:reduce){.boot i::after{animation:none}}
 </style>
