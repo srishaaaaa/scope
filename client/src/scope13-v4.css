@@ -452,3 +452,8 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .s13-feat strong { color: #0b0b0b !important } .s13-feat strong::after { background: #12232C !important }
 .s13-feat span { color: #555 !important }
 @media (max-width: 1000px) { .s13-feat { border-bottom: 1px solid rgba(11,11,11,.1) !important } }
+
+/* ---- product cards stay still on hover (no lift, tilt or jitter) ---- */
+.s13-pslide .pcard, .s13-pslide .pcard-frame, .pcard, .pcard-layer { transform: none !important; will-change: auto }
+.s13-pslide .pcard:hover .pcard-frame { transform: none !important }
+.pcard:hover { transform: none !important }
