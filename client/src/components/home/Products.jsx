@@ -19,13 +19,13 @@ function useProducts(paths) {
   return items;
 }
 
-function Shelf({ id, label, title, link, items, aria }) {
+function Shelf({ id, label, title, link, items, aria, badge, ghost, dark }) {
   if (!items?.length) return null;
   return (
-    <section className="s13-sec s13-shelf" id={id} aria-labelledby={`${id}-h`}>
-      <div className="s13-wrap"><SectionHead id={`${id}-h`} label={label} title={title} link={link} /></div>
+    <section className={`s13-sec s13-shelf ${dark ? 'dark' : ''}`} id={id} aria-labelledby={`${id}-h`}>
+      <div className="s13-wrap s13-shelf-top"><span className="s13-gw" aria-hidden="true">{ghost}</span><SectionHead id={`${id}-h`} label={label} title={title} link={link} /></div>
       <Scroller className="s13-pscroll" label={aria}>
-        {items.map((p, i) => <div className="s13-pslide" key={p.id}><ProductCard p={p} index={i} /></div>)}
+        {items.map((p, i) => <div className="s13-pslide" key={p.id}>{badge && <span className="s13-chip">{badge}</span>}<ProductCard p={p} index={i} /></div>)}
       </Scroller>
     </section>
   );
@@ -34,11 +34,11 @@ function Shelf({ id, label, title, link, items, aria }) {
 // Trending now: the pieces the store features (Admin → Inventory → Featured); if none are flagged, the newest pieces.
 export function TrendingNow() {
   const items = useProducts(['/products?featured=1&limit=10', '/products?sort=newest&limit=10']);
-  return <Shelf id="trending" label="TRENDING NOW" title="What everyone is wearing" link={['/shop', 'VIEW ALL →']} items={items} aria="trending now" />;
+  return <Shelf id="trending" label="TRENDING NOW" title="What everyone is wearing" link={['/shop', 'VIEW ALL →']} items={items} aria="trending now" badge="FEATURED" ghost="TRENDING" />;
 }
 
 // Best sellers: only products flagged as best sellers. No invented rankings; the shelf stays out of the way if none are.
 export function Bestsellers() {
   const items = useProducts(['/products?flag=best&limit=10']);
-  return <Shelf id="best-sellers" label="BEST SELLERS" title="Most wanted" link={['/shop?flag=best', 'VIEW ALL →']} items={items} aria="best sellers" />;
+  return <Shelf id="best-sellers" label="BEST SELLERS" title="Most wanted" link={['/shop?flag=best', 'VIEW ALL →']} items={items} aria="best sellers" badge="BEST SELLER" ghost="BEST SELLERS" dark />;
 }

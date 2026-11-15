@@ -1,10 +1,10 @@
 // Deterministic generative art used while a product has no photography.
 export const PALETTES = [
-  ['#111111', '#999999', '#DCDCDC'],
-  ['#252525', '#BDBDBD', '#F4F4F4'],
-  ['#1b1b1b', '#8a8a8a', '#E6E6E6'],
-  ['#2e2e2e', '#A9A9A9', '#FAFAFA'],
-  ['#161616', '#777777', '#D0D0D0'],
+  ['#12232C', '#477E90', '#7FAEC3'],
+  ['#1B3340', '#7FAEC3', '#DCE8EE'],
+  ['#0f1d25', '#3a6b80', '#A9C9DA'],
+  ['#242a2e', '#8a9aa3', '#E4EAED'],
+  ['#16303b', '#5f8fa5', '#C8DCE6'],
 ];
 
 export function hash(str) {

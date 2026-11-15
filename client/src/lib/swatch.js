@@ -1,0 +1,3 @@
+// Colour name -> swatch colour for the product cards (falls back to a neutral grey for names it does not know).
+const MAP = { black: '#111111', white: '#FFFFFF', 'off white': '#F1EEE6', grey: '#8A8D90', gray: '#8A8D90', charcoal: '#2E3133', 'washed grey': '#A5A8AB', stone: '#CFC8B8', olive: '#59603F', indigo: '#2B3A67', sky: '#8DB8D9', 'light blue': '#A9C9E2', navy: '#14213D', blue: '#2C5AA0', beige: '#D8C9AE', cream: '#F2EBD9', brown: '#6B4B35', tan: '#B58A5B', green: '#3E6B4B', red: '#A3262A', maroon: '#5A1E2A', khaki: '#A89F72', sand: '#D9CDB0' };
+export const swatch = name => MAP[String(name || '').trim().toLowerCase()] || '#B9BDC0';

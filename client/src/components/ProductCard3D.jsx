@@ -5,6 +5,7 @@ import ProductArt from './ProductArt';
 import { useApp } from '../context/App';
 import { useFinePointer, useReduced } from '../lib/hooks';
 import { inr } from '../lib/format';
+import { swatch } from '../lib/swatch';
 
 // A photo fades in once it has loaded (never a half-drawn image) and is framed on the focus point chosen in the admin.
 function Photo({ className = '', style, ...rest }) {
@@ -84,7 +85,7 @@ export default function ProductCard({ p, tall = false, className = '', index = n
         </div>
         <div className="pcard-price">
           <span>{inr(p.price)}</span>
-          {p.colors?.length > 1 && <span className="dots" aria-label={`${p.colors.length} colours`}>{p.colors.slice(0, 4).map(c => <i key={c} title={c} />)}</span>}
+          {p.colors?.length > 1 && <span className="dots" aria-label={`${p.colors.length} colours`}>{p.colors.slice(0, 4).map(c => <i key={c} title={c} style={{ background: swatch(c) }} />)}</span>}
         </div>
       </div>
     </motion.article>

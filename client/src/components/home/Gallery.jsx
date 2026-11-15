@@ -33,7 +33,7 @@ function Lightbox({ items, index, setIndex, onClose }) {
 export default function Gallery() {
   const { catalog } = useApp();
   const [open, setOpen] = useState(null);
-  const items = catalog.featured.slice(0, 8).map(p => ({ p, alt: p.name }));
+  const items = catalog.featured.slice(0, 6).map(p => ({ p, alt: p.name }));
   if (!items.length) return null;
   return (
     <section className="s13-sec s13-gallery" id="gallery" aria-labelledby="gal-h">
