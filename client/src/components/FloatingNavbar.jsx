@@ -118,9 +118,9 @@ export default function FloatingNavbar() {
             <div className="tools-pill">
               <button className="tool" onClick={() => setSearchOpen(true)} aria-label="Search" data-cursor="SEARCH"><SearchI /><span>SEARCH</span></button>
               <i className="sep hide-sm" aria-hidden="true" />
-              <Link className="tool hide-sm" to={user ? '/account' : '/login'} aria-label={user ? 'Account' : 'Sign in'}><UserI /><span>PROFILE</span></Link>
+              <Link className="tool hide-sm" to={user ? '/account' : '/login'} aria-label={user ? 'Account' : 'Sign in'}><UserI /><span>{user ? 'ACCOUNT' : 'LOGIN'}</span></Link>
               <Link className="tool hide-sm" to="/wishlist" aria-label={`Wishlist, ${wish.length} saved`}><HeartI /><span>WISHLIST</span>{wish.length > 0 && <b className="count">{wish.length}</b>}</Link>
-              <button className="cart-pill" onClick={() => setBagOpen(true)} aria-label={`Shopping bag, ${bagCount} items`} data-cursor="BAG"><BagI /><span>BAG</span>
+              <button className="cart-pill" onClick={() => setBagOpen(true)} aria-label={`Shopping bag, ${bagCount} items`} data-cursor="BAG"><BagI /><span>CART ({bagCount})</span>
                 {bagCount > 0 && <motion.b key={bagCount} className="cart-n" initial={{ scale: 1.7 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 400, damping: 14 }}>{bagCount}</motion.b>}
               </button>
             </div>
