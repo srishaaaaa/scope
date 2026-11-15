@@ -9,6 +9,7 @@ import { ProductMedia } from '../ProductCard3D';
 import { coverStyle } from '../../lib/imgPos';
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true }); // phone address-bar show/hide must not re-pin the section
 
 // Pinned sideways showcase: while you scroll down the page, the section stays put and its content slides left. The card
 // nearest the focus point turns dark, its photograph drifts against the motion, and a progress bar fills. Cards are the
@@ -30,12 +31,12 @@ export default function HorizontalShowcase() {
   }, [key]); // eslint-disable-line
 
   useEffect(() => {
-    if (reduced || mobile || !cats.length || !track.current) return;
+    if (reduced || !cats.length || !track.current) return;
     const ctx = gsap.context(() => {
       const cards = gsap.utils.toArray('.hs-card', track.current);
       const dist = () => Math.max(0, track.current.scrollWidth - window.innerWidth);
       const paint = () => {
-        const focus = window.innerWidth * 0.56;
+        const focus = window.innerWidth * (window.innerWidth < 900 ? 0.5 : 0.56);
         let best = 0, bd = 1e9;
         cards.forEach((c, i) => {
           const r = c.getBoundingClientRect(), mid = r.left + r.width / 2, d = Math.abs(mid - focus);
@@ -53,7 +54,7 @@ export default function HorizontalShowcase() {
       paint();
     }, root);
     return () => ctx.revert();
-  }, [reduced, mobile, key, Object.keys(lead).length]); // eslint-disable-line
+  }, [reduced, key, Object.keys(lead).length]); // eslint-disable-line
 
   if (!cats.length) return null;
   return (

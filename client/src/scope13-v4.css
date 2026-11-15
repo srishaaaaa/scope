@@ -59,7 +59,7 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
   .s13-h-cta { left: var(--pad); bottom: 5%; gap: 22px } .s13-black { padding: 15px 28px }
   .s13-h-note { right: var(--pad); bottom: 5%; display: none }
 }
-@media (prefers-reduced-motion: reduce) { .s13-h-word-in, .s13-h-fig { transform: none !important } }
+@media (prefers-reduced-motion: reduce) { .s13-h-word-in, .s13-h-fig { } }
 .cursor { display: none !important }
 
 /* ---- search: compact panel over a dimmed page ---- */
@@ -215,7 +215,7 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .hs-prog span { font: 600 11px/1 var(--display); letter-spacing: .2em; font-variant-numeric: tabular-nums }
 @media (max-width: 900px) {
   .hs-pin { height: auto; min-height: 0; padding: 56px 0 40px; display: block }
-  .hs-track { width: 100%; overflow-x: auto; padding: 0 var(--pad) 12px; align-items: stretch; scroll-snap-type: x mandatory; scrollbar-width: none; transform: none !important }
+  .hs-track { width: 100%; overflow-x: auto; padding: 0 var(--pad) 12px; align-items: stretch; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .hs-head { flex: none; width: 80vw; align-self: center } .hs-head h2 { font-size: clamp(40px, 12vw, 64px) }
   .hs-card { height: 420px; width: 74vw; scroll-snap-align: center } .hs-prog { display: none } .hs-hint { display: none }
 }
@@ -358,7 +358,7 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 :root { --hs-h: min(74vh, 640px) }
 .hs-card { justify-content: flex-start !important; height: var(--hs-h) !important; width: calc((var(--hs-h) - 112px) * .75 + 28px) !important; padding: 14px !important }
 .hs-img { position: relative !important; left: auto !important; right: auto !important; top: auto !important; bottom: auto !important; flex: none; width: 100%; aspect-ratio: 3 / 4; border-radius: 12px }
-.hs-img > span { position: absolute !important; inset: 0 !important; transform: none !important }
+.hs-img > span { position: absolute !important; inset: 0 !important; }
 .hs-no { left: 26px !important; top: 22px !important; font-size: clamp(38px, 3.6vw, 56px) !important; color: rgba(255,255,255,.92) !important; text-shadow: 0 2px 18px rgba(0,0,0,.35) }
 .hs-card.on .hs-no { color: #fff !important }
 .hs-go { right: 26px !important; top: 24px !important; background: rgba(255,255,255,.9); color: #0b0b0b; border-color: transparent }
@@ -455,8 +455,8 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 
 /* ---- product cards stay still on hover (no lift, tilt or jitter) ---- */
 .s13-pslide .pcard, .s13-pslide .pcard-frame, .pcard, .pcard-layer { transform: none !important; will-change: auto }
-.s13-pslide .pcard:hover .pcard-frame { transform: none !important }
-.pcard:hover { transform: none !important }
+.s13-pslide .pcard:hover .pcard-frame { }
+.pcard:hover { }
 
 /* ---- no blue bands: shelves and benefits on white / soft neutral; ghost word kept inside the grid ---- */
 .s13-shelf.dark, #best-sellers { background: #F5F5F3 !important; color: #0b0b0b }
@@ -515,3 +515,15 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .dpos-reel .media { border-radius: 26px; aspect-ratio: 9 / 16 }
 @media (max-width: 1100px) { .dpos-reels.six { grid-template-columns: repeat(2, minmax(0, 1fr)) !important } }
 @media (max-width: 640px) { .dpos-reels.six { grid-template-columns: 1fr !important } }
+
+/* ---- phones: same pinned sideways scroll as desktop ---- */
+@media (max-width: 900px) {
+  .hs-pin { height: 100svh !important; min-height: 560px !important; padding: 0 !important; display: flex !important; flex-direction: column; justify-content: center }
+  .hs-track { width: max-content !important; overflow: visible !important; scroll-snap-type: none !important; align-items: center !important; padding: 0 12vw 0 var(--pad) !important; gap: 14px !important }
+  .hs-head { width: 72vw !important; margin-right: 6vw }
+  .hs-head h2 { font-size: clamp(38px, 12.5vw, 58px) !important }
+  .hs-sub { font-size: 14px }
+  .hs-hint { display: inline-flex !important }
+  .hs-card { --hs-h: min(64svh, 500px); height: var(--hs-h) !important; width: calc((var(--hs-h) - 104px) * .75 + 28px) !important; scroll-snap-align: none }
+  .hs-prog { display: flex !important; left: var(--pad); right: var(--pad); bottom: 22px }
+}
