@@ -103,10 +103,10 @@ export function BarcodeScannerInput({ onItem, onUnknown }) {
   return (
     <div className="bc-scan">
       <div className="bc-scan-bar">
-        <span aria-hidden="true" className="bc-scan-ic">▥</span>
+        <svg className="bc-scan-ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 8V5.5A1.5 1.5 0 0 1 4.5 4H8M16 4h3.5A1.5 1.5 0 0 1 21 5.5V8M21 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H4.5A1.5 1.5 0 0 1 3 18.5V16" /><path d="M7 12h10" /></svg>
         <input ref={input} value={val} disabled={busy} placeholder="Scan barcode with machine, camera, or type code…" aria-label="Scan or type a barcode"
           onChange={e => setVal(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && val.trim()) { e.preventDefault(); process(val) } }} />
-        <button type="button" className="bc-scan-cam" aria-label="Scan with camera" onClick={() => setCam(true)}>📷</button>
+        <button type="button" className="bc-scan-cam" aria-label="Scan with camera" onClick={() => setCam(true)}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.3-2h6.4L16.5 7h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z" /><circle cx="12" cy="13" r="3.4" /></svg></button>
       </div>
       {msg && <p className={`bc-msg ${msg.t}`} role={msg.t === 'err' ? 'alert' : 'status'}>{msg.t === 'ok' ? '✓ ' : '⚠ '}{msg.x}</p>}
       {cam && <CameraScanner onClose={() => setCam(false)} onCode={c => { setCam(false); process(c) }} />}

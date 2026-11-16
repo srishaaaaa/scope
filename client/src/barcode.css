@@ -75,3 +75,12 @@
 .bc-queue table { width: 100% } .bc-queue th { text-align: left; font: 800 10px/1 var(--display); letter-spacing: .14em; color: #6b7780; padding: 12px 14px } .bc-queue td { padding: 12px 14px; border-top: 1px solid #f0f1f2; vertical-align: middle } .bc-queue .r, .bc-queue th.r { text-align: right }
 .bc-n { width: 60px; padding: 6px 8px; border: 1px solid #cfd3d6; border-radius: 8px; text-align: right }
 .dpos-sheet .bc-info + .f, .dpos-sheet label.f { display: grid; gap: 6px }
+
+/* ---- billing scan bar, as in the reference: big rounded bar, scan-frame icon, bold grey placeholder, camera button ---- */
+.bc-scan { margin: 14px 0 16px }
+.bc-scan-bar { gap: 14px; padding: 9px 12px 9px 20px; border: 2.5px solid #cfd2d6; border-radius: 20px; background: #fff; min-height: 66px; box-shadow: none }
+.bc-scan-bar:focus-within { border-color: #8d949b; box-shadow: 0 0 0 4px rgba(141,148,155,.14) }
+.bc-scan-ic { flex: none; color: #2b2f33 }
+.bc-scan input { font: 700 16px/1.2 var(--sans) !important; color: #1c1f22; padding: 12px 2px }
+.bc-scan input::placeholder { color: #9aa0a6; font-weight: 800; opacity: 1 }
+.bc-scan-cam { width: 48px; height: 48px; border-radius: 14px; border: 1.5px solid #cfd2d6; display: grid; place-items: center; color: #2b2f33; background: #fff; flex: none; transition: background .2s, border-color .2s } .bc-scan-cam:hover { background: #f3f4f5; border-color: #8d949b }
