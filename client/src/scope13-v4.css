@@ -620,3 +620,5 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 @keyframes s13-ken { from { transform: scale(1) } to { transform: scale(1.06) } }
 @media (prefers-reduced-motion: reduce) { .s13-story-media img { animation: none } }
 .s13-stats strong > span, .ab-stat strong > span { font: inherit !important; color: inherit !important; max-width: none !important; line-height: inherit !important }
+.ab-photo img, .ab-photo .media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+.s13-stats strong > span, .ab-stat strong > span { letter-spacing: inherit !important; text-transform: none !important; opacity: 1 !important; display: inline !important } .ab-stat strong { color: #0b0b0b !important; letter-spacing: -.03em !important }

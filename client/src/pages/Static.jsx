@@ -11,9 +11,12 @@ import { useSiteText } from '../lib/siteText';
 import StoreLocationMap from '../components/StoreLocationMap';
 import CountUp from '../components/home/CountUp';
 import BrandPanel from '../components/home/BrandPanel';
+import { coverStyle } from '../lib/imgPos';
 
 export function About() {
-  const { catalog } = useApp();
+  const { catalog, site } = useApp();
+  const aboutPhoto = site.branding?.storyImage || null;
+  const aboutLead = catalog.featured[1] || catalog.featured[0];
   const t = useSiteText();
   const cats = catalog.categories, cols = catalog.collections;
   const total = cats.reduce((s, c) => s + c.product_count, 0);
@@ -34,7 +37,7 @@ export function About() {
           <div className="ab-cta"><Link className="btn solid pill" to="/shop" data-cursor="SHOP">EXPLORE COLLECTION</Link><Link className="hl-link" to="/collections" data-cursor="EXPLORE">VIEW CATEGORIES</Link></div>
         </div>
         <div className="ab-photo cut">
-          <BrandPanel />
+          {aboutPhoto ? <img src={aboutPhoto} alt={site.branding?.storyAlt || 'SCOPE 13'} loading="eager" style={coverStyle(site.branding?.storyPos)} /> : aboutLead ? <ProductMedia p={aboutLead} /> : <BrandPanel />}
           {total > 0 && <span className="ab-chip c1"><b>{total}</b> pieces</span>}
           {cats.length > 0 && <span className="ab-chip c2"><b>{cats.length}</b> categories</span>}
         </div>
