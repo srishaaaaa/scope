@@ -1,0 +1,77 @@
+/* Barcode screens (generator, settings drawer, print, scanner) — admin side. */
+.bc-info { margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; background: #eaf3fb; border: 1px solid #bcd7ee; color: #14354d; font-size: 13px; font-weight: 600 }
+.bc-msg { margin: 10px 0 0; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; font-weight: 600 } .bc-msg.ok { background: #e6f5ec; color: #14532d; border: 1px solid #a8d8b9 } .bc-msg.err { background: #fdecec; color: #7a1f1f; border: 1px solid #f1b9b9 }
+.bc-note { margin: 10px 0 0; padding: 8px 12px; background: #fff7e0; border: 1px solid #ecd18a; border-radius: 10px; font-size: 13px }
+.bc-row { display: flex; justify-content: space-between; align-items: center; gap: 8px } .bc-row h4 { margin: 0; font: 800 11px/1 var(--display); letter-spacing: .14em; text-transform: uppercase } .bc-row em { font-size: 10.5px; color: #8a8f94 }
+.bc-pill { background: #12232C; color: #fff; padding: 5px 10px; border-radius: 999px; font: 700 10.5px/1 var(--display) }
+.bc-tag { margin-left: auto; background: #12232C; color: #fff; font: 800 9px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; padding: 4px 7px; border-radius: 5px }
+.bc-x { color: #b3261e; font-size: 12px; padding: 2px 4px }
+
+/* sticker preview */
+.bc-sticker { background: #fff; color: #000; border: 1px solid #cfd3d6; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.08); display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center; overflow: hidden; box-sizing: border-box }
+.bc-st-head { display: flex; flex-direction: column; align-items: center; width: 100%; line-height: 1.1 } .bc-st-head b { font-weight: 900; letter-spacing: .08em; text-transform: uppercase } .bc-st-head span { font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.bc-st-bars { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 0; overflow: hidden } .bc-st-bars svg { max-width: 98%; max-height: 100%; height: auto }
+.bc-st-foot { width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #000; padding-top: 2px; font-size: 7px } .bc-st-foot i { font-style: normal; font-weight: 800; color: #444; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0 } .bc-st-foot b { font-weight: 900; margin-left: 4px }
+
+/* settings drawer */
+.bc-drawer-ov { position: fixed; inset: 0; z-index: 600; background: rgba(0,0,0,.55); display: flex; justify-content: flex-end }
+.bc-drawer { width: min(400px, 100%); height: 100%; background: #fff; display: flex; flex-direction: column; box-shadow: -20px 0 50px rgba(0,0,0,.3); animation: bc-in .25s var(--ease) }
+@keyframes bc-in { from { transform: translateX(100%) } to { transform: none } }
+.bc-drawer-h { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: #12232C; color: #fff } .bc-drawer-h b { font-size: 16px } .bc-drawer-h button { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.12); color: #fff }
+.bc-drawer-b { flex: 1; overflow: auto; padding: 18px 20px; display: grid; gap: 20px; align-content: start }
+.bc-box { margin-top: 8px; display: grid; gap: 11px; padding: 14px; background: #FBFAF6; border: 1px solid #e7e2d2; border-radius: 14px }
+.bc-box label { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; cursor: pointer } .bc-box input { accent-color: #12232C; width: 16px; height: 16px; flex: none }
+.bc-link { text-align: left; color: #1d5fc4; font-weight: 800; font-size: 13px; padding-top: 10px; border-top: 1px solid #e7e2d2 }
+.bc-drawer-f { padding: 14px 18px; border-top: 1px solid #e7e2d2 } .bc-done { width: 100%; padding: 13px; border-radius: 14px; background: #12232C; color: #fff; font: 800 12px/1 var(--display); letter-spacing: .16em }
+
+/* custom size */
+.bc-cs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start } .bc-cs-prev { background: #FBFAF6; border: 1px dashed #d7d0b8; border-radius: 14px; padding: 14px; display: grid; gap: 10px; justify-items: center } .bc-cs-prev h4 { margin: 0; align-self: start }
+.bc-cs-lbl { background: #fff; border: 1px solid #12232C; border-radius: 4px; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #12232C }
+@media (max-width: 700px) { .bc-cs-grid { grid-template-columns: 1fr } }
+
+/* print + preview */
+.bc-print { display: grid; gap: 14px } .bc-print-info { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px; background: #FBFAF6; border: 1px solid #e7e2d2; border-radius: 14px } .bc-print-info small { font: 800 10px/1 var(--display); letter-spacing: .14em; color: #8a6d12 } .bc-print-info h3 { margin: 4px 0; font-size: 18px }
+.bc-chip { display: inline-block; padding: 3px 10px; background: #fff3cf; border: 1px solid #ecd18a; border-radius: 8px; font-size: 12px; font-weight: 700 }
+.bc-code { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #dcdfe2; padding: 6px 10px; border-radius: 12px } .bc-code code { font-weight: 800; font-size: 14px }
+.bc-print-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px } @media (max-width: 760px) { .bc-print-grid { grid-template-columns: 1fr } }
+.bc-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 4px; background: #fff; border: 1px solid #dcdfe2; border-radius: 12px; margin: 6px 0 } .bc-seg button { padding: 9px 6px; border-radius: 9px; font-size: 12px; font-weight: 800 } .bc-seg .on { background: #12232C; color: #fff }
+.bc-print-prev { background: #f1f3f4; border-radius: 14px; padding: 16px; display: grid; gap: 10px; justify-items: center } .bc-print-prev small { justify-self: start; font: 800 10px/1 var(--display); letter-spacing: .14em; color: #6b7780 }
+.bc-sheet { display: flex; flex-wrap: wrap; gap: 12px; padding: 14px; background: #eef0f2; border-radius: 14px; max-height: 60vh; overflow: auto }
+.bc-card { background: #fff; border: 1px dashed #aab; border-radius: 4px; padding: 6px 8px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center; overflow: hidden } .bc-card b { font-size: 11px; letter-spacing: .08em; text-transform: uppercase } .bc-card span { font-size: 10px; font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap } .bc-card small { font-family: monospace; font-size: 9px }
+.bc-card-f { width: 100%; display: flex; justify-content: space-between; border-top: 1px solid #000; padding-top: 2px; font-size: 9px } .bc-card-f i { font-style: normal; font-weight: 700; color: #555 }
+
+/* generator */
+.bc-gen-ov { z-index: 500 }
+.bc-gen { max-width: 1180px; width: calc(100% - 24px); max-height: calc(100vh - 24px); display: flex; flex-direction: column; padding: 0; overflow: hidden }
+.bc-gen-h { padding: 16px 22px } .bc-gen-meta { display: flex; align-items: center; gap: 14px; font-size: 12px; color: rgba(255,255,255,.7) } .bc-gen-meta b { color: #fff } .bc-gen-meta button { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.12); color: #fff; font-size: 16px }
+.bc-gen-b { flex: 1; overflow: auto; padding: 20px 22px; display: grid; gap: 14px; align-content: start }
+.bc-panel { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; padding: 18px; background: #FBFAF6; border: 1px solid #e7e2d2; border-radius: 18px } @media (max-width: 900px) { .bc-panel { grid-template-columns: 1fr } }
+.bc-form h4 { margin: 0 0 12px; font: 800 12px/1 var(--display); letter-spacing: .1em } .bc-fg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 14px } .bc-fg .f { margin: 6px 0 } .bc-fg .bc-dd { grid-column: span 2 } .bc-fg .bc-code-row { grid-column: span 1 }
+@media (max-width: 700px) { .bc-fg { grid-template-columns: 1fr } .bc-fg .bc-dd, .bc-fg .bc-code-row { grid-column: auto } }
+.bc-code-row > div { display: flex; gap: 8px } .bc-code-row input { flex: 1; min-width: 0 }
+.bc-dd { position: relative } .bc-dd-list { position: absolute; left: 0; right: 0; top: 100%; z-index: 20; max-height: 280px; overflow: auto; background: #fff; border: 1px solid #dcdfe2; border-radius: 12px; box-shadow: 0 14px 40px rgba(0,0,0,.18); margin-top: 4px } .bc-dd-list button { display: grid; width: 100%; padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f1f2 } .bc-dd-list button:hover { background: #f3f7f9 } .bc-dd-list small { color: #6b7780 }
+.bc-prev { display: grid; gap: 10px; align-content: start } .bc-prev-box { display: grid; place-items: center; padding: 16px; background: #eef0f2; border-radius: 14px; border: 1px solid #dcdfe2; min-height: 160px }
+.bc-add { padding: 13px; border-radius: 14px; background: #12232C; color: #fff; font: 800 12px/1 var(--display); letter-spacing: .14em; transition: transform .2s } .bc-add:hover { transform: translateY(-2px) }
+.bc-queue { border: 1px solid #e7e2d2; border-radius: 18px; background: #fff; overflow: hidden } .bc-queue-h { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #eee; font-size: 12px; letter-spacing: .06em } .bc-queue-h label { display: flex; gap: 6px; align-items: center; font-size: 12px }
+.bc-empty { text-align: center; padding: 34px 10px; color: #8a8f94; font-weight: 600 } .bc-n { width: 56px; text-align: right }
+.bc-gen-f { display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 14px 22px; border-top: 1px solid #e7e2d2; background: #fff; flex-wrap: wrap } .bc-us { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; margin-right: auto } .bc-gen-f .bc-us { margin-left: 0 }
+
+/* scan bar */
+.bc-scan { margin: 4px 0 12px } .bc-scan-bar { display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 14px; border: 2px solid #d3d7da; border-radius: 16px; background: #fff; transition: border-color .2s, box-shadow .2s } .bc-scan-bar:focus-within { border-color: #12232C; box-shadow: 0 0 0 4px rgba(18,35,44,.1) }
+.bc-scan-ic { font-size: 20px; color: #6b7780 } .bc-scan input { flex: 1; border: 0 !important; outline: 0; background: transparent; padding: 10px 4px; font-size: 14px; font-weight: 600; min-width: 0 } .bc-scan-cam { width: 40px; height: 40px; border-radius: 12px; border: 1px solid #d3d7da; font-size: 18px }
+.bc-cam { position: relative; background: #000; border-radius: 16px; overflow: hidden; aspect-ratio: 4 / 3 } .bc-cam video { width: 100%; height: 100%; object-fit: cover } .bc-cam-frame { position: absolute; inset: 18% 12%; border: 2px solid rgba(255,255,255,.85); border-radius: 14px; box-shadow: 0 0 0 999px rgba(0,0,0,.35) }
+.bc-assign { max-height: 300px; overflow: auto; display: grid; gap: 6px; margin: 0; padding: 0; list-style: none } .bc-assign li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid #e3e6e8; border-radius: 12px } .bc-assign small { display: block; color: #6b7780 }
+.bc-reg { max-height: 55vh; overflow: auto }
+
+/* ---- generator layout fixes ---- */
+.dpos-sheet.bc-gen { max-width: min(1180px, calc(100vw - 24px)) !important; width: min(1180px, calc(100vw - 24px)) !important; padding: 0 !important }
+.bc-gen .dpos-mhead.bc-gen-h { position: static !important; display: flex !important; justify-content: space-between; align-items: center; margin: 0 !important; padding: 14px 22px !important; border-radius: 0; min-height: 0 }
+.bc-gen .f, .bc-drawer .f, .bc-print .f, .bc-cs .f { display: grid !important; gap: 6px; align-content: start }
+.bc-gen .f > span, .bc-print .f > span { font: 700 10.5px/1.2 var(--display); letter-spacing: .12em; text-transform: uppercase; color: #4a5258 }
+.bc-gen .f input, .bc-gen .f select { width: 100%; min-width: 0 }
+.bc-gen-f .dpos-btn, .bc-gen-f .dpos-btn.ghost { display: inline-flex !important; align-items: center; justify-content: center; padding: 11px 20px; border-radius: 12px; font-weight: 800; letter-spacing: .08em; white-space: nowrap }
+.bc-gen-f .dpos-btn:not(.ghost) { background: #12232C; color: #fff } .bc-gen-f .dpos-btn.ghost { border: 1px solid #12232C; background: #fff; color: #12232C }
+.bc-gen-f .dpos-btn:disabled { opacity: .45 }
+.bc-queue table { width: 100% } .bc-queue th { text-align: left; font: 800 10px/1 var(--display); letter-spacing: .14em; color: #6b7780; padding: 12px 14px } .bc-queue td { padding: 12px 14px; border-top: 1px solid #f0f1f2; vertical-align: middle } .bc-queue .r, .bc-queue th.r { text-align: right }
+.bc-n { width: 60px; padding: 6px 8px; border: 1px solid #cfd3d6; border-radius: 8px; text-align: right }
+.dpos-sheet .bc-info + .f, .dpos-sheet label.f { display: grid; gap: 6px }

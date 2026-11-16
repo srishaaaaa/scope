@@ -11,6 +11,7 @@ import CatalogPicker from '../components/CatalogPicker';
 import MeasureModal, { measureSummary } from '../components/MeasureModal';
 import LogoCard from '../components/LogoCard';
 import PosInventory from './PosInventory';
+import { BarcodeScannerInput, AssignBarcodeModal } from '../components/barcode/scanner';
 import { AccentPicker, LoginPasswordCard, StaffAccessCard, StockAlertsCard, LowStockAlert } from '../components/PosSettingsParts';
 import PosExpenses from './PosExpenses';
 import PosCoupons from './PosCoupons';
@@ -175,6 +176,7 @@ function Billing({ channel, shop, onSale, onAdvance }) {
     if (cust.phone.replace(/\D/g, '').length < 10) return;
     try { const c = await api('/admin/pos/customers/lookup?phone=' + encodeURIComponent(cust.phone)); if (c) setCust(x => ({ ...x, name: x.name || c.name, dob: x.dob || c.dob || '' })) } catch { /* optional convenience */ }
   };
+  const [unknownCode, setUnknownCode] = useState(null);
   const add = v => setLines(ls => {
     const i = ls.findIndex(l => l.variantId === v.variantId);
     if (i >= 0) return ls.map((l, n) => n === i ? { ...l, qty: Math.min(l.qty + 1, v.stock) } : l);
@@ -287,6 +289,8 @@ function Billing({ channel, shop, onSale, onAdvance }) {
               {!ws && <button className="dpos-btn sm" onClick={() => setCatOpen(true)}>☰ Catalog</button>}
               {!ws && <button className="dpos-btn ghost sm" onClick={() => setLines(ls => [...ls, blankCustom(true)])}>✂ Add Service</button>}
               <button className="dpos-btn ghost sm" onClick={() => setLines(ls => [...ls, blankCustom()])}>+ Add {ws ? 'Item' : 'Custom Item'}</button></div></div>
+          {!ws && <BarcodeScannerInput onItem={it => { add(it); setPulse([it.variantId]); setTimeout(() => setPulse([]), 1700) }} onUnknown={setUnknownCode} />}
+          {unknownCode && <AssignBarcodeModal code={unknownCode} onClose={() => setUnknownCode(null)} onDone={v => add({ ...v, variantId: v.variantId })} />}
           {ws && <datalist id="dpos-ws-list">{wsItems.map(i => <option key={i.id} value={[i.code, i.company, i.colour].filter(Boolean).join(' · ')} />)}</datalist>}
           {lines.length ? lineEls : <Empty>{ws ? 'No items yet.' : 'No items yet. Press Catalog to pick products, or add a service or custom item.'}</Empty>}
           {catOpen && <CatalogPicker onClose={() => setCatOpen(false)} onPick={addMany} />}

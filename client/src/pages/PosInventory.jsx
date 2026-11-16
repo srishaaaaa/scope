@@ -8,6 +8,10 @@ import { Chips } from '../components/PeriodFilter';
 import { ColourModal, colourGroups } from '../components/ColourOptions';
 import ProductPhotos from '../components/ProductPhotos';
 import StockMovements, { downloadCsv } from '../components/StockMovements';
+import CreateBarcodeModal from '../components/barcode/CreateBarcodeModal';
+import { BarcodePrintModal } from '../components/barcode/BarcodeParts';
+import RegistryModal from '../components/barcode/RegistryModal';
+import { useHardwareScanner, lookup, beep } from '../components/barcode/scanner';
 
 const toPaise = s => { const n = Math.round(parseFloat(String(s || '').replace(/,/g, '')) * 100); return Number.isFinite(n) && n > 0 ? n : 0 };
 const rupees = p => (p / 100).toFixed(2).replace(/\.00$/, '');
@@ -205,6 +209,10 @@ function ProductsStock({ manager, stocker }) {
   const load = useCallback(() => api('/admin/pos/products?q=' + encodeURIComponent(q)).then(r => { setList(r); setErr() }).catch(e => setErr(e.message)), [q]);
   useEffect(() => { const t = setTimeout(load, 200); return () => clearTimeout(t) }, [load]);
   useEffect(() => { api('/admin/pos/categories').then(setCats).catch(() => {}) }, []);
+  const [bc, setBc] = useState({}); // variantId -> barcode value
+  const loadBc = useCallback(() => api('/admin/barcodes?limit=500').then(r => setBc(Object.fromEntries(r.filter(x => x.isActive).map(x => [x.variantId, x.barcodeValue])))).catch(() => {}), []);
+  useEffect(() => { if (stocker) loadBc() }, [loadBc, stocker]);
+  useHardwareScanner(async code => { try { const r = await lookup(code); if (!r.found) { beep(false); return setErr(`Barcode ${code} is not assigned to any item yet.`) } beep(true); const p = (list || []).find(x => x.id === r.item.productId); if (p) { setErr(); setView('list'); setOpen(p.id) } } catch (e) { setErr(e.message) } }, true);
   const lowOf = p => p.lowAlert ?? LOW;
   const shown = useMemo(() => (list || []).filter(p => (stock === 'all' || (stock === 'out' ? p.stock < 1 : stock === 'low' ? p.stock >= 1 && p.stock <= lowOf(p) : stock === 'best' ? p.bestSeller : p.stock > lowOf(p))) && (catF === 'all' || p.categorySlug === catF))
     .sort((a, b) => sortBy === 'stock-asc' ? a.stock - b.stock : sortBy === 'stock-desc' ? b.stock - a.stock : sortBy === 'price-asc' ? a.price - b.price : sortBy === 'price-desc' ? b.price - a.price : a.name.localeCompare(b.name)), [list, stock, catF, sortBy]);
@@ -238,6 +246,8 @@ function ProductsStock({ manager, stocker }) {
       <p className="inv-count">{list ? `${list.length} products` : '…'} · same catalog customers see</p>
         <div className="inv-top-r">
 <button className="dpos-btn ghost" onClick={() => setAlerts(true)} style={{ color: '#8a5a00', borderColor: '#e0b44c' }}>⚠ Alerts{needs.length > 0 && <b className="dpos-count" style={{ background: '#b3261e' }}>{needs.length}</b>}</button>
+{stocker && <button className="dpos-btn ghost" onClick={() => setModal({ t: 'registry' })}>▥ Barcodes</button>}
+{stocker && <button className="dpos-btn ghost" onClick={() => setModal({ t: 'barcode' })}>▥ Add Barcode</button>}
 {manager && <button className="dpos-btn" onClick={() => setModal({ t: 'add' })}><Icon n="plus" size={16} />Add product</button>}
         </div>
       </div>
@@ -292,8 +302,8 @@ function ProductsStock({ manager, stocker }) {
                     <span key={c.name} className="dpos-pill" style={{ display: 'inline-flex', gap: 8, alignItems: 'center', padding: '7px 12px', fontSize: 11 }}>{c.name} · {c.stock} in stock{c.price !== p.price ? ` · ${inr(c.price)}` : ''}
                       {manager && colourGroups(p).length > 1 && <button type="button" aria-label={`Remove colour ${c.name}`} style={{ color: '#b3261e', fontWeight: 800 }} onClick={() => removeColour(p, c.name)}>✕</button>}</span>))}</div>
                 </div>
-                <div className="dpos-tw"><table><thead><tr><th>Size</th><th>Colour</th><th>SKU</th><th className="r">Stock</th><th /></tr></thead>
-                  <tbody>{p.variants.map(v => <tr key={v.id}><td>{v.size}</td><td>{v.color}</td><td className="muted small">{v.sku}</td><td className="r"><b>{v.stock}</b> {tag(v.stock)}</td><td className="r">{stocker && <button className="dpos-btn ghost sm" onClick={() => setModal({ t: 'stock', p, vid: v.id })}>Stock</button>}</td></tr>)}</tbody></table></div>
+                <div className="dpos-tw"><table><thead><tr><th>Size</th><th>Colour</th><th>SKU</th><th>Barcode</th><th className="r">Stock</th><th /></tr></thead>
+                  <tbody>{p.variants.map(v => <tr key={v.id}><td>{v.size}</td><td>{v.color}</td><td className="muted small">{v.sku}</td><td className="small">{bc[v.id] ? <><code>{bc[v.id]}</code> {stocker && <button type="button" className="link-u small" onClick={() => setModal({ t: 'print', p, v })}>Print</button>}</> : stocker ? <button type="button" className="link-u small" onClick={() => setModal({ t: 'barcode', pre: { productId: p.id, variantId: v.id } })}>+ Add</button> : '—'}</td><td className="r"><b>{v.stock}</b> {tag(v.stock)}</td><td className="r">{stocker && <button className="dpos-btn ghost sm" onClick={() => setModal({ t: 'stock', p, vid: v.id })}>Stock</button>}</td></tr>)}</tbody></table></div>
                 {manager && <form onSubmit={e => addVariant(p, e)} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr)) auto', gap: 8 }}>
                   <input required aria-label="New size" placeholder="New size" value={nv.size} onChange={e => setNv({ ...nv, size: e.target.value })} /><input aria-label="Colour" placeholder="Colour" value={nv.color} onChange={e => setNv({ ...nv, color: e.target.value })} />
                   <input aria-label="SKU" placeholder="SKU (auto)" value={nv.sku} onChange={e => setNv({ ...nv, sku: e.target.value })} /><input aria-label="Opening stock" inputMode="numeric" placeholder="Stock" value={nv.stock} onChange={e => setNv({ ...nv, stock: e.target.value.replace(/\D/g, '') })} />
@@ -305,6 +315,9 @@ function ProductsStock({ manager, stocker }) {
       {modal?.t === 'stock' && <StockModal product={list.find(x => x.id === modal.p.id) || modal.p} variantId={modal.vid} onClose={() => setModal(null)} onDone={stockDone} />}
       {modal?.t === 'edit' && <ProductEditor product={modal.p} categories={cats} onClose={() => setModal(null)} onDone={load} onPhotos={load} />}
       {modal?.t === 'colour' && <ColourModal product={modal.p} onClose={() => setModal(null)} onDone={() => { toast('Colour added.'); load() }} />}
+      {modal?.t === 'barcode' && <CreateBarcodeModal products={list || []} preselect={modal.pre} onClose={() => setModal(null)} onDone={() => { load(); loadBc() }} />}
+      {modal?.t === 'registry' && <RegistryModal onClose={() => setModal(null)} onChanged={() => { load(); loadBc() }} />}
+      {modal?.t === 'print' && <BarcodePrintModal item={{ productName: modal.p.name, variantName: [modal.v.size, modal.v.color !== 'Default' ? modal.v.color : null].filter(Boolean).join(' / '), barcodeValue: bc[modal.v.id], price: modal.v.priceOverride ?? modal.p.price, defaultQuantity: Math.max(1, modal.v.stock || 1) }} onClose={() => setModal(null)} />}
       {modal?.t === 'add' && <ProductEditor categories={cats} onClose={() => setModal(null)} onDone={load} />}
     </>
   );

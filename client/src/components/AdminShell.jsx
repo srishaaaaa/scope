@@ -1,3 +1,4 @@
+import { GlobalScanListener } from './barcode/scanner';
 import { useLayoutEffect, useRef } from 'react';
 import { Link, NavLink, Navigate, useLocation } from 'react-router-dom';
 import { useStaffAccess } from '../lib/staffAccess';
@@ -95,6 +96,7 @@ export default function AdminShell({ title, sub, actions, children }) {
   const initial = (user?.name || user?.email || 'A').trim()[0].toUpperCase();
   return (
     <div className="dpos">
+      <GlobalScanListener />
       <nav className="dpos-side" aria-label="Admin sections" ref={side} onScroll={e => { sideScroll.top = e.currentTarget.scrollTop; sideScroll.left = e.currentTarget.scrollLeft }}>
         <Link to="/admin/billing" className="dpos-brand" aria-label={nm}><span className="wm-text"><b>{nm.split(' ')[0]}</b><i>{nm.split(' ').slice(1).join(' ')}</i></span><i className="dpos-role">{user?.role === 'inventory' ? 'STOCK' : manager ? 'ADMIN' : 'CASHIER'}</i></Link>
         {NAV.map(g => {
