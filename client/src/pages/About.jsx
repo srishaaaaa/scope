@@ -10,7 +10,7 @@ import BrandPanel from '../components/home/BrandPanel';
 import { useSiteText } from '../lib/siteText';
 import { useReduced } from '../lib/hooks';
 import { brand } from '../config/content';
-import { coverStyle } from '../lib/imgPos';
+import { coverStyle, splitAlt } from '../lib/imgPos';
 
 const STEPS = [
   ['01', 'Browse', 'Filter by category, size, colour and price to find what suits you.'],
@@ -33,7 +33,9 @@ export default function About() {
   const cats = catalog.categories.filter(c => c.product_count > 0);
   const total = cats.reduce((s, c) => s + c.product_count, 0);
   const photo = site.branding?.storyImage || null;
-  const f = catalog.featured;
+  // The collage uses only photos uploaded in the admin: the Our Story photo plus the Reels & Photo gallery photos (never product photos).
+  const gallery = (site.social?.instagram?.posts || []).filter(p => !p.video && p.image).map(p => ({ src: p.image, alt: splitAlt(p.alt).alt, pos: splitAlt(p.alt).pos }));
+  const [g1, g2] = gallery.filter(g => g.src !== photo);
   const stats = [[total, 'Pieces in the collection'], [cats.length, 'Menswear categories'], [catalog.collections.length, 'Curated collections'], ['Madurai', 'Visit our store']].filter(([n]) => n || n === 0);
   const lines = String(t.aboutTitle).split('\n');
 
@@ -47,9 +49,9 @@ export default function About() {
             <div className="ab3-cta"><Link className="ab3-btn" to="/shop" data-cursor="SHOP">EXPLORE COLLECTION</Link><Link className="ab3-link" to="/enquiry" data-cursor="TALK">GET IN TOUCH →</Link></div></Reveal>
         </div>
         <div className="ab3-media">
-          <motion.figure className="ab3-main" style={{ y: y1 }}>{photo ? <img src={photo} alt={site.branding?.storyAlt || 'SCOPE 13'} loading="eager" style={coverStyle(site.branding?.storyPos)} /> : f[0] ? <ProductMedia p={f[0]} /> : <BrandPanel />}</motion.figure>
-          {f[1] && <motion.figure className="ab3-small a" style={{ y: y2 }}><ProductMedia p={f[1]} /></motion.figure>}
-          {f[2] && <motion.figure className="ab3-small b" style={{ y: y1 }}><ProductMedia p={f[2]} /></motion.figure>}
+          <motion.figure className="ab3-main" style={{ y: y1 }}>{photo ? <img src={photo} alt={site.branding?.storyAlt || 'SCOPE 13'} loading="eager" style={coverStyle(site.branding?.storyPos)} /> : g1 ? <img src={g1.src} alt={g1.alt} loading="eager" style={coverStyle(g1.pos)} /> : <BrandPanel />}</motion.figure>
+          {photo && g1 && <motion.figure className="ab3-small a" style={{ y: y2 }}><img src={g1.src} alt={g1.alt} loading="eager" style={coverStyle(g1.pos)} /></motion.figure>}
+          {photo && g2 && <motion.figure className="ab3-small b" style={{ y: y1 }}><img src={g2.src} alt={g2.alt} loading="eager" style={coverStyle(g2.pos)} /></motion.figure>}
         </div>
       </header>
 
