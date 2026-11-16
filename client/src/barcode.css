@@ -84,3 +84,4 @@
 .bc-scan input { font: 700 16px/1.2 var(--sans) !important; color: #1c1f22; padding: 12px 2px }
 .bc-scan input::placeholder { color: #9aa0a6; font-weight: 800; opacity: 1 }
 .bc-scan-cam { width: 48px; height: 48px; border-radius: 14px; border: 1.5px solid #cfd2d6; display: grid; place-items: center; color: #2b2f33; background: #fff; flex: none; transition: background .2s, border-color .2s } .bc-scan-cam:hover { background: #f3f4f5; border-color: #8d949b }
+.inv-cats { margin: 4px 0 20px }
