@@ -91,3 +91,9 @@
 .inv-cat { display: contents !important }
 .inv-cat > .inv-grid { display: contents !important }
 .inv-cat-h { display: none !important }
+
+/* ---- Inventory category chips: tidy, left-aligned, even pills (not stretched across the row) ---- */
+.inv-cats { display: flex !important; flex-wrap: wrap !important; justify-content: flex-start !important; align-items: center; gap: 10px 10px !important; margin: 6px 0 22px !important; padding: 0 !important }
+.inv-cats button { flex: 0 0 auto !important; width: auto !important; margin: 0 !important; padding: 11px 20px !important; border-radius: 999px !important; background: #f1efe9; font: 800 12.5px/1 var(--display) !important; letter-spacing: .06em !important; text-transform: uppercase; white-space: nowrap; transition: background .25s, color .25s, transform .25s var(--ease) }
+.inv-cats button:hover:not(.on) { background: #e6e3da; transform: translateY(-1px) }
+.inv-cats button.on { background: #12232C !important; color: #fff !important }
