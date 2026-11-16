@@ -8,6 +8,7 @@ import { Reveal } from '../Motion';
 import { ProductMedia } from '../ProductCard3D';
 import { brand, contact } from '../../config/content';
 import BrandPanel from './BrandPanel';
+import CountUp from './CountUp';
 import { coverStyle } from '../../lib/imgPos';
 
 const Ico = ({ children, kind }) => (
@@ -59,12 +60,12 @@ export function StorySplit() {
     <section className="s13-sec s13-story" id="story" aria-labelledby="story-h">
       <div className="s13-wrap">
         <div className="s13-story-card">
-          <Reveal className="s13-story-media">{photo ? <img src={photo} alt={site.branding?.storyAlt || 'SCOPE 13'} loading="lazy" style={coverStyle(site.branding?.storyPos)} /> : lead ? <ProductMedia p={lead} /> : <BrandPanel />}</Reveal>
+          <Reveal className="s13-story-media">{photo ? <img src={photo} alt={site.branding?.storyAlt || 'SCOPE 13'} loading="eager" decoding="async" style={coverStyle(site.branding?.storyPos)} /> : lead ? <ProductMedia p={lead} /> : <BrandPanel />}</Reveal>
           <div className="s13-story-copy">
             <Reveal><p className="s13-label"><i />OUR STORY</p></Reveal>
             <h2 id="story-h" className="sr">More than what you wear.</h2>
             {brand.story.slice(0, 2).map((p, i) => <Reveal key={i} delay={0.08 * i}><p className="s13-story-p">{p}</p></Reveal>)}
-            <Reveal delay={0.2}><ul className="s13-stats">{stats.map(([n, l]) => <li key={l}><strong>{n}</strong><span>{l}</span></li>)}</ul><Link className="s13-link" to="/about" data-cursor="DISCOVER">DISCOVER SCOPE 13 →</Link></Reveal>
+            <Reveal delay={0.2}><ul className="s13-stats">{stats.map(([n, l]) => <li key={l}><strong><CountUp value={n} /></strong><span>{l}</span></li>)}</ul><Link className="s13-link" to="/about" data-cursor="DISCOVER">DISCOVER SCOPE 13 →</Link></Reveal>
           </div>
         </div>
       </div>

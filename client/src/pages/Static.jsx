@@ -9,6 +9,7 @@ import { ProductMedia } from '../components/ProductCard3D';
 import ServiceHighlights from '../components/ServiceHighlights';
 import { useSiteText } from '../lib/siteText';
 import StoreLocationMap from '../components/StoreLocationMap';
+import CountUp from '../components/home/CountUp';
 import BrandPanel from '../components/home/BrandPanel';
 
 export function About() {
@@ -40,8 +41,8 @@ export function About() {
       </header>
 
       <section className="ab-stats" aria-label="SCOPE 13 at a glance">
-        {[[total || '—', 'Pieces in the collection'], [cats.length || '—', 'Categories of menswear'], [cols.length || '—', 'Curated categories'], ['India', 'Delivered across the country']].map(([n, l]) => (
-          <Reveal key={l} className="ab-stat"><strong>{n}</strong><span>{l}</span></Reveal>
+        {[[total || '—', 'Pieces in the collection'], [cats.length || '—', 'Categories of menswear'], [cols.length || '—', 'Curated collections'], ['India', 'Delivered across the country']].map(([n, l]) => (
+          <Reveal key={l} className="ab-stat"><strong><CountUp value={n} /></strong><span>{l}</span></Reveal>
         ))}
       </section>
 

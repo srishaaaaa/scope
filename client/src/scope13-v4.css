@@ -609,3 +609,14 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .ab-photo .s13-brandpanel { justify-content: center; padding: 32px 28px }
 .ab-chip.c1 { bottom: auto !important; top: 18px !important; left: 16px !important; right: auto !important }
 .ab-chip.c2 { top: auto !important; bottom: 18px !important; right: 16px !important; left: auto !important }
+
+/* ---- live About stats: hover lift + rising number, line grows in ---- */
+.ab-stats { max-width: var(--max); margin-inline: auto }
+.ab-stat { position: relative; transition: background .4s var(--ease), transform .5s var(--ease) }
+.ab-stat::after { content: ''; position: absolute; left: 0; right: 100%; bottom: -1px; height: 2px; background: #12232C; transition: right .7s var(--ease) }
+.ab-stat:hover { background: #F6F8F9; transform: translateY(-3px) } .ab-stat:hover::after { right: 0 }
+.ab-stat strong { font-variant-numeric: tabular-nums; font-size: clamp(36px, 4vw, 60px) !important }
+.s13-story-media img { animation: s13-ken 22s ease-in-out infinite alternate }
+@keyframes s13-ken { from { transform: scale(1) } to { transform: scale(1.06) } }
+@media (prefers-reduced-motion: reduce) { .s13-story-media img { animation: none } }
+.s13-stats strong > span, .ab-stat strong > span { font: inherit !important; color: inherit !important; max-width: none !important; line-height: inherit !important }
