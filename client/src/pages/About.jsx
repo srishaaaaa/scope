@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useApp } from '../context/App';
 import { Reveal } from '../components/Motion';
 import { ProductMedia } from '../components/ProductCard3D';
@@ -35,7 +35,9 @@ export default function About() {
   const photo = site.branding?.storyImage || null;
   // The collage uses only photos uploaded in the admin: the Our Story photo plus the Reels & Photo gallery photos (never product photos).
   const gallery = (site.social?.instagram?.posts || []).filter(p => !p.video && p.image).map(p => ({ src: p.image, alt: splitAlt(p.alt).alt, pos: splitAlt(p.alt).pos }));
-  const [g1, g2] = gallery.filter(g => g.src !== photo);
+  const [ok, setOk] = useState({}); // gallery files that actually load (a missing file is skipped, never shown broken)
+  useEffect(() => { gallery.forEach(g => { if (ok[g.src] !== undefined) return; const i = new Image(); i.onload = () => setOk(o => ({ ...o, [g.src]: true })); i.onerror = () => setOk(o => ({ ...o, [g.src]: false })); i.src = g.src }) }, [gallery.map(g => g.src).join('|')]); // eslint-disable-line
+  const [g1, g2] = gallery.filter(g => g.src !== photo && ok[g.src]);
   const stats = [[total, 'Pieces in the collection'], [cats.length, 'Menswear categories'], [catalog.collections.length, 'Curated collections'], ['Madurai', 'Visit our store']].filter(([n]) => n || n === 0);
   const lines = String(t.aboutTitle).split('\n');
 
