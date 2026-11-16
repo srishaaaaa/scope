@@ -63,7 +63,7 @@ export default function HorizontalShowcase() {
         <div ref={track} className="hs-track">
           <div className="hs-head">
             <p className="s13-label"><i />SHOP BY CATEGORY</p>
-            <h2 id="hs-h">FIND YOUR<br />FIT, BY<br />CATEGORY.</h2>
+            <h2 id="hs-h">Find your fit,<br />by <em>category.</em></h2>
             <p className="hs-sub">Scroll to move through every department of the store.</p>
             <span className="hs-hint" aria-hidden="true">SCROLL <i /></span>
           </div>

@@ -555,3 +555,8 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .inv-cat-h { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 0 2px 12px; margin-bottom: 16px; border-bottom: 2px solid #0b0b0b }
 .inv-cat-h h3 { margin: 0; font: 700 22px/1.1 'Syne', var(--display); letter-spacing: -.01em; text-transform: none } .inv-cat-h span { font: 600 11px/1 var(--display); letter-spacing: .14em; text-transform: uppercase; color: #6b7780 }
 .inv-cat-h.list { margin: 22px 0 6px; padding-top: 6px }
+
+/* ---- category showcase heading in the site's serif, like the other section titles ---- */
+.hs-head h2 { font: 600 clamp(40px, 5.4vw, 84px)/1.05 'Playfair Display', Georgia, serif !important; letter-spacing: -.01em !important; text-transform: none !important; margin: 8px 0 22px }
+.hs-head h2 em { font-style: italic; font-weight: 500; color: #477E90 }
+@media (max-width: 900px) { .hs-head h2 { font-size: clamp(36px, 11vw, 54px) !important } }
