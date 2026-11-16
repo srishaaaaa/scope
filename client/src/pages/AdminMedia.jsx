@@ -258,6 +258,7 @@ export function AdminSample() {
 
 // Admin → Site text: the wording of the website's sections and policy pages. An empty box uses the built-in wording (shown greyed as the placeholder).
 const TEXT_GROUPS = [
+  ['Home page · first screen', [['heroBadgeText', 'Rotating badge text (about 40 characters, ends with a · )'], ['heroBadgeLink', 'Badge link (a page such as /shop or /collections/new-arrivals)'], ['heroIndexTitle', 'Category list heading']]],
   ['Shop Story', [['storyTitle', 'Title'], ['story', 'Story (one paragraph per box)', 'paras']]],
   ['Trending collections', [['trendingEyebrow', 'Small label'], ['trendingTitle', 'Title'], ['trendingSub', 'Line under the title']]],
   ['Choose your world', [['worldEyebrow', 'Small label'], ['worldTitle', 'Title']]],

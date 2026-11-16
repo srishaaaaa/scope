@@ -9,6 +9,7 @@ import { media } from '../../config/content';
 import { decodePos } from '../../lib/imgPos';
 import { inr } from '../../lib/format';
 import { apiRetry } from '../../lib/api';
+import { useSiteText } from '../../lib/siteText';
 
 const EASE = [0.22, 1, 0.36, 1];
 const WORD = ['S', 'C', 'O', 'P', 'E', ' ', '1', '3'];
@@ -26,7 +27,13 @@ export default function ScopeHero() {
   const reduced = useReduced(), fine = useFinePointer();
   const ref = useRef();
   const show = entered;
-  const cats = catalog.categories.filter(c => c.product_count > 0).slice(0, 5);
+  const t = useSiteText();
+  // The index lists the categories chosen in Admin → Storefront images → Homepage picks (in that order); with none chosen, the first five.
+  const live = catalog.categories.filter(c => c.product_count > 0);
+  const chosen = (site.homepage?.categories || []).map(s => live.find(c => c.slug === s)).filter(Boolean);
+  const cats = (chosen.length ? chosen : live).slice(0, 6);
+  const badgeText = (t.heroBadgeText || '').slice(0, 60);
+  const badgeLink = /^(\/|https:\/\/)/.test(t.heroBadgeLink || '') ? t.heroBadgeLink : '/shop';
   // The hero's Featured chip is the first piece picked in Admin → Trending; until one is picked it falls back to the first featured piece.
   const pick = site.homepage?.trending?.[0];
   const [picked, setPicked] = useState(null);
@@ -48,6 +55,9 @@ export default function ScopeHero() {
   const sunScroll = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [0, 90]);
   const move = e => { if (!fine || reduced) return; const r = ref.current.getBoundingClientRect(); mx.set((e.clientX - r.left) / r.width - 0.5); my.set((e.clientY - r.top) / r.height - 0.5) };
 
+  const badgeInner = (<>
+    <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="bd" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0" /></defs><text><textPath href="#bd" startOffset="0" textLength="268" lengthAdjust="spacing">{badgeText}</textPath></text></svg>
+    <b aria-hidden="true">↗</b></>);
   return (
     <section ref={ref} className="s13-hero" data-hero aria-label="SCOPE 13" onPointerMove={move} onPointerLeave={() => { mx.set(0); my.set(0) }}>
       <div className="s13-h-art" aria-hidden="true">
@@ -89,10 +99,7 @@ export default function ScopeHero() {
 
       {/* rotating circular badge */}
       <motion.div className="s13-h-badge" initial={{ opacity: 0, scale: 0.8 }} animate={show ? { opacity: 1, scale: 1 } : undefined} transition={{ duration: 1, delay: 1.2, ease: EASE }}>
-        <Link to="/shop" data-cursor="SHOP" aria-label="Shop the collection">
-          <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="bd" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0" /></defs><text><textPath href="#bd" startOffset="0" textLength="268" lengthAdjust="spacing">CONTEMPORARY MENSWEAR · SCOPE 13 · MADURAI ·</textPath></text></svg>
-          <b aria-hidden="true">↗</b>
-        </Link>
+        {/^https:/.test(badgeLink) ? <a href={badgeLink} target="_blank" rel="noopener noreferrer" aria-label={badgeText} data-cursor="OPEN">{badgeInner}</a> : <Link to={badgeLink} aria-label={badgeText} data-cursor="OPEN">{badgeInner}</Link>}
       </motion.div>
 
       {/* running marquee strip */}
@@ -112,7 +119,7 @@ export default function ScopeHero() {
       )}
       {cats.length > 0 && (
         <motion.nav className="s13-h-index" aria-label="Categories" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.25, ease: EASE }}>
-          <p>INDEX</p>
+          <p>{t.heroIndexTitle}</p>
           <ul>{cats.map((c, i) => <li key={c.slug}><Link to={`/shop?category=${c.slug}`}><span>{String(i + 1).padStart(2, '0')}</span>{c.name}</Link></li>)}</ul>
         </motion.nav>
       )}

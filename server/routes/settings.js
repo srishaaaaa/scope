@@ -49,6 +49,7 @@ export const contentSchema = z.object({
   instaTitle: line(80), instaSub: line(300),
   contactEyebrow: line(60), contactTitle: line(120), contactSub: line(300),
   aboutTitle: line(120), aboutLead: line(400), aboutSub: line(400),
+  heroBadgeText: line(60), heroBadgeLink: line(200), heroIndexTitle: line(30),
 }).strip();
 export const pageSchema = z.object({ title: text(120).min(1), body: text(20000) });
 

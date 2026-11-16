@@ -8,6 +8,7 @@ export const TEXT_DEFAULTS = {
   worldEyebrow: 'COLLECTIONS', worldTitle: 'CHOOSE YOUR WORLD.',
   instaTitle: 'THE SCOPE 13 FEED.', instaSub: 'A closer look at the style.',
   contactEyebrow: 'ENQUIRIES', contactTitle: "LET'S TALK.", contactSub: 'Questions about a piece, your size or an order? Send us a message and we will get back to you.',
+  heroBadgeText: 'CONTEMPORARY MENSWEAR · SCOPE 13 · MADURAI ·', heroBadgeLink: '/shop', heroIndexTitle: 'INDEX',
   aboutTitle: 'A NEW ERA OF\nEVERYDAY STYLE.', aboutLead: brand.positioning, aboutSub: brand.promise,
 };
 

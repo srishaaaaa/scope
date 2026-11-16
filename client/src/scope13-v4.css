@@ -560,3 +560,21 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .hs-head h2 { font: 600 clamp(40px, 5.4vw, 84px)/1.05 'Playfair Display', Georgia, serif !important; letter-spacing: -.01em !important; text-transform: none !important; margin: 8px 0 22px }
 .hs-head h2 em { font-style: italic; font-weight: 500; color: #477E90 }
 @media (max-width: 900px) { .hs-head h2 { font-size: clamp(36px, 11vw, 54px) !important } }
+
+/* ---- tighter vertical rhythm between home sections ---- */
+:root { --rhythm: clamp(36px, 4.4vw, 64px) }
+.s13-sec, .s13-shelf, .s13-flow > section:not(.s13-features):not(.s13-sec) { padding-block: var(--rhythm) !important }
+.s13-shelf { padding-top: clamp(28px, 3.4vw, 48px) !important; padding-bottom: clamp(24px, 3vw, 44px) !important }
+.s13-shelf .s13-sh { margin-bottom: 20px }
+.s13-scroller-ctl { margin-top: 16px !important }
+.s13-pscroll .s13-scroller-track { padding-bottom: 2px !important }
+.s13-features .s13-feat { padding-block: 28px 30px !important }
+/* the sideways showcase starts near the top of the screen instead of centring in empty space */
+.hs-pin { justify-content: flex-start !important; padding-top: clamp(96px, 11vh, 130px) }
+.hs-card { height: min(66vh, 600px) !important }
+.hs-prog { bottom: 26px !important }
+.reviews.light-sec, .insta, .studio, .eq, .s13-story { padding-block: var(--rhythm) !important }
+.rev-head, .insta-head { margin-bottom: 20px }
+:root { --hs-h: min(66vh, 600px) }
+.hs-card { height: var(--hs-h) !important }
+.hs-pin { padding-top: clamp(84px, 10vh, 110px) !important }
