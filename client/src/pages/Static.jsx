@@ -35,7 +35,7 @@ export function About() {
         <div className="ab-photo cut">
           <BrandPanel />
           {total > 0 && <span className="ab-chip c1"><b>{total}</b> pieces</span>}
-          {cols.length > 0 && <span className="ab-chip c2"><b>{cols.length}</b> categories</span>}
+          {cats.length > 0 && <span className="ab-chip c2"><b>{cats.length}</b> categories</span>}
         </div>
       </header>
 
