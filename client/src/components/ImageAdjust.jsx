@@ -6,6 +6,8 @@ import { decodePos, encodePos, coverStyle, ZOOMS } from '../lib/imgPos';
 // The preview updates instantly while you adjust; the value is saved once, a moment after you stop (one request, one toast).
 export default function ImageAdjust({ src, video, pos, aspect = 3 / 4, fit = 'cover', onChange, busy }) {
   const [local, setLocal] = useState(pos || null);
+  const [broken, setBroken] = useState(false);
+  useEffect(() => { setBroken(false) }, [src, video]);
   const timer = useRef(), pending = useRef(false), latest = useRef(onChange);
   latest.current = onChange;
   useEffect(() => { if (!pending.current) setLocal(pos || null) }, [pos]);
@@ -25,8 +27,9 @@ export default function ImageAdjust({ src, video, pos, aspect = 3 / 4, fit = 'co
   return (
     <div className="adj">
       <div className="adj-box" style={{ aspectRatio: String(aspect) }} onPointerDown={e => { e.currentTarget.setPointerCapture?.(e.pointerId); pick(e) }} onPointerMove={e => e.buttons === 1 && pick(e)} role="img" aria-label="Preview. Click to choose the part of the photo that stays in view.">
-        {video ? <video src={video} poster={src || undefined} muted playsInline preload="metadata" style={coverStyle(local)} /> : <img src={src} alt="" draggable={false} style={fit === 'cover' ? coverStyle(local) : { objectFit: 'contain', objectPosition: 'center bottom', transformOrigin: `${d.x}% 100%`, transform: d.z > 1 ? `scale(${d.z})` : undefined }} />}
-        <span className="adj-dot" style={{ left: `${d.x}%`, top: `${d.y}%` }} aria-hidden="true" />
+        {video ? <video src={video} poster={src || undefined} muted playsInline preload="metadata" style={coverStyle(local)} /> : <img src={src} alt="" draggable={false} onError={() => setBroken(true)} style={fit === 'cover' ? coverStyle(local) : { objectFit: 'contain', objectPosition: 'center bottom', transformOrigin: `${d.x}% 100%`, transform: d.z > 1 ? `scale(${d.z})` : undefined }} />}
+        {broken && <div className="adj-missing" role="alert"><b>File missing</b><span>This photo's file is no longer stored. Click Replace below and upload it again.</span></div>}
+        {!broken && <span className="adj-dot" style={{ left: `${d.x}%`, top: `${d.y}%` }} aria-hidden="true" />}
       </div>
       <label className="adj-zoom"><span>Zoom <b>{d.z.toFixed(1)}×</b></span>
         <input type="range" min="0" max={ZOOMS.length - 1} step="1" value={d.k} disabled={busy} onChange={e => commit(encodePos(d.x, d.y, +e.target.value))} aria-label="Zoom" /></label>

@@ -670,3 +670,5 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
   .ab3-stats { grid-template-columns: 1fr 1fr } .ab3-stat:nth-child(2) { border-right: 0 } .ab3-stat { border-bottom: 1px solid rgba(11,11,11,.1); padding-left: 0 }
 }
 @media (max-width: 560px) { .ab3-cats { grid-template-columns: repeat(2, 1fr) } .ab3-steps ol { grid-template-columns: 1fr } }
+.adj-missing { position: absolute; inset: 0; display: grid; place-content: center; gap: 8px; padding: 20px; text-align: center; background: repeating-linear-gradient(45deg, #fdf3f3, #fdf3f3 12px, #fbe9e9 12px, #fbe9e9 24px); color: #7a1f1f; z-index: 2 }
+.adj-missing b { font: 800 13px/1 var(--display); letter-spacing: .14em; text-transform: uppercase } .adj-missing span { font-size: 13px; line-height: 1.5; max-width: 220px }
