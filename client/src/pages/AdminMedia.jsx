@@ -70,7 +70,7 @@ function HomePicks({ onSaved, toast, only }) {
       {!only && <h2 className="serif adm-h2">Homepage picks</h2>}
       {err && <p role="alert" className="err">{err}</p>}
       <h3 className="adm-h3">Trending collections ({trend.length} of 4)</h3>
-      <p className="muted small">The pieces shown in “Trending collections” on the homepage, in this order.</p>
+      <p className="muted small">The pieces shown in “Trending collections” on the homepage, in this order. The first piece is also the “Featured” card on the home page’s first screen.</p>
       {auto && <p className="adm-note">Nothing is saved here yet, so the homepage is showing your <b>featured</b> pieces, listed below. Change them if you like, then press Save to keep this list.</p>}
       <ol className="adm-picks">{trend.map((s, i) => row(<span className="adm-pick-n">{pics[s] && <img src={pics[s]} alt="" width="40" height="50" />}{names[s] || s}</span>, i, trend, setTrend))}</ol>
       {trend.length < 4 && <>

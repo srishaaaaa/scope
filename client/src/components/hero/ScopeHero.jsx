@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
 import { useApp } from '../../context/App';
@@ -8,6 +8,7 @@ import FigurePlaceholder from '../home/FigurePlaceholder';
 import { media } from '../../config/content';
 import { decodePos } from '../../lib/imgPos';
 import { inr } from '../../lib/format';
+import { apiRetry } from '../../lib/api';
 
 const EASE = [0.22, 1, 0.36, 1];
 const WORD = ['S', 'C', 'O', 'P', 'E', ' ', '1', '3'];
@@ -26,7 +27,11 @@ export default function ScopeHero() {
   const ref = useRef();
   const show = entered;
   const cats = catalog.categories.filter(c => c.product_count > 0).slice(0, 5);
-  const feat = catalog.featured[0];
+  // The hero's Featured chip is the first piece picked in Admin → Trending; until one is picked it falls back to the first featured piece.
+  const pick = site.homepage?.trending?.[0];
+  const [picked, setPicked] = useState(null);
+  useEffect(() => { let dead = false; if (!pick) { setPicked(null); return } apiRetry(`/products?slugs=${encodeURIComponent(pick)}&limit=1`).then(d => !dead && setPicked(d.items?.[0] || null)).catch(() => {}); return () => { dead = true } }, [pick]);
+  const feat = picked || catalog.featured[0];
   const marquee = ['SCOPE 13', 'CONTEMPORARY MENSWEAR', 'NEW ARRIVALS', 'MADURAI', 'EVERYDAY STYLE'];
 
   const mx = useMotionValue(0), my = useMotionValue(0);
