@@ -622,3 +622,51 @@ body:has(.s13-hero) .site-header:not(.compact) { background: var(--stage) !impor
 .s13-stats strong > span, .ab-stat strong > span { font: inherit !important; color: inherit !important; max-width: none !important; line-height: inherit !important }
 .ab-photo img, .ab-photo .media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
 .s13-stats strong > span, .ab-stat strong > span { letter-spacing: inherit !important; text-transform: none !important; opacity: 1 !important; display: inline !important } .ab-stat strong { color: #0b0b0b !important; letter-spacing: -.03em !important }
+
+/* ======================= About page ======================= */
+.ab3 { background: #fff; color: #0b0b0b; padding-top: 0 }
+.ab3-label { display: inline-flex; align-items: center; gap: 12px; margin: 0 0 18px; font: 600 11px/1 var(--display); letter-spacing: .3em } .ab3-label i { width: 36px; height: 1px; background: #477E90 }
+.ab3 h1, .ab3 h2, .ab3 h3 { text-transform: none }
+.ab3 em { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-weight: 500; color: #477E90 }
+.ab3-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 90px); align-items: center; max-width: var(--max); margin: 0 auto; padding: 150px var(--pad) 70px }
+.ab3-h { margin: 0 0 24px; font: 600 clamp(44px, 6vw, 92px)/1 'Playfair Display', Georgia, serif; letter-spacing: -.02em } .ab3-mask { display: block; overflow: hidden; padding-bottom: .08em } .ab3-mask > span { display: block }
+.ab3-lead { margin: 0 0 12px; font: 500 clamp(18px, 1.5vw, 22px)/1.5 var(--sans); max-width: 480px } .ab3-sub { margin: 0 0 28px; color: #666; font-size: 15px; line-height: 1.7; max-width: 440px }
+.ab3-cta { display: flex; align-items: center; gap: 26px; flex-wrap: wrap }
+.ab3-btn { display: inline-flex; padding: 17px 34px; background: #0b0b0b; color: #fff; font: 600 11.5px/1 var(--display); letter-spacing: .16em; transition: background .3s, transform .3s var(--ease) } .ab3-btn:hover { background: #12232C; transform: translateY(-2px) } .ab3-btn.light { background: #fff; color: #0b0b0b } .ab3-btn.light:hover { background: #cfe2ea }
+.ab3-link { font: 700 11.5px/1 var(--display); letter-spacing: .16em; padding-bottom: 6px; border-bottom: 1.5px solid currentColor; transition: color .3s } .ab3-link:hover { color: #477E90 } .ab3-link.light { color: #fff }
+.ab3-media { position: relative; min-height: clamp(420px, 44vw, 660px) }
+.ab3-media figure { margin: 0; overflow: hidden; background: #ECEFF1; will-change: transform; box-shadow: 0 30px 60px -34px rgba(11,11,11,.5) }
+.ab3-main { position: absolute; right: 0; top: 0; width: 72%; aspect-ratio: 4 / 5; border-radius: 6px }
+.ab3-small { position: absolute; border: 8px solid #fff; border-radius: 6px }
+.ab3-small.a { left: 0; bottom: 6%; width: 34%; aspect-ratio: 3 / 4 } .ab3-small.b { right: 6%; bottom: -4%; width: 26%; aspect-ratio: 1 }
+.ab3-media img, .ab3-media .media, .ab3-media svg, .ab3-media .s13-brandpanel { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+.ab3-media .s13-brandpanel b { font-size: clamp(36px, 4.2vw, 62px) !important }
+
+.ab3-stats { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #0b0b0b; border-bottom: 1px solid rgba(11,11,11,.12) }
+.ab3-stat { padding: 34px 24px 36px; border-right: 1px solid rgba(11,11,11,.1); transition: background .4s var(--ease) } .ab3-stat:first-child { padding-left: 0 } .ab3-stat:last-child { border-right: 0 } .ab3-stat:hover { background: #F6F8F9 }
+.ab3-stat strong { display: block; font: 600 clamp(38px, 4.4vw, 64px)/1 'Playfair Display', Georgia, serif; letter-spacing: -.01em; font-variant-numeric: lining-nums tabular-nums; margin-bottom: 10px } .ab3-stat strong > span { font: inherit !important; letter-spacing: inherit !important; text-transform: none !important; color: inherit !important; display: inline !important; max-width: none !important }
+.ab3-stat > span { font: 600 10.5px/1.4 var(--display); letter-spacing: .18em; text-transform: uppercase; color: #6b7780 }
+
+.ab3-story { max-width: var(--max); margin: 0 auto; padding: clamp(56px, 7vw, 110px) var(--pad); display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(28px, 6vw, 100px) }
+.ab3-story h2, .ab3-head h2, .ab3-steps h2 { margin: 0; font: 600 clamp(32px, 3.8vw, 56px)/1.08 'Playfair Display', Georgia, serif; letter-spacing: -.01em }
+.ab3-story-r p { margin: 0 0 20px; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.75; color: #333 } .ab3-story-r p:first-child { font: 500 clamp(22px, 2.2vw, 32px)/1.35 'Playfair Display', Georgia, serif; color: #0b0b0b }
+.ab3-traits { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px } .ab3-traits li { padding: 10px 18px; border: 1px solid #d3d7da; border-radius: 999px; font: 600 10.5px/1 var(--display); letter-spacing: .18em; text-transform: uppercase; transition: background .3s, color .3s } .ab3-traits li:hover { background: #0b0b0b; color: #fff }
+
+.ab3-offer { background: #F5F5F3; padding: clamp(50px, 6vw, 90px) 0 }
+.ab3-head { max-width: var(--max); margin: 0 auto 32px; padding: 0 var(--pad) }
+.ab3-cats { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px }
+.ab3-cat { display: grid; gap: 10px } .ab3-cat-img { display: block; position: relative; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 4px; background: #E6E9EB } .ab3-cat-img .media, .ab3-cat-img svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease) } .ab3-cat:hover .media { transform: scale(1.07) }
+.ab3-cat-t { display: grid; gap: 2px } .ab3-cat-t strong { font: 600 13px/1.25 var(--display); letter-spacing: .02em } .ab3-cat-t em { font: 500 12px var(--sans); font-style: normal; color: #666 }
+
+.ab3-steps { max-width: var(--max); margin: 0 auto; padding: clamp(56px, 7vw, 110px) var(--pad) }
+.ab3-steps ol { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #0b0b0b; margin-top: 34px } .ab3-steps li { padding: 26px 24px 10px 0; border-right: 1px solid rgba(11,11,11,.1); margin-right: 24px } .ab3-steps li:last-child { border-right: 0; margin-right: 0 }
+.ab3-steps li span { font: 600 clamp(40px, 4vw, 60px)/1 'Playfair Display', Georgia, serif; color: transparent; -webkit-text-stroke: 1px #0b0b0b } .ab3-steps h3 { margin: 16px 0 8px; font: 600 20px var(--display); letter-spacing: -.01em } .ab3-steps p { margin: 0; color: #5a6168; font-size: 14.5px; line-height: 1.6; max-width: 260px }
+
+.ab3-cta2 { background: #0b0b0b; color: #fff; text-align: center; padding: clamp(60px, 8vw, 120px) var(--pad) } .ab3-cta2 h2 { margin: 0 0 28px; font: 600 clamp(40px, 6vw, 92px)/1 'Playfair Display', Georgia, serif } .ab3-cta2 .ab3-cta { justify-content: center } .ab3-cta2 em { color: #7FAEC3 }
+
+@media (max-width: 1000px) { .ab3-cats { grid-template-columns: repeat(3, 1fr) } .ab3-steps ol { grid-template-columns: 1fr 1fr } .ab3-steps li { margin-right: 0; border-right: 0; padding-right: 16px } }
+@media (max-width: 860px) {
+  .ab3-hero { grid-template-columns: 1fr; padding-top: 120px } .ab3-media { min-height: 120vw } .ab3-story { grid-template-columns: 1fr }
+  .ab3-stats { grid-template-columns: 1fr 1fr } .ab3-stat:nth-child(2) { border-right: 0 } .ab3-stat { border-bottom: 1px solid rgba(11,11,11,.1); padding-left: 0 }
+}
+@media (max-width: 560px) { .ab3-cats { grid-template-columns: repeat(2, 1fr) } .ab3-steps ol { grid-template-columns: 1fr } }
