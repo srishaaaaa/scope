@@ -64,7 +64,7 @@
 .s13-home .s13-feat:nth-child(4n+4) svg { color: var(--hc-violet) }
 .s13-home .s13-feat:nth-child(4n+1):hover { background: var(--hc-mist) !important } .s13-home .s13-feat:nth-child(4n+2):hover { background: var(--hc-rose) !important }
 .s13-home .s13-feat:nth-child(4n+3):hover { background: var(--hc-sagebg) !important } .s13-home .s13-feat:nth-child(4n+4):hover { background: #EFEDFA !important }
-.s13-home .s13-features { background: #fff !important }
+.s13-home .s13-features { border-block: 0 !important }
 /* section tints back toward white, with a coloured hairline on top of each band */
 .s13-home .s13-flow > :nth-child(1) { background: linear-gradient(180deg, #fff, #F7FBFD) }
 .s13-home .s13-flow > :nth-child(2) { background: linear-gradient(180deg, #F7FBFD, #fff 60%, #FEF9F2) }
@@ -97,3 +97,25 @@
               radial-gradient(60% 70% at 50% 40%, #F7F7F5, #E9EEF0 70%), #EDF0F1 !important;
 }
 .s13-home .s13-h-strip { background: linear-gradient(90deg, var(--hc-deep), var(--hc-azure) 50%, var(--hc-deep)) }
+
+/* smooth hand-offs between sections: grey Best Sellers fades in from white above and out to the categories section below */
+.s13-home #best-sellers { background: linear-gradient(180deg, #fff 0%, #F5F5F3 14%, #F5F5F3 72%, #fff 100%) !important }
+.s13-home .hs { background: #fff }
+.s13-home .hs-pin { background: linear-gradient(180deg, #fff 0%, var(--hc-mist) 100%) }
+.s13-home .s13-features { background: linear-gradient(180deg, var(--hc-mist), #fff 40%) !important }
+
+/* hero: richer colour, same layout */
+body:has(.s13-hero) .site-header:not(.compact) { background: linear-gradient(180deg, #EEF4F7, #E4EDF2) !important }
+.s13-home .s13-hero {
+  background: radial-gradient(40% 55% at 86% 82%, rgba(44,123,198,.30), transparent 70%),
+              radial-gradient(34% 46% at 8% 22%, rgba(224,166,58,.30), transparent 72%),
+              radial-gradient(32% 42% at 12% 86%, rgba(226,114,91,.24), transparent 72%),
+              radial-gradient(30% 38% at 64% 6%, rgba(111,162,135,.24), transparent 72%),
+              radial-gradient(60% 70% at 50% 42%, #F6F8F8, #DCE8EE 72%), #E4ECF0 !important;
+}
+.s13-home .s13-h-feat a { background: rgba(255,255,255,.78) }
+.s13-home .s13-h-feat a b, .s13-home .s13-h-feat a small, .s13-home .s13-h-feat a i { color: var(--hc-coral) }
+.s13-home .s13-h-badge a { box-shadow: inset 0 0 0 1px rgba(44,123,198,.35), 0 12px 30px -14px rgba(44,123,198,.5) }
+.s13-home .s13-h-badge a:hover { background: var(--hc-azure) }
+.s13-home .s13-h-tag, .s13-home .s13-h-note { color: var(--hc-deep2) }
+.s13-home .s13-link { color: var(--hc-azure); border-color: var(--hc-azure) }
