@@ -125,7 +125,7 @@ export function AdminStorefront() {
   const [b, setB] = useState(null); const [cats, setCats] = useState([]); const [cols, setCols] = useState([]);
   const [posts, setPosts] = useState([]); const [busy, setBusy] = useState(''); const [err, setErr] = useState();
 
-  useEffect(() => { if (state === 'ok' && site.branding) { setB({ logo: null, logoAlt: '', heroCutout: null, heroDepth: null, heroAlt: '', storyImage: null, storyAlt: '', heroModel: null, textileImage: null, editorialImage: null, textileAlt: '', editorialAlt: '', ...site.branding, logoAlt: site.branding.logoAlt || '', heroAlt: site.branding.heroAlt || '', storyAlt: site.branding.storyAlt || '', textileAlt: site.branding.textileAlt || '', editorialAlt: site.branding.editorialAlt || '' }); setPosts(site.social?.instagram?.posts || []) } }, [state, site.branding, site.social]);
+  useEffect(() => { if (state === 'ok' && site.branding) { setB({ logo: null, logoAlt: '', heroCutout: null, heroDepth: null, heroAlt: '', storyImage: null, storyAlt: '', heroModel: null, heroLooks: [], textileImage: null, editorialImage: null, textileAlt: '', editorialAlt: '', ...site.branding, logoAlt: site.branding.logoAlt || '', heroAlt: site.branding.heroAlt || '', storyAlt: site.branding.storyAlt || '', textileAlt: site.branding.textileAlt || '', editorialAlt: site.branding.editorialAlt || '' }); setPosts(site.social?.instagram?.posts || []) } }, [state, site.branding, site.social]);
   useEffect(() => { if (state !== 'ok') return; api('/admin/categories').then(setCats).catch(() => {}); api('/admin/collections').then(setCols).catch(() => {}) }, [state]);
 
   const refresh = () => { loadSite(); loadCatalog() };
@@ -154,6 +154,18 @@ export function AdminStorefront() {
               hint="The model photograph that stands in front of the big SCOPE 13 wordmark on the home page. A tall, full-length photo with the background removed (transparent PNG or WebP) works best. The built-in model photo is used until you upload another."
               onUpload={f => run('hero', async () => { const up = await uploadImage(f); const next = { ...b, heroModel: up.url }; await saveBranding(next); setB(next) }, 'Hero model updated.')}
               onReset={() => run('hero', async () => { const next = { ...b, heroModel: null, heroAlt: '' }; await saveBranding(next); setB(next) }, 'Hero model removed.')} />
+            <section className="adm-block">
+              <h3 className="serif adm-h2">Hero outfits (change his shirt)</h3>
+              <p className="muted small">Add up to 5 more photos of the same model in different outfits (same pose, transparent PNG or WebP works best). The home page hero cycles through them with arrows and dots, starting with the Hero model photo above.</p>
+              <ul className="adm-covers">{(b.heroLooks || []).map((u, i) => (
+                <li key={u + i}>
+                  <div className="adm-cover"><img src={u} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>
+                  <b>Outfit {i + 2}</b>
+                  <div className="adm-act"><button className="btn dark pill" disabled={busy === 'look'} onClick={() => run('look', async () => { const next = { ...b, heroLooks: b.heroLooks.filter((_, j) => j !== i) }; await saveBranding(next); setB(next) }, 'Outfit removed.')}>REMOVE</button></div>
+                </li>))}
+              </ul>
+              {(b.heroLooks || []).length < 5 && <label className="btn dark pill adm-file">{busy === 'look' ? '…' : 'ADD OUTFIT PHOTO'}<input type="file" hidden accept="image/png,image/webp,image/jpeg" onChange={e => { const f = e.target.files?.[0]; e.target.value = ''; if (f) run('look', async () => { const up = await uploadImage(f); const next = { ...b, heroLooks: [...(b.heroLooks || []), up.url] }; await saveBranding(next); setB(next) }, 'Outfit added.') }} /></label>}
+            </section>
             <Slot title="Our Story photo" aspect={4 / 3} accept="image/jpeg,image/png,image/webp" busy={busy === 'story'} value={b.storyImage} fallback="" pos={b.storyPos} onPos={v => run('story', async () => { const next = { ...b, storyPos: v }; await saveBranding(next); setB(next) }, 'Position saved.')} alt={b.storyAlt} onAlt={v => setB({ ...b, storyAlt: v })}
               hint="A landscape or square photograph for the Our Story section on the home page. Until you add one, a product photo is used."
               onUpload={f => run('story', async () => { const up = await uploadImage(f); const next = { ...b, storyImage: up.url }; await saveBranding(next); setB(next) }, 'Story photo updated.')}

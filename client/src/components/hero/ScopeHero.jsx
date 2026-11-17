@@ -12,6 +12,7 @@ import { apiRetry } from '../../lib/api';
 import { useSiteText } from '../../lib/siteText';
 
 const EASE = [0.22, 1, 0.36, 1];
+const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const WORD = ['S', 'C', 'O', 'P', 'E', ' ', '1', '3'];
 
 // Editorial hero set like a quiet studio: a pale ice-blue disc and fine rings behind the model, architectural slabs
@@ -21,7 +22,15 @@ const WORD = ['S', 'C', 'O', 'P', 'E', ' ', '1', '3'];
 // The figure is the supplied hero cut-out (or the admin hero photo, or a product photo, or a neutral placeholder).
 export default function ScopeHero() {
   const { entered, site, catalog } = useApp();
-  const photo = site.branding?.heroModel || media.heroCutout || catalog.featured.find(p => p.image)?.image || null;
+  const base = site.branding?.heroModel || media.heroCutout || catalog.featured.find(p => p.image)?.image || null;
+  // Extra outfits uploaded in Admin → Storefront images → Hero outfits; the hero cycles through them.
+  const looks = [base, ...(site.branding?.heroLooks || [])].filter(Boolean);
+  const [li, setLi] = useState(0);
+  const idx = looks.length ? li % looks.length : 0;
+  const photo = looks[idx] || null;
+  const [paused, setPaused] = useState(false);
+  useEffect(() => { if (looks.length < 2 || paused || reducedMotion()) return; const id = setInterval(() => setLi(n => n + 1), 5500); return () => clearInterval(id) }, [looks.length, paused]);
+  const step = d => setLi(n => (n + d + looks.length) % looks.length);
   const fr = decodePos(site.branding?.heroModelPos);
   const cutout = !!photo && /\.(png|webp|avif)(\?|#|$)/i.test(photo);
   const reduced = useReduced(), fine = useFinePointer();
@@ -78,7 +87,7 @@ export default function ScopeHero() {
         <motion.span className="s13-h-ground" style={{ x: shadowX }} initial={{ opacity: 0 }} animate={show ? { opacity: 1 } : undefined} transition={{ duration: 1.4, delay: 0.6 }} />
         <motion.div className="s13-h-fig" style={{ x: figX, y: figY, rotateY: rotY }} initial={{ opacity: 0, y: 40 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 1.3, delay: 0.5, ease: EASE }}>
           <motion.div style={{ y: figScroll, scale: fr.z, originX: 0.5, originY: 1, x: `${(50 - fr.x) * 0.5}%` }} className="s13-h-fig-in">
-            {photo ? <img src={photo} alt="" className={cutout ? 'cut' : 'blend'} fetchpriority="high" decoding="async" /> : <FigurePlaceholder />}
+            {photo ? <img key={photo} src={photo} alt="" className={(cutout ? 'cut' : 'blend') + ' look-in'} fetchpriority="high" decoding="async" /> : <FigurePlaceholder />}
             {photo && cutout && <span className="refl"><img src={photo} alt="" /></span>}
           </motion.div>
         </motion.div>
@@ -101,6 +110,14 @@ export default function ScopeHero() {
       <motion.div className="s13-h-badge" initial={{ opacity: 0, scale: 0.8 }} animate={show ? { opacity: 1, scale: 1 } : undefined} transition={{ duration: 1, delay: 1.2, ease: EASE }}>
         {/^https:/.test(badgeLink) ? <a href={badgeLink} target="_blank" rel="noopener noreferrer" aria-label={badgeText} data-cursor="OPEN">{badgeInner}</a> : <Link to={badgeLink} aria-label={badgeText} data-cursor="OPEN">{badgeInner}</Link>}
       </motion.div>
+
+      {looks.length > 1 && (
+        <div className="s13-h-looks" role="group" aria-label="Outfits" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
+          <button type="button" aria-label="Previous outfit" onClick={() => step(-1)}>&#8249;</button>
+          <span className="dots">{looks.map((_, i) => <button type="button" key={i} aria-label={`Outfit ${i + 1}`} aria-current={i === idx} className={i === idx ? 'on' : ''} onClick={() => setLi(i)} />)}</span>
+          <button type="button" aria-label="Next outfit" onClick={() => step(1)}>&#8250;</button>
+        </div>
+      )}
 
       {/* running marquee strip */}
       <div className="s13-h-strip" aria-hidden="true">

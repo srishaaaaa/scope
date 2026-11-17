@@ -119,3 +119,15 @@ body:has(.s13-hero) .site-header:not(.compact) { background: linear-gradient(180
 .s13-home .s13-h-badge a:hover { background: var(--hc-azure) }
 .s13-home .s13-h-tag, .s13-home .s13-h-note { color: var(--hc-deep2) }
 .s13-home .s13-link { color: var(--hc-azure); border-color: var(--hc-azure) }
+
+/* hero outfit switcher: arrows + dots under the model, soft cross-fade between looks */
+.s13-h-looks { position: absolute; z-index: 6; left: 50%; bottom: 58px; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; padding: 6px 10px; border-radius: 999px; background: rgba(251,247,240,.82); backdrop-filter: blur(8px); box-shadow: 0 10px 26px -14px rgba(18,35,44,.5) }
+.s13-h-looks > button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(18,35,44,.3); background: transparent; font-size: 20px; line-height: 1; color: var(--hc-deep); cursor: pointer; transition: background .25s, color .25s }
+.s13-h-looks > button:hover { background: var(--hc-azure); border-color: var(--hc-azure); color: #fff }
+.s13-h-looks .dots { display: flex; gap: 8px }
+.s13-h-looks .dots button { width: 9px; height: 9px; padding: 0; border-radius: 50%; border: 0; background: rgba(18,35,44,.25); cursor: pointer; transition: background .25s, transform .25s }
+.s13-h-looks .dots button.on { background: var(--hc-azure); transform: scale(1.3) }
+.s13-h-fig img.look-in { animation: hc-look .7s ease both }
+@keyframes hc-look { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+@media (prefers-reduced-motion: reduce) { .s13-h-fig img.look-in { animation: none } }
+@media (max-width: 900px) { .s13-h-looks { bottom: 52px; gap: 10px } .s13-h-looks > button { width: 40px; height: 40px } }
