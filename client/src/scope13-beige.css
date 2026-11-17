@@ -1,0 +1,37 @@
+/* BEIGE THEME — replaces the white page surfaces with warm beige. Colour only. Accents (azure, coral, sage, gold, deep teal) are unchanged.
+   Retune the whole theme from the tokens below. Loaded last. */
+:root {
+  --bg-beige: #F6EFE3; --bg-beige-lt: #FBF7F0; --bg-beige-dp: #EFE5D4; --bg-beige-line: rgba(120,92,52,.18);
+  --white: var(--bg-beige-lt); --pearl: var(--bg-beige-lt); --soft: var(--bg-beige); --cream: var(--bg-beige); --cream2: var(--bg-beige-dp);
+  --paper: var(--bg-beige-lt); --ivory: var(--bg-beige-lt); --beige: var(--bg-beige); --stage: #EFE6D6;
+  --line: var(--bg-beige-line); --sand: #E6D9C3;
+}
+html, body, .page, .home, .s13-home, .s13-flow { background: var(--bg-beige) !important }
+.catalog, .pdp-wrap, .cart-page, .checkout, .auth, .auth2, .auth.auth2, .account, .page-pad, .about-body, .light-page, .about2, .policy, .ab3, .ab3-offer,
+.s13-sec, .s13-features, .s13-story, .s13-craft, .s13-new, .s13-best, .s13-cats, .s13-gallery, .s13-gal, .s13-enq-page, .s13-intro, .s13-na,
+.cu, .cf, .cc, .story3, .lb-sec, .svc, .reviews, .rv, .eq, .studio, .ivory-sec, .hs, .related, .s13-recent { background: var(--bg-beige) !important }
+.s13-home .s13-flow > :nth-child(1), .s13-home .s13-flow > :nth-child(2), .s13-home .reviews.light-sec, .s13-home .insta, .s13-home .insta-sec,
+.s13-home .studio.ivory-sec, .s13-home .eq, .pdp-wrap, .cart-page, .checkout, .auth, .auth2 { background: linear-gradient(180deg, var(--bg-beige-lt), var(--bg-beige)) !important }
+.s13-home #best-sellers { background: linear-gradient(180deg, var(--bg-beige) 0%, #EFE6D6 14%, #EFE6D6 72%, var(--bg-beige) 100%) !important }
+.s13-home .hs-pin { background: linear-gradient(180deg, var(--bg-beige), #F1E8D9) !important }
+.s13-home .s13-features { background: linear-gradient(180deg, #F1E8D9, var(--bg-beige) 40%) !important }
+/* header, footer, toolbar */
+.site-header, .site-header.solid, body:has(.s13-hero) .site-header:not(.compact) { background: linear-gradient(180deg, #F8F2E7, #F1E8D9) !important }
+.site-header .mega.mega-sm, .site-header .mega-tile, .drawer, .glass, .quick.glass, .search.glass { background-color: var(--bg-beige-lt) !important }
+.toolbar { background: linear-gradient(180deg, var(--bg-beige-lt), var(--bg-beige)) !important }
+.s13-foot { background: linear-gradient(180deg, var(--bg-beige-lt), var(--bg-beige-dp)) !important }
+/* hero keeps its colour glows over a beige base */
+.s13-home .s13-hero {
+  background: radial-gradient(40% 55% at 86% 82%, rgba(44,123,198,.26), transparent 70%), radial-gradient(34% 46% at 8% 22%, rgba(224,166,58,.34), transparent 72%),
+              radial-gradient(32% 42% at 12% 86%, rgba(226,114,91,.26), transparent 72%), radial-gradient(30% 38% at 64% 6%, rgba(111,162,135,.22), transparent 72%),
+              radial-gradient(60% 70% at 50% 42%, #FAF4E9, #EBDFCB 72%), #EFE6D6 !important;
+}
+/* cards, panels, chips, inputs sit one shade lighter than the page so they stay readable */
+.eq-card, .rv-card, .hs-card:not(.on), .s13-tcard, .s13-feat:hover, .summary, .co-bag, .co-sheet, .co2 .co-bag, .co2 .co-form, .co-method, .auth2 form, .auth.auth2 form,
+.review-modal, .account > .acc-panel, .account .acc-tabs, .acc-stats > div, .dr-box, .search .search-bar input, .s-item:hover { background: var(--bg-beige-lt) !important }
+.cat-tabs button, .sel select, .s13-chip { background: var(--bg-beige-lt) }
+.pcard-frame { background: linear-gradient(160deg, #F1E8D9, var(--bg-beige-lt)) !important }
+.pcard:nth-child(3n+2) .pcard-frame { background: linear-gradient(160deg, #F7E6DD, var(--bg-beige-lt)) !important }
+.pcard:nth-child(3n+3) .pcard-frame { background: linear-gradient(160deg, #E9EDDD, var(--bg-beige-lt)) !important }
+input, textarea, select { background-color: var(--bg-beige-lt) }
+.site-header .burger { background: transparent !important }

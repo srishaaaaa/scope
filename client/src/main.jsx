@@ -17,6 +17,7 @@ import './scope13-v3.css';
 import './scope13-v4.css';
 import './scope13-homecolor.css';
 import './scope13-sitecolor.css';
+import './scope13-beige.css';
 import './scope13-fit.css';
 import './barcode.css';
 
