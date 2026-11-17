@@ -56,7 +56,7 @@
 /* headline italics get a blue-to-teal gradient */
 .s13-home .s13-h2 em { background: linear-gradient(90deg, var(--hc-azure), var(--hc-sage)); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent }
 /* label dashes: blue -> coral -> gold */
-.s13-home .s13-label i, .s13-home .eq-label i { background: linear-gradient(90deg, var(--hc-azure), var(--hc-coral), var(--hc-gold)) }
+.s13-home .s13-label i, .s13-home .eq-label i { background: var(--hc-steel) }
 /* feature icons cycle through the palette */
 .s13-home .s13-feat:nth-child(4n+1) svg { color: var(--hc-azure) }
 .s13-home .s13-feat:nth-child(4n+2) svg { color: var(--hc-coral) }
@@ -64,14 +64,14 @@
 .s13-home .s13-feat:nth-child(4n+4) svg { color: var(--hc-violet) }
 .s13-home .s13-feat:nth-child(4n+1):hover { background: var(--hc-mist) !important } .s13-home .s13-feat:nth-child(4n+2):hover { background: var(--hc-rose) !important }
 .s13-home .s13-feat:nth-child(4n+3):hover { background: var(--hc-sagebg) !important } .s13-home .s13-feat:nth-child(4n+4):hover { background: #EFEDFA !important }
-.s13-home .s13-features { background: #fff !important; box-shadow: inset 0 3px 0 var(--hc-azure), inset 0 -3px 0 var(--hc-amber) }
+.s13-home .s13-features { background: #fff !important }
 /* section tints back toward white, with a coloured hairline on top of each band */
 .s13-home .s13-flow > :nth-child(1) { background: linear-gradient(180deg, #fff, #F7FBFD) }
-.s13-home .s13-flow > :nth-child(2) { background: linear-gradient(180deg, #F7FBFD, #fff 60%, #FEF9F2); box-shadow: inset 0 3px 0 var(--hc-coral) }
-.s13-home .reviews.light-sec { background: linear-gradient(180deg, #fff, #F7FBFD); box-shadow: inset 0 3px 0 var(--hc-gold) }
-.s13-home .insta, .s13-home .insta-sec { background: linear-gradient(180deg, #fff, #FEF6F3); box-shadow: inset 0 3px 0 var(--hc-sage) }
-.s13-home .studio.ivory-sec { background: linear-gradient(180deg, #fff, #F4F2FC); box-shadow: inset 0 3px 0 var(--hc-violet) }
-.s13-home .eq { background: linear-gradient(180deg, #fff, #F3F8FC); box-shadow: inset 0 3px 0 var(--hc-azure) }
+.s13-home .s13-flow > :nth-child(2) { background: linear-gradient(180deg, #F7FBFD, #fff 60%, #FEF9F2) }
+.s13-home .reviews.light-sec { background: linear-gradient(180deg, #fff, #F7FBFD) }
+.s13-home .insta, .s13-home .insta-sec { background: linear-gradient(180deg, #fff, #FEF6F3) }
+.s13-home .studio.ivory-sec { background: linear-gradient(180deg, #fff, #F4F2FC) }
+.s13-home .eq { background: linear-gradient(180deg, #fff, #F3F8FC) }
 .s13-home .eq-card { box-shadow: 0 30px 60px -34px rgba(44,123,198,.45), 0 0 0 4px rgba(127,174,195,.12) }
 /* product cards: rotating soft tints, coral/azure hover edge */
 .s13-home .pcard:nth-child(3n+1) .pcard-frame { background: linear-gradient(160deg, #EAF3F7, #fff) }
@@ -82,8 +82,8 @@
 .s13-home .hs-card:not(.on):nth-child(3n+1) { box-shadow: 0 20px 44px -28px rgba(44,123,198,.5) }
 .s13-home .hs-card:not(.on):nth-child(3n+2) { box-shadow: 0 20px 44px -28px rgba(226,114,91,.5) }
 .s13-home .hs-card:not(.on):nth-child(3n+3) { box-shadow: 0 20px 44px -28px rgba(111,162,135,.55) }
-.s13-home .rv-card { border-top: 3px solid var(--hc-gold) }
-.s13-home .rv-card:nth-child(3n+2) { border-top-color: var(--hc-coral) } .s13-home .rv-card:nth-child(3n+3) { border-top-color: var(--hc-sage) }
+
+
 .s13-home .rv-stars, .s13-home .stars { color: var(--hc-gold) }
 /* buttons: azure to deep-teal gradient */
 .s13-home .s13-black, .s13-home .s13-btn, .s13-home .eq .bh-btn { background: linear-gradient(100deg, var(--hc-deep2), var(--hc-deep)) }

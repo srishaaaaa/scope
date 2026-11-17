@@ -1,0 +1,71 @@
+/* SITE COLOUR LAYER — colour only (no layout/size/spacing changes), white stays dominant. Extends the homepage palette to every page.
+   Tokens match scope13-homecolor.css. */
+:root {
+  --sc-steel: #477E90; --sc-azure: #2C7BC6; --sc-deep: #12232C; --sc-deep2: #1B3340; --sc-coral: #E2725B; --sc-sage: #6FA287;
+  --sc-violet: #7A6FD0; --sc-gold: #E0A63A; --sc-mist: #EAF3F7; --sc-rose: #FBEDE8; --sc-sagebg: #EAF4EE; --sc-sand: #FEF9F2; --sc-lav: #F1EFFB;
+}
+::selection { background: var(--sc-azure); color: #fff }
+
+/* announcement bar + header */
+.s13-ann { background: linear-gradient(90deg, var(--sc-deep), var(--sc-deep2) 50%, var(--sc-deep)) }
+
+.site-header .primary a:hover { color: var(--sc-azure) !important }
+.site-header .hdr { box-shadow: 0 1px 0 rgba(71,126,144,.18), 0 10px 30px -22px rgba(44,123,198,.5) }
+.mobile-menu { background: radial-gradient(120% 80% at 50% 0%, var(--sc-deep2), var(--sc-deep)) }
+.mm-link:hover, .mm-cats a:hover { color: var(--sc-coral) }
+
+/* shop page */
+.cat-hero .eyebrow { color: var(--sc-coral) }
+.cat-hero h1 { background: linear-gradient(90deg, #12232C 40%, var(--sc-azure)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent }
+.cat-tabs button { border-color: rgba(44,123,198,.28); background: #fff }
+.cat-tabs button:nth-child(4n+1):hover { background: var(--sc-mist); border-color: var(--sc-azure) }
+.cat-tabs button:nth-child(4n+2):hover { background: var(--sc-rose); border-color: var(--sc-coral) }
+.cat-tabs button:nth-child(4n+3):hover { background: var(--sc-sagebg); border-color: var(--sc-sage) }
+.cat-tabs button:nth-child(4n+4):hover { background: var(--sc-lav); border-color: var(--sc-violet) }
+.cat-tabs button.on { background: linear-gradient(100deg, var(--sc-azure), var(--sc-deep2)) !important; border-color: transparent !important; color: #fff }
+.toolbar { background: linear-gradient(180deg, #fff, #F7FBFD) !important; border-color: rgba(71,126,144,.2) !important }
+.pcard-price, .pcard-meta b { color: var(--sc-deep) }
+.pcard-badge { background: var(--sc-coral); color: #fff }
+.pcard-low { color: var(--sc-coral) }
+.pcard-wish:hover { background: var(--sc-coral); color: #fff }
+.pcard-add { background: linear-gradient(100deg, var(--sc-deep2), var(--sc-deep)) }
+.pcard-add:hover { background: linear-gradient(100deg, var(--sc-azure), var(--sc-steel)) }
+.pcard:hover .pcard-meta h3, .pcard:hover .pcard-link { color: var(--sc-azure) }
+
+/* product page */
+.pdp-wrap { background: linear-gradient(180deg, #fff, #F7FBFD 60%, #fff) }
+.pdp-info .price, .pdp-info .pdp-price { color: var(--sc-azure) }
+.pdp-info .chip { border-color: rgba(44,123,198,.3) } .pdp-info .chip:hover { background: var(--sc-mist) }
+.pdp-info .chip.on { background: linear-gradient(100deg, var(--sc-azure), var(--sc-deep2)) !important; border-color: transparent !important }
+.btn.solid, .pdp-actions .btn.solid, .sticky-buy .btn { background: linear-gradient(100deg, var(--sc-deep2), var(--sc-deep)) !important; border-color: transparent !important }
+.btn.solid:hover:not(:disabled) { background: linear-gradient(100deg, var(--sc-azure), var(--sc-steel)) !important; color: #fff !important }
+.related, .s13-recent { background: linear-gradient(180deg, #fff, var(--sc-sand)) }
+.crumbs a:hover { color: var(--sc-azure) }
+
+/* cart + checkout */
+.cart-page, .checkout { background: linear-gradient(180deg, #fff, #F7FBFD 70%, #fff) }
+.summary, .co-bag, .co-sheet { border-color: rgba(71,126,144,.22) !important; box-shadow: 0 24px 50px -34px rgba(44,123,198,.45) }
+.co-steps .on, .co-steps .done { color: var(--sc-azure) }
+.co-trust svg { color: var(--sc-sage) }
+.cart-n, .count { background: var(--sc-coral) !important; color: #fff !important }
+input:focus, textarea:focus, select:focus { border-color: var(--sc-azure) !important; box-shadow: 0 0 0 3px rgba(44,123,198,.14) }
+
+/* login / account */
+.auth, .auth2 { background: linear-gradient(180deg, #fff, #F3F8FC) }
+.auth-side { background: radial-gradient(120% 90% at 0% 0%, var(--sc-deep2), var(--sc-deep)) !important; color: #fff }
+
+/* about page */
+.ab3-label { color: var(--sc-coral) }
+.ab3-stat:nth-child(4n+1) b, .ab3-stat:nth-child(4n+1) strong { color: var(--sc-azure) } .ab3-stat:nth-child(4n+2) b, .ab3-stat:nth-child(4n+2) strong { color: var(--sc-coral) }
+.ab3-stat:nth-child(4n+3) b, .ab3-stat:nth-child(4n+3) strong { color: var(--sc-sage) } .ab3-stat:nth-child(4n+4) b, .ab3-stat:nth-child(4n+4) strong { color: var(--sc-violet) }
+.ab3-cats .ab3-cat:nth-child(3n+1) { background: var(--sc-mist) } .ab3-cats .ab3-cat:nth-child(3n+2) { background: var(--sc-rose) } .ab3-cats .ab3-cat:nth-child(3n+3) { background: var(--sc-sagebg) }
+.ab3-steps li:nth-child(odd) { background: var(--sc-sand) } .ab3-steps li:nth-child(even) { background: var(--sc-mist) }
+.ab3-btn, .ab3-cta .ab3-btn { background: linear-gradient(100deg, var(--sc-deep2), var(--sc-deep)) } .ab3-btn:hover { background: linear-gradient(100deg, var(--sc-azure), var(--sc-steel)) }
+.ab3-link:hover { color: var(--sc-azure) }
+
+/* footer */
+.s13-foot { background: linear-gradient(180deg, #F7FBFD, var(--sc-mist)) }
+.s13-foot a:hover { color: var(--sc-azure) }
+.foot-h { color: var(--sc-steel) }
+.s13-foot-news { background: linear-gradient(100deg, var(--sc-deep2), var(--sc-deep)) }
+.foot-ig svg { color: var(--sc-coral) }
