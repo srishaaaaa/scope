@@ -1,0 +1,28 @@
+/* FIT LAYER — keeps every page inside the screen on phones, tablets, laptops and large monitors. Loaded last. */
+html, body { max-width: 100%; overflow-x: clip }
+img, video, svg, canvas { max-width: 100% }
+.catalog, .catalog * { box-sizing: border-box }
+
+/* shop page: clear the fixed announcement bar + header so the title is never hidden */
+.catalog { padding-top: calc(var(--ann) + var(--hdr) + 8px) !important }
+.cat-hero { padding-top: clamp(20px, 3vw, 36px) !important; padding-inline: var(--pad) !important }
+.cat-hero h1 { overflow-wrap: anywhere }
+.cat-tabs { padding-inline: var(--pad) !important }
+.toolbar { padding-inline: var(--pad) }
+
+/* tablets: 3 across, 2 under 700px, comfortable gaps */
+@media (max-width: 1100px) { .pgrid { gap: 14px !important } }
+@media (max-width: 700px) {
+  .pgrid { gap: 10px !important; padding-inline: 12px !important }
+  /* category chips become one swipeable row instead of a wrapped block */
+  .cat-tabs { flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; scrollbar-width: none; padding-bottom: 14px !important }
+  .cat-tabs::-webkit-scrollbar { display: none }
+  .cat-tabs button { flex: none; scroll-snap-align: start; min-height: 40px }
+  .toolbar { flex-wrap: wrap; gap: 8px }
+}
+@media (max-width: 380px) { .pgrid.cols-2, .pgrid.cols-3 { gap: 8px !important } .cat-hero h1 { font-size: 28px !important } }
+
+/* touch devices: comfortable tap targets, no sticky hover */
+@media (hover: none) and (pointer: coarse) { .btn, .icon-btn, .chip, .cat-tabs button { min-height: 40px } }
+/* very large screens: keep content centred on the grid */
+@media (min-width: 1700px) { .catalog { --pad: clamp(24px, 4vw, 80px) } }
