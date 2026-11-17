@@ -1,0 +1,50 @@
+/* HOME COLOUR LAYER — colour only (backgrounds, accents, tints, shadows). No layout, size, spacing or typography changes.
+   Everything is scoped to .s13-home so no other page is touched. Palette: steel #477E90, ice #7FAEC3, azure #2C7BC6, deep #12232C,
+   plus a warm sand/amber accent for contrast. Keep this file last in main.jsx; edit tokens here to retune. */
+.s13-home {
+  --hc-steel: #477E90; --hc-ice: #7FAEC3; --hc-azure: #2C7BC6; --hc-deep: #12232C; --hc-deep2: #1B3340;
+  --hc-mist: #EAF3F7; --hc-sky: #F3F8FB; --hc-sand: #F8F1E6; --hc-amber: #C98A3B; --hc-amber-d: #A86F27;
+}
+
+/* section washes: alternate cool mist / warm sand / white so each band reads as its own chapter */
+.s13-home .s13-flow > :nth-child(1) { background: linear-gradient(180deg, #fff 0%, var(--hc-sky) 100%) }
+.s13-home .s13-flow > :nth-child(2) { background: linear-gradient(180deg, var(--hc-sky) 0%, var(--hc-sand) 100%) }
+.s13-home .s13-features { background: linear-gradient(90deg, var(--hc-mist), #F2F7F4 55%, var(--hc-sand)) !important; border-block-color: rgba(71,126,144,.22) }
+.s13-home .reviews.light-sec { background: linear-gradient(180deg, #fff, var(--hc-sky)) }
+.s13-home .insta, .s13-home .insta-sec { background: linear-gradient(180deg, var(--hc-sand), #FBF7F0) }
+.s13-home .studio.ivory-sec { background: linear-gradient(180deg, #fff, var(--hc-mist)) }
+.s13-home .eq { background: linear-gradient(180deg, #fff, var(--hc-sky)) }
+.s13-home .eq-card { background: #fff; border-color: rgba(71,126,144,.25); box-shadow: 0 24px 50px -30px rgba(44,123,198,.35) }
+
+/* headings, labels, accents */
+.s13-home .s13-h2 em, .s13-home .eq-info h2 em { color: var(--hc-azure) }
+.s13-home .s13-label, .s13-home .eq-label { color: var(--hc-steel) }
+.s13-home .s13-label i, .s13-home .eq-label i { background: linear-gradient(90deg, var(--hc-azure), var(--hc-amber)) }
+.s13-home .s13-feat svg { color: var(--hc-azure) }
+.s13-home .s13-feat:nth-child(even) svg { color: var(--hc-amber-d) }
+.s13-home .s13-feat:hover { background: rgba(255,255,255,.7) !important }
+.s13-home .s13-link:hover, .s13-home .eq-links a:hover { color: var(--hc-azure) }
+.s13-home .eq-links svg { color: var(--hc-amber-d) }
+
+/* cards pick up a soft tinted lift */
+.s13-home .pcard-frame { background: linear-gradient(160deg, #EAF3F7, #F8F1E6) }
+.s13-home .pcard:hover .pcard-frame { box-shadow: 0 26px 46px -28px rgba(44,123,198,.45) }
+.s13-home .hs-card:not(.on) { box-shadow: 0 20px 44px -30px rgba(71,126,144,.45) }
+.s13-home .hs-card.on { background: linear-gradient(160deg, var(--hc-deep2), var(--hc-deep)); box-shadow: 0 40px 70px -34px rgba(44,123,198,.55) }
+.s13-home .hs-pin { background: linear-gradient(180deg, #fff, var(--hc-mist)) }
+.s13-home .rv-card { background: #fff; box-shadow: 0 22px 44px -30px rgba(71,126,144,.4); border-color: rgba(71,126,144,.18) }
+.s13-home .rv-stars, .s13-home .stars { color: var(--hc-amber) }
+.s13-home .rv-tag { color: var(--hc-steel) }
+.s13-home .s13-chip:hover { background: var(--hc-azure); border-color: var(--hc-azure); color: #fff }
+
+/* buttons: deep teal with an azure hover glow */
+.s13-home .s13-black, .s13-home .s13-btn, .s13-home .eq .bh-btn { background: var(--hc-deep) }
+.s13-home .s13-black:hover, .s13-home .s13-btn:hover, .s13-home .eq .bh-btn:hover { background: var(--hc-azure); box-shadow: 0 16px 30px -14px rgba(44,123,198,.7) }
+
+/* hero: gentle colour in the studio set (extra layers on top of the existing background, nothing moved) */
+.s13-home .s13-hero {
+  background: radial-gradient(38% 52% at 84% 80%, rgba(127,174,195,.42), transparent 70%),
+              radial-gradient(34% 46% at 10% 16%, rgba(201,138,59,.18), transparent 72%),
+              radial-gradient(60% 70% at 50% 40%, #F3F3F0, #E4E9EB 70%), #E8EBEC !important;
+}
+.s13-home .s13-h-strip { background: linear-gradient(90deg, var(--hc-deep), var(--hc-deep2)) }
