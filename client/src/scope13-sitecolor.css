@@ -64,8 +64,5 @@ input:focus, textarea:focus, select:focus { border-color: var(--sc-azure) !impor
 .ab3-link:hover { color: var(--sc-azure) }
 
 /* footer */
-.s13-foot { background: linear-gradient(180deg, #FAF5EC, var(--sc-mist)) }
-.s13-foot a:hover { color: var(--sc-azure) }
-.foot-h { color: var(--sc-steel) }
 .s13-foot-news { background: linear-gradient(100deg, var(--sc-deep2), var(--sc-deep)) }
 .foot-ig svg { color: var(--sc-coral) }
