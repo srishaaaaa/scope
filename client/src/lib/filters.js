@@ -9,7 +9,7 @@ const num = v => (v === null || v === '' || isNaN(+v) ? null : +v);
 export function useFilters() {
   const [sp, setSp] = useSearchParams();
   const f = useMemo(() => ({
-    category: list(sp.get('category')), material: list(sp.get('material')), size: list(sp.get('size')), color: list(sp.get('color')),
+    category: list(sp.get('category')), style: list(sp.get('style')), material: list(sp.get('material')), size: list(sp.get('size')), color: list(sp.get('color')),
     min: num(sp.get('min')), max: num(sp.get('max')), stock: sp.get('stock') === '1',
     sort: sp.get('sort') || 'featured', view: sp.get('view') === '3' ? 3 : 2, flag: sp.get('flag') === 'best' ? 'best' : '',
   }), [sp]);
@@ -34,6 +34,7 @@ export function toQuery(f, base = {}, page = 1, limit = 12) {
   if (base.q) p.set('q', base.q);
   if (f.flag) p.set('flag', f.flag);
   if (f.category.length) p.set('category', f.category.join(','));
+  if (f.style.length) p.set('style', f.style.join(','));
   if (f.material.length) p.set('material', f.material.join(','));
   if (f.size.length) p.set('size', f.size.join(','));
   if (f.color.length) p.set('color', f.color.join(','));

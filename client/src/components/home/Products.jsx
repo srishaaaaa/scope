@@ -31,14 +31,17 @@ function Shelf({ id, label, title, link, items, aria, badge, ghost, dark }) {
   );
 }
 
-// Trending now: the pieces the store features (Admin → Inventory → Featured); if none are flagged, the newest pieces.
+// New arrivals, shirts: the newest shirts in the store (falls back to the newest pieces if there are no shirts yet).
+const SHIRTS = 'shirts,casual-shirts,formal-shirts';
 export function TrendingNow() {
-  const items = useProducts(['/products?featured=1&limit=10', '/products?sort=newest&limit=10']);
-  return <Shelf id="trending" label="TRENDING NOW" title="What everyone is wearing" link={['/shop', 'VIEW ALL →']} items={items} aria="trending now" badge="FEATURED" ghost="TRENDING" />;
+  const items = useProducts([`/products?category=${SHIRTS}&sort=newest&limit=10`, '/products?sort=newest&limit=10']);
+  return <Shelf id="trending" label="NEW ARRIVALS" title="Shirts" link={[`/shop?category=${SHIRTS}&sort=newest`, 'VIEW ALL →']} items={items} aria="new arrival shirts" badge="NEW" ghost="NEW" />;
 }
 
-// Best sellers: only products flagged as best sellers. No invented rankings; the shelf stays out of the way if none are.
+// New arrivals, pants: the newest jeans, trousers and cargo pants (this shelf replaced Best Sellers on the home page; the section keeps its
+// old id so its styling and links still work). Falls back to the newest pieces if there are no pants yet.
+const PANTS = 'jeans,trousers,cargo-pants';
 export function Bestsellers() {
-  const items = useProducts(['/products?flag=best&limit=10']);
-  return <Shelf id="best-sellers" label="BEST SELLERS" title="Most wanted" link={['/shop?flag=best', 'VIEW ALL →']} items={items} aria="best sellers" badge="BEST SELLER" ghost="BEST" />;
+  const items = useProducts([`/products?category=${PANTS}&sort=newest&limit=10`, '/products?sort=newest&limit=10']);
+  return <Shelf id="best-sellers" label="NEW ARRIVALS" title="Pants" link={[`/shop?category=${PANTS}&sort=newest`, 'VIEW ALL →']} items={items} aria="new arrival pants" badge="NEW" ghost="NEW" />;
 }

@@ -26,3 +26,29 @@ img, video, svg, canvas { max-width: 100% }
 @media (hover: none) and (pointer: coarse) { .btn, .icon-btn, .chip, .cat-tabs button { min-height: 40px } }
 /* very large screens: keep content centred on the grid */
 @media (min-width: 1700px) { .catalog { --pad: clamp(24px, 4vw, 80px) } }
+
+/* "Shop by category" swipe row on phones/tablets: keep swiping cheap (no big blurred shadows or transitions repainting while it scrolls) */
+@media (max-width: 900px) {
+  .hs-track { will-change: auto !important; transform: none !important; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity !important; touch-action: pan-x pan-y }
+  .hs-card, .hs-card.on { transition: none !important; contain: layout paint; transform: none !important; box-shadow: 0 8px 18px -14px rgba(18,35,44,.5) !important }
+  .hs-card:not(.on) { box-shadow: 0 8px 18px -14px rgba(18,35,44,.35) !important }
+  .hs-img > span, .hs-img .media, .hs-img .cov, .hs-img img { transform: none !important; transition: none !important }
+  .hs-go { transition: none !important }
+}
+@media (max-width: 900px) {
+  .hs { height: auto !important }
+  .hs-pin { position: relative !important; height: auto !important; min-height: 0 !important; padding: 48px 0 36px !important; display: block !important; overflow: visible !important }
+  .hs-track { display: flex !important; width: 100% !important; max-width: 100% !important; overflow-x: auto !important; overflow-y: hidden; padding: 0 var(--pad) 14px !important; gap: 14px !important; align-items: stretch !important; scrollbar-width: none; scroll-snap-type: x proximity !important }
+  .hs-track::-webkit-scrollbar { display: none }
+  .hs-head { flex: none; width: 82vw !important; align-self: center }
+  .hs-card { flex: none; width: 72vw !important; max-width: 340px; height: auto !important; scroll-snap-align: center }
+  .hs-prog, .hs-hint { display: none !important }
+}
+
+/* style choices under a picked category (e.g. Shirts -> Flannel, Printed, Checks) */
+.cat-styles { display: flex; gap: 8px; flex-wrap: wrap; max-width: var(--max); margin: -2px auto 0; padding: 0 var(--pad) 16px }
+.cat-styles button { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(44,123,198,.3); background: var(--bg-beige-lt, #fff); color: #12232C; font: 600 11px/1 var(--display, sans-serif); letter-spacing: .08em; cursor: pointer; transition: background .25s, color .25s, border-color .25s }
+.cat-styles button span { font-size: 10px; opacity: .55; font-weight: 500 }
+.cat-styles button:hover { border-color: #2C7BC6 }
+.cat-styles button.on { background: #12232C; border-color: #12232C; color: #fff } .cat-styles button.on span { opacity: .7 }
+@media (max-width: 700px) { .cat-styles { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 12px } .cat-styles::-webkit-scrollbar { display: none } .cat-styles button { flex: none; min-height: 38px } }

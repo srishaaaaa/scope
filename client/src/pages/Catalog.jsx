@@ -8,7 +8,7 @@ import FilterDrawer, { ActiveFilters } from '../components/FilterDrawer';
 
 const PAGE = 12;
 const SORTS = [['featured', 'Featured'], ['newest', 'Newest'], ['price-asc', 'Price: low to high'], ['price-desc', 'Price: high to low']];
-const NO_FACETS = { categories: [], materials: [], sizes: [], colors: [], maxPrice: 0 };
+const NO_FACETS = { categories: [], styles: [], materials: [], sizes: [], colors: [], maxPrice: 0 };
 
 // Shared by /shop, /collections/:slug and /search. `base` = { collection?, q? }; filtering, sorting and
 // pagination are done by the server (GET /api/products).
@@ -51,8 +51,13 @@ export default function Catalog({ base = {}, title, eyebrow, intro, emptyNote })
 
       {!base.q && fx.categories.length > 0 && (
         <nav className="cat-tabs" aria-label="Categories">
-          <button type="button" className={!f.category.length ? 'on' : ''} aria-pressed={!f.category.length} onClick={() => set({ category: [] })}>All</button>
-          {fx.categories.map(c => <button key={c.slug} type="button" className={f.category[0] === c.slug ? 'on' : ''} aria-pressed={f.category[0] === c.slug} onClick={() => set({ category: [c.slug] })}>{c.name}</button>)}
+          <button type="button" className={!f.category.length ? 'on' : ''} aria-pressed={!f.category.length} onClick={() => set({ category: [], style: [] })}>All</button>
+          {fx.categories.map(c => <button key={c.slug} type="button" className={f.category[0] === c.slug ? 'on' : ''} aria-pressed={f.category[0] === c.slug} onClick={() => set({ category: [c.slug], style: [] })}>{c.name}</button>)}
+        </nav>)}
+      {!base.q && f.category.length === 1 && fx.styles?.length > 0 && (
+        <nav className="cat-styles" aria-label={`${picked?.name || 'Category'} styles`}>
+          <button type="button" className={!f.style.length ? 'on' : ''} aria-pressed={!f.style.length} onClick={() => set({ style: [] })}>All {picked?.name || ''}</button>
+          {fx.styles.map(s => <button key={s.name} type="button" className={f.style[0] === s.name ? 'on' : ''} aria-pressed={f.style[0] === s.name} onClick={() => set({ style: [s.name] })}>{s.name}<span>{s.count}</span></button>)}
         </nav>)}
       <div className="toolbar" role="region" aria-label="Sort and view">
         <p className="muted small" aria-live="polite">{loading && !items.length ? 'Loading…' : `${total} ${total === 1 ? 'piece' : 'pieces'}`}</p>

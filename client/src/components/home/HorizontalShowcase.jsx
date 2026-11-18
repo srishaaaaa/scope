@@ -13,6 +13,9 @@ import { coverStyle } from '../../lib/imgPos';
 export default function HorizontalShowcase() {
   const { catalog } = useApp();
   const reduced = useReduced();
+  // Phones and small tablets use the plain swipeable row (native scrolling + snap); the scroll-driven sideways track is for wide screens only.
+  const [narrow, setNarrow] = useState(() => typeof matchMedia === 'function' && matchMedia('(max-width: 900px)').matches);
+  useEffect(() => { const m = matchMedia('(max-width: 900px)'), on = () => setNarrow(m.matches); m.addEventListener('change', on); return () => m.removeEventListener('change', on) }, []);
   const root = useRef(), track = useRef(), bar = useRef(), count = useRef();
   const cats = catalog.categories.filter(c => c.product_count > 0).slice(0, 12);
   const [lead, setLead] = useState({});
@@ -27,7 +30,17 @@ export default function HorizontalShowcase() {
 
   useEffect(() => {
     const el = root.current, tr = track.current;
-    if (reduced || !cats.length || !el || !tr) return;
+    if (!cats.length || !el || !tr) return;
+    if (narrow) {
+      // No scroll listener, no layout reads while swiping: an IntersectionObserver marks the card nearest the middle of the row.
+      el.style.height = ''; tr.style.transform = '';
+      const cards = [...tr.querySelectorAll('.hs-card')];
+      const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { cards.forEach(c => c.classList.toggle('on', c === e.target)); if (count.current) count.current.textContent = `${String(cards.indexOf(e.target) + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}` } }),
+        { root: tr, rootMargin: '0px -42% 0px -42%', threshold: 0 });
+      cards.forEach(c => io.observe(c));
+      return () => io.disconnect();
+    }
+    if (reduced) return;
     const cards = [...tr.querySelectorAll('.hs-card')];
     let dist = 0, top = 0, raf = 0, last = null, active = -1;
     const update = () => {
@@ -54,7 +67,7 @@ export default function HorizontalShowcase() {
     const imgs = [...tr.querySelectorAll('img')]; imgs.forEach(i => i.addEventListener('load', measure));
     const t = setTimeout(measure, 1200); // after fonts and photos have settled
     return () => { clearTimeout(t); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', measure); imgs.forEach(i => i.removeEventListener('load', measure)); cancelAnimationFrame(raf); el.style.height = ''; tr.style.transform = '' };
-  }, [reduced, key, Object.keys(lead).length]); // eslint-disable-line
+  }, [reduced, narrow, key, Object.keys(lead).length]); // eslint-disable-line
 
   if (!cats.length) return null;
   return (

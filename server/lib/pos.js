@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import { rows, one } from '../db/index.js';
 import { HttpError } from './http.js';
 import { hasCostColumns, hasDepositSplit, hasVariantCost } from './cost.js';
+import { hasStyle } from './catalog.js';
 import { audit } from './orders.js';
 import { returnsFor } from './returns.js';
 
@@ -431,10 +432,11 @@ export async function stockMovements(db, { from, to, q = '', type = 'all', limit
 // ---- products with their variants (inventory screen) ----
 export const listProducts = async (db, q = '', onlyId = null) => {
   const costSql = (await hasCostColumns(db)) ? 'p.cost_price' : '0';
+  const styleSql = (await hasStyle(db)) ? 'p.style' : 'NULL::text';
   const vcSql = (await hasVariantCost(db)) ? "'costOverride', v.cost_override, 'cost', COALESCE(v.cost_override, " + costSql + ")" : "'costOverride', NULL, 'cost', " + costSql;
   const like = `%${q.replace(/[\\%_]/g, m => '\\' + m)}%`;
   return rows(db, `
-    SELECT p.id, p.slug, p.name, p.status, p.base_price AS price, ${costSql}::int AS "costPrice", p.tax_rate AS "taxRate", p.description, p.material, p.featured, p.best_seller AS "bestSeller", p.is_sample AS "isSample", p.low_stock_alert AS "lowAlert", p.weight_grams AS "weightGrams",
+    SELECT p.id, p.slug, p.name, p.status, p.base_price AS price, ${costSql}::int AS "costPrice", p.tax_rate AS "taxRate", p.description, p.material, ${styleSql} AS style, p.featured, p.best_seller AS "bestSeller", p.is_sample AS "isSample", p.low_stock_alert AS "lowAlert", p.weight_grams AS "weightGrams",
            COALESCE((SELECT json_agg(col.slug ORDER BY col.display_order) FROM collection_products cp JOIN collections col ON col.id = cp.collection_id WHERE cp.product_id = p.id), '[]'::json) AS collections,
            c.name AS category, c.slug AS "categorySlug",
            (SELECT image_url FROM product_images i WHERE i.product_id = p.id ORDER BY i.display_order, i.id LIMIT 1) AS image,

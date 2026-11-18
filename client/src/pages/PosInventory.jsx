@@ -85,7 +85,7 @@ function VariantRow({ productId, v, basePrice, productCost, canCost, onChanged, 
 function EditModal({ product: start, categories, onClose, onDone, onPhotos }) {
   const [product, setProduct] = useState(start);
   const [f, setF] = useState({ name: start.name, price: rupees(start.price), cost: start.costPrice ? rupees(start.costPrice) : '', tax: start.taxRate, cat: start.categorySlug || '', status: start.status,
-    description: start.description || '', material: start.material || '', featured: !!start.featured, best: !!start.bestSeller, low: start.lowAlert ?? 3, collections: start.collections || [] });
+    description: start.description || '', material: start.material || '', style: start.style || '', featured: !!start.featured, best: !!start.bestSeller, low: start.lowAlert ?? 3, collections: start.collections || [] });
   const [cols, setCols] = useState([]);
   const [nv, setNv] = useState({ size: '', color: '', sku: '', stock: '' });
   const [busy, setBusy] = useState(false); const [err, setErr] = useState(); const [tab, setTab] = useState('details');
@@ -95,7 +95,7 @@ function EditModal({ product: start, categories, onClose, onDone, onPhotos }) {
     e.preventDefault(); setBusy(true); setErr();
     try {
       await api(`/admin/pos/products/${product.id}`, { method: 'PATCH', body: { name: f.name.trim(), price: toPaise(f.price), costPrice: toPaise(f.cost), taxRate: +f.tax, categorySlug: f.cat || null, status: f.status,
-        description: f.description.trim(), material: f.material.trim(), featured: f.featured, bestSeller: f.best, lowAlert: Math.max(0, Math.round(+f.low) || 0), collections: f.collections } });
+        description: f.description.trim(), material: f.material.trim(), style: f.style.trim(), featured: f.featured, bestSeller: f.best, lowAlert: Math.max(0, Math.round(+f.low) || 0), collections: f.collections } });
       onDone(); onClose();
     } catch (x) { setErr(x.issues?.[0]?.message || x.message) } finally { setBusy(false) }
   };
@@ -123,6 +123,8 @@ function EditModal({ product: start, categories, onClose, onDone, onPhotos }) {
             <label className="f">Category<select value={f.cat} onChange={e => setF({ ...f, cat: e.target.value })}><option value="">— None —</option>{categories.map(c => <option key={c.id} value={c.slug}>{c.name}</option>)}</select></label>
             <label className="f">Status<select value={f.status} onChange={e => setF({ ...f, status: e.target.value })}><option value="active">Active (on sale)</option><option value="draft">Draft (hidden)</option><option value="archived">Archived</option></select></label>
             <label className="f">Fabric / material<input value={f.material} maxLength={80} onChange={e => setF({ ...f, material: e.target.value })} placeholder="e.g. Kanjivaram silk" /></label>
+            <label className="f">Style <span className="muted small">(shown as a choice under the category, e.g. Flannel, Printed, Checks)</span><input list="style-ideas" value={f.style} maxLength={40} onChange={e => setF({ ...f, style: e.target.value })} placeholder="e.g. Checks" />
+              <datalist id="style-ideas">{STYLE_IDEAS.map(s => <option key={s} value={s} />)}</datalist></label>
           </div>
         </div>
         <div style={{ display: tab === 'website' ? 'grid' : 'none', gap: 14 }}>
@@ -346,12 +348,15 @@ function SuggestPicker({ selfId, picked, setPicked }) {
   );
 }
 
+// Suggestions only: any style can be typed. Customers see these as a row of choices once they open a category.
+const STYLE_IDEAS = ['Plain', 'Checks', 'Micro checks', 'Striped', 'Printed', 'Embroidery', 'Flannel', 'Denim', 'Linen', 'Oxford', 'Solid'];
+
 function ProductEditor({ product: start, categories, onClose, onDone, onPhotos }) {
   const editing = !!start;
   const { toast } = useApp();
   const [product, setProduct] = useState(start);
   const [f, setF] = useState(() => ({ name: start?.name || '', description: start?.description || '', cat: start?.categorySlug || '', status: start?.status || 'active', price: start ? rupees(start.price) : '', cost: start?.costPrice ? rupees(start.costPrice) : '',
-    tax: start?.taxRate ?? 5, material: start?.material || '', featured: !!start?.featured, best: !!start?.bestSeller, low: start?.lowAlert ?? 3, weight: String(start?.weightGrams ?? 500), defStock: '0' }));
+    tax: start?.taxRate ?? 5, material: start?.material || '', style: start?.style || '', featured: !!start?.featured, best: !!start?.bestSeller, low: start?.lowAlert ?? 3, weight: String(start?.weightGrams ?? 500), defStock: '0' }));
   const [vars, setVars] = useState([{ size: '', color: '', sku: '', price: '', cost: '', weight: '', stock: '' }]); // new product only
   const [nv, setNv] = useState({ size: '', color: '', sku: '', stock: '' }); // extra size on an existing product
   const [picked, setPicked] = useState([]); const [files, setFiles] = useState([]); const [busy, setBusy] = useState(false); const [err, setErr] = useState();
@@ -367,7 +372,7 @@ function ProductEditor({ product: start, categories, onClose, onDone, onPhotos }
       setNv({ size: '', color: '', sku: '', stock: '' }); reload();
     } catch (x) { setErr(x.issues?.[0]?.message || x.message) }
   };
-  const body = () => ({ name: f.name.trim(), price: toPaise(f.price), costPrice: toPaise(f.cost), taxRate: +f.tax, categorySlug: f.cat || null, status: f.status, description: f.description.trim(), material: f.material.trim(),
+  const body = () => ({ name: f.name.trim(), price: toPaise(f.price), costPrice: toPaise(f.cost), taxRate: +f.tax, categorySlug: f.cat || null, status: f.status, description: f.description.trim(), material: f.material.trim(), style: f.style.trim(),
     featured: f.featured, bestSeller: f.best, lowAlert: Math.max(0, Math.round(+f.low) || 0), weightGrams: Math.max(0, Math.round(+f.weight) || 0) });
   const submit = async e => {
     e.preventDefault(); setErr(); setBusy(true);
@@ -422,6 +427,8 @@ function ProductEditor({ product: start, categories, onClose, onDone, onPhotos }
               <label className="pe2-f">COST PRICE (₹)<input inputMode="decimal" value={f.cost} onChange={e => setF({ ...f, cost: e.target.value })} placeholder="What you paid" /></label>
               <label className="pe2-f">GST %<select value={f.tax} onChange={e => setF({ ...f, tax: e.target.value })}>{[0, 5, 12, 18, 28].map(r => <option key={r} value={r}>{r}%</option>)}</select></label>
               <label className="pe2-f">FABRIC / MATERIAL<input value={f.material} maxLength={80} onChange={e => setF({ ...f, material: e.target.value })} placeholder="e.g. Cotton" /></label>
+              <label className="pe2-f">STYLE (SHOWN UNDER THE CATEGORY)<input list="style-ideas2" value={f.style} maxLength={40} onChange={e => setF({ ...f, style: e.target.value })} placeholder="e.g. Checks, Flannel, Printed" />
+                <datalist id="style-ideas2">{STYLE_IDEAS.map(s => <option key={s} value={s} />)}</datalist></label>
               <label className="pe2-f">WEIGHT (GRAMS)<input inputMode="numeric" value={f.weight} onChange={e => setF({ ...f, weight: e.target.value.replace(/\D/g, '') })} placeholder="e.g. 650" /></label>
             </div>
             <label className="pe2-c"><input type="checkbox" checked={f.featured} onChange={e => setF({ ...f, featured: e.target.checked })} /> Show in “Trending collections”</label>

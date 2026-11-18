@@ -18,11 +18,22 @@ const FULL_SELECT = `
            CASE WHEN COUNT(*) FILTER (WHERE v.stock_quantity > 0) = 1 THEN MIN(v.id) FILTER (WHERE v.stock_quantity > 0) END AS single_variant
     FROM product_variants v WHERE v.product_id = p.id AND v.active
   ) st ON true`;
-let BASE_SELECT = FULL_SELECT, HAS_BEST = true;
-// Picks the column list for this database (best_seller exists after migration 028).
+let BASE_SELECT = FULL_SELECT, HAS_BEST = true, HAS_STYLE = false;
+// products.style arrives with migration 036; until it is applied the shop works exactly as before.
+let stKnown = false, stAt = 0;
+export async function hasStyle(db) {
+  if (stKnown) return true;
+  if (Date.now() - stAt < 60_000) return false;
+  stAt = Date.now();
+  stKnown = !!(await one(db, `SELECT 1 AS x FROM information_schema.columns WHERE table_name = 'products' AND column_name = 'style'`));
+  return stKnown;
+}
+// Picks the column list for this database (best_seller exists after migration 028, style after 036).
 async function prepare(q) {
   HAS_BEST = await hasBestSeller(q);
-  BASE_SELECT = HAS_BEST ? FULL_SELECT : FULL_SELECT.replace('p.best_seller,', 'false AS best_seller,');
+  HAS_STYLE = await hasStyle(q);
+  BASE_SELECT = (HAS_BEST ? FULL_SELECT : FULL_SELECT.replace('p.best_seller,', 'false AS best_seller,'))
+    .replace('p.material, p.currency,', HAS_STYLE ? 'p.material, p.style, p.currency,' : 'p.material, NULL::text AS style, p.currency,');
 }
 
 
@@ -43,6 +54,7 @@ function where(f, { baseOnly = false } = {}) {
   if (!baseOnly) {
     if (f.category?.length) w.push(`c.slug = ANY(${add(f.category)})`);
     if (f.material?.length) w.push(`p.material = ANY(${add(f.material)})`);
+    if (f.style?.length && HAS_STYLE) w.push(`p.style = ANY(${add(f.style)})`);
     if (f.size?.length) w.push(`EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id AND v.active AND v.stock_quantity > 0 AND v.size = ANY(${add(f.size)}))`);
     if (f.color?.length) w.push(`EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id AND v.active AND v.stock_quantity > 0 AND v.color = ANY(${add(f.color)}))`);
     if (f.min != null) w.push(`p.base_price >= ${add(f.min)}`);
@@ -80,7 +92,12 @@ export async function facets(q, f) {
     one(q, `SELECT COALESCE(MAX(p.base_price), 0)::int AS max ${from}`, a),
     rows(q, `SELECT DISTINCT p.material ${from} AND p.material IS NOT NULL ORDER BY p.material`, a),
   ]);
-  return { categories: categories.map(({ slug, name }) => ({ slug, name })), sizes: sizes.map(r => r.size), colors: colors.map(r => r.color).sort(), materials: materials.map(r => r.material), maxPrice: price.max };
+  // Styles of the picked category (only when exactly one category is chosen), with how many pieces each has.
+  let styles = [];
+  if (HAS_STYLE && f.category?.length === 1) {
+    styles = (await rows(q, `SELECT p.style AS name, COUNT(*)::int AS count ${from} AND c.slug = $${a.length + 1} AND p.style IS NOT NULL AND p.style <> '' GROUP BY p.style ORDER BY count DESC, p.style`, [...a, f.category[0]])).map(r => ({ name: r.name, count: r.count }));
+  }
+  return { styles, categories: categories.map(({ slug, name }) => ({ slug, name })), sizes: sizes.map(r => r.size), colors: colors.map(r => r.color).sort(), materials: materials.map(r => r.material), maxPrice: price.max };
 }
 
 export async function productBySlug(q, slug) {
