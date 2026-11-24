@@ -69,6 +69,7 @@ export default function ScopeHero() {
     <section ref={ref} className="s13-hero" data-hero aria-label="SCOPE 13" onPointerMove={move} onPointerLeave={() => { mx.set(0); my.set(0) }}>
       <div className="s13-h-art" aria-hidden="true">
         <span className="g g1" /><span className="g g2" /><span className="g g3" />
+        <i className="spk k1">&#10022;</i><i className="spk k2">&#10022;</i><i className="spk k3">&#10022;</i>
         <motion.span className="ring" style={{ x: sunX, y: sunY }} />
         <motion.span className="ring r2" style={{ x: sunX, y: sunY }} />
       </div>
@@ -90,6 +91,11 @@ export default function ScopeHero() {
           </motion.div>
         </motion.div>
       </div>
+
+      <motion.div className="s13-h-head" initial={{ opacity: 0, y: 18 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 1, delay: 0.8, ease: EASE }}>
+        <h2>CLEAN CUTS,<br />BOLD STYLE —<br />MADE FOR<br />EVERY DAY.</h2>
+        <p>CONTEMPORARY MENSWEAR FROM MADURAI.<br />DESIGNED TO WEAR, BUILT TO LAST.</p>
+      </motion.div>
 
       <motion.div className="s13-h-tag" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 0.9, ease: EASE }}>
         <p>A NEW ERA<br />OF EVERYDAY<br />STYLE.</p><i aria-hidden="true" />
@@ -120,11 +126,12 @@ export default function ScopeHero() {
       <span className="s13-h-dots" aria-hidden="true" />
       <span className="s13-h-ruler" aria-hidden="true"><i>00</i><i>50</i><i>100</i></span>
       <div className="s13-h-side l" aria-hidden="true">CONTEMPORARY MENSWEAR &nbsp;·&nbsp; MADURAI</div>
+      <span className="s13-h-scroll" aria-hidden="true">SCROLL</span>
       <div className="s13-h-side r" aria-hidden="true">9.9252° N &nbsp;—&nbsp; 78.1198° E</div>
 
       {feat && (
         <motion.div className="s13-h-feat" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.15, ease: EASE }}>
-          <Link to={`/product/${feat.slug}`} data-cursor="VIEW"><small>FEATURED</small><strong>{feat.name}</strong><em>{inr(feat.price)} <i aria-hidden="true">&rarr;</i></em></Link>
+          <Link to={`/product/${feat.slug}`} data-cursor="VIEW">{feat.image && <img src={feat.image} alt="" loading="lazy" decoding="async" />}<span><small>FEATURED</small><strong>{feat.name}</strong><em>{inr(feat.price)} <i aria-hidden="true">&rarr;</i></em></span></Link>
         </motion.div>
       )}
       {cats.length > 0 && (

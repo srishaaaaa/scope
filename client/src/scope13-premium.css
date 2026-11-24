@@ -113,3 +113,42 @@
 .s13-h-picks .edit span { font: 400 11.5px/1.45 var(--sans); color: rgba(246,239,226,.72) }
 .s13-h-picks .edit em { font: 600 9.5px/1.2 var(--sans); font-style: normal; letter-spacing: .08em; text-transform: uppercase; color: var(--pm-gold); padding-top: 8px; border-top: 1px solid rgba(176,138,74,.4) }
 .s13-h-picks .edit:hover { background: #2a2217 }
+
+/* ===== reference-inspired layout (desktop): bold headline left, tinted watermark wordmark low behind the pair ===== */
+.s13-h-head, .s13-h-scroll, .s13-h-art .spk { display: none }
+.s13-h-feat a img { display: none }
+.s13-h-art .spk { position: absolute; font-style: normal; color: var(--pm-gold); opacity: .55; line-height: 1 }
+.s13-h-art .k1 { left: 44%; top: 17%; font-size: 15px } .s13-h-art .k2 { left: 84%; top: 52%; font-size: 11px } .s13-h-art .k3 { left: 30%; top: 62%; font-size: 12px }
+.s13-hero .s13-h-art::after { content: ''; position: absolute; inset: 0; opacity: .5;
+  background-image: linear-gradient(rgba(20,17,13,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(20,17,13,.045) 1px, transparent 1px); background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(70% 80% at 50% 45%, #000, transparent 85%); mask-image: radial-gradient(70% 80% at 50% 45%, #000, transparent 85%) }
+
+@media (min-width: 901px) {
+  .s13-h-art .spk, .s13-h-scroll { display: block }
+  /* watermark wordmark: warm, low contrast, sitting low behind the pair */
+  .s13-h-word { place-items: end center !important; padding-bottom: 8.5% }
+  .s13-h-word-in { margin-top: 0 !important; color: rgba(176,138,74,.30) !important }
+  /* headline */
+  .s13-h-head { display: block; position: absolute; z-index: 3; left: max(var(--pad), 5vw); top: 11% }
+  .s13-h-head h2 { margin: 0 0 16px; font: 800 clamp(26px, 2.85vw, 50px)/1 var(--brand); letter-spacing: -.02em; color: var(--pm-ink) }
+  .s13-h-head p { margin: 0; font: 500 clamp(10px, .8vw, 12.5px)/1.75 var(--sans); letter-spacing: .12em; color: rgba(20,17,13,.7) }
+  /* the small tagline moves to the top right, with its gold rule */
+  .s13-h-tag { left: auto !important; right: max(var(--pad), 5vw); top: 7% !important; width: 200px }
+  .s13-h-tag p { font-size: 10px !important; letter-spacing: .3em !important; line-height: 1.8 !important; margin-bottom: 10px !important }
+  /* call to action sits under the headline as a pill */
+  .s13-h-cta { bottom: auto !important; top: 54% !important }
+  .s13-h-cta .s13-black { border-radius: 999px !important; padding: 16px 26px 16px 30px !important; display: inline-flex; align-items: center; gap: 16px }
+  .s13-h-cta .s13-black::after { content: '→'; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: rgba(246,239,226,.16); font-size: 12px; letter-spacing: 0 }
+  /* featured product: small photo card under the CTA */
+  .s13-h-feat { top: 69% !important }
+  .s13-home .s13-h-feat a { display: grid !important; grid-template-columns: 52px 1fr; gap: 12px !important; align-items: center; padding: 8px 14px 8px 8px !important; min-width: 0 !important; width: 230px; border-radius: 14px }
+  .s13-h-feat a img { display: block; width: 52px; height: 52px; object-fit: cover; border-radius: 9px }
+  .s13-h-feat a span { display: grid; gap: 3px; min-width: 0 }
+  .s13-h-feat strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+  /* right column: dark card then categories; old note and index retire */
+  .s13-h-note, .s13-h-index { display: none !important }
+  .s13-h-picks { display: block !important; top: 20% }
+  .s13-h-info { display: block !important; top: auto; bottom: 29% }
+  .s13-h-scroll { position: absolute; z-index: 3; right: 22px; bottom: 56px; writing-mode: vertical-rl; font: 500 9px/1 var(--sans); letter-spacing: .4em; color: rgba(20,17,13,.4) }
+}
+@media (min-width: 901px) and (max-height: 740px) { .s13-h-feat { display: none !important } }
