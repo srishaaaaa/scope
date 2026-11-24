@@ -142,12 +142,18 @@ export default function ScopeHero() {
       )}
       {true && (
         <motion.aside className="s13-h-picks" aria-label={picks.length ? 'Trending now' : 'Shop by category'} initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.25, ease: EASE }}>
-          <p>THE LOOK</p>
-          <Link className="edit" to="/shop" data-cursor="SHOP">
-            <strong>Shop<br />The Look</strong>
-            <span>Olive and espresso shirts with relaxed black trousers.</span>
-            <em>Shop now <i aria-hidden="true">&rarr;</i></em>
-          </Link>
+          <p>FEATURED</p>
+          {feat ? (
+            <div className="fcard">
+              <Link className="top" to={`/product/${feat.slug}`} data-cursor="VIEW">
+                {feat.image && <img src={feat.image} alt="" loading="lazy" decoding="async" />}
+                <span><strong>{feat.name}</strong><em>{inr(feat.price)}</em></span>
+              </Link>
+              <Link className="btn" to="/shop" data-cursor="SHOP">SHOP THE LOOK <i aria-hidden="true">&rarr;</i></Link>
+            </div>
+          ) : (
+            <Link className="edit" to="/shop" data-cursor="SHOP"><strong>Shop<br />The Look</strong><em>Shop now <i aria-hidden="true">&rarr;</i></em></Link>
+          )}
         </motion.aside>
       )}
       {cats.length > 0 && (
