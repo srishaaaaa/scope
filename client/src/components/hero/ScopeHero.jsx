@@ -125,10 +125,12 @@ export default function ScopeHero() {
           <Link to={`/product/${feat.slug}`} data-cursor="VIEW"><small>FEATURED</small><strong>{feat.name}</strong><em>{inr(feat.price)} <i aria-hidden="true">&rarr;</i></em></Link>
         </motion.div>
       )}
-      {picks.length > 0 && (
-        <motion.aside className="s13-h-picks" aria-label="Trending now" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.25, ease: EASE }}>
-          <p>TRENDING NOW</p>
-          <ul>{picks.map(p => <li key={p.slug}><Link to={`/product/${p.slug}`} data-cursor="VIEW"><span>{p.name}</span><em>{inr(p.price)}</em></Link></li>)}</ul>
+      {(picks.length > 0 || cats.length > 0) && (
+        <motion.aside className="s13-h-picks" aria-label={picks.length ? 'Trending now' : 'Shop by category'} initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.25, ease: EASE }}>
+          <p>{picks.length ? 'TRENDING NOW' : 'SHOP BY CATEGORY'}</p>
+          <ul>{picks.length
+            ? picks.map(p => <li key={p.slug}><Link to={`/product/${p.slug}`} data-cursor="VIEW"><span>{p.name}</span><em>{inr(p.price)}</em></Link></li>)
+            : cats.slice(0, 3).map(c => <li key={c.slug}><Link to={`/shop?category=${c.slug}`}><span>{c.name}</span><em>Shop now &rarr;</em></Link></li>)}</ul>
         </motion.aside>
       )}
       {cats.length > 0 && (
