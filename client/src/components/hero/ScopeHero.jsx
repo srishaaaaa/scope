@@ -136,10 +136,12 @@ export default function ScopeHero() {
       {(picks.length > 0 || cats.length > 0) && (
         <motion.aside className="s13-h-picks" aria-label={picks.length ? 'Trending now' : 'Shop by category'} initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.25, ease: EASE }}>
           <p>{picks.length ? 'TRENDING NOW' : 'SHOP BY CATEGORY'}</p>
-          <ul>{picks.length
-            ? picks.map(p => <li key={p.slug}><Link to={`/product/${p.slug}`} data-cursor="VIEW"><span>{p.name}</span><em>{inr(p.price)}</em></Link></li>)
-            : cats.slice(0, 3).map(c => <li key={c.slug}><Link to={`/shop?category=${c.slug}`}><span>{c.name}</span><em>Shop now &rarr;</em></Link></li>)}</ul>
-          <div className="note"><small>{dl?.freeOver ? 'FREE DELIVERY' : 'MADURAI'}</small><span>{dl?.freeOver ? `On orders of ${inr(dl.freeOver)} or more` : 'Contemporary menswear, Tamil Nadu'}</span></div>
+          {picks.length > 0
+            ? <Link className="card" to={`/product/${picks[0].slug}`} data-cursor="VIEW">
+                {picks[0].image && <span className="ph"><img src={picks[0].image} alt="" loading="lazy" decoding="async" />{dl?.freeOver && <b>FREE DELIVERY OVER {inr(dl.freeOver)}</b>}</span>}
+                <span className="meta"><span>{picks[0].name}</span><em>{inr(picks[0].price)} <i aria-hidden="true">&rarr;</i></em></span>
+              </Link>
+            : <ul>{cats.slice(0, 3).map(c => <li key={c.slug}><Link to={`/shop?category=${c.slug}`}><span>{c.name}</span><em>Shop now &rarr;</em></Link></li>)}</ul>}
         </motion.aside>
       )}
       {cats.length > 0 && (
