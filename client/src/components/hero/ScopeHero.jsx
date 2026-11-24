@@ -45,8 +45,10 @@ export default function ScopeHero() {
   const pick = site.homepage?.trending?.[0];
   const [picked, setPicked] = useState(null);
   useEffect(() => { let dead = false; if (!pick) { setPicked(null); return } apiRetry(`/products?slugs=${encodeURIComponent(pick)}&limit=1`).then(d => !dead && setPicked(d.items?.[0] || null)).catch(() => {}); return () => { dead = true } }, [pick]);
+  const [dl, setDl] = useState(null);
+  useEffect(() => { let dead = false; apiRetry('/delivery-info').then(x => !dead && setDl(x)).catch(() => {}); return () => { dead = true } }, []);
   const feat = picked || catalog.featured[0];
-  const picks = catalog.featured.filter(p => p.slug !== feat?.slug).slice(0, 2);
+  const picks = catalog.featured.filter(p => p.slug !== feat?.slug).slice(0, 1);
   const marquee = ['SCOPE 13', 'CONTEMPORARY MENSWEAR', 'NEW ARRIVALS', 'MADURAI', 'EVERYDAY STYLE'];
 
   const mx = useMotionValue(0), my = useMotionValue(0);
@@ -137,6 +139,7 @@ export default function ScopeHero() {
           <ul>{picks.length
             ? picks.map(p => <li key={p.slug}><Link to={`/product/${p.slug}`} data-cursor="VIEW"><span>{p.name}</span><em>{inr(p.price)}</em></Link></li>)
             : cats.slice(0, 3).map(c => <li key={c.slug}><Link to={`/shop?category=${c.slug}`}><span>{c.name}</span><em>Shop now &rarr;</em></Link></li>)}</ul>
+          <div className="note"><small>{dl?.freeOver ? 'FREE DELIVERY' : 'MADURAI'}</small><span>{dl?.freeOver ? `On orders of ${inr(dl.freeOver)} or more` : 'Contemporary menswear, Tamil Nadu'}</span></div>
         </motion.aside>
       )}
       {cats.length > 0 && (
