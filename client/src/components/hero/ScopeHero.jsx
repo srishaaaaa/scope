@@ -41,13 +41,12 @@ export default function ScopeHero() {
   const live = catalog.categories.filter(c => c.product_count > 0);
   const chosen = (site.homepage?.categories || []).map(s => live.find(c => c.slug === s)).filter(Boolean);
   const cats = (chosen.length ? chosen : live).slice(0, 6);
-  const badgeText = (t.heroBadgeText || '').slice(0, 60);
-  const badgeLink = /^(\/|https:\/\/)/.test(t.heroBadgeLink || '') ? t.heroBadgeLink : '/shop';
   // The hero's Featured chip is the first piece picked in Admin → Trending; until one is picked it falls back to the first featured piece.
   const pick = site.homepage?.trending?.[0];
   const [picked, setPicked] = useState(null);
   useEffect(() => { let dead = false; if (!pick) { setPicked(null); return } apiRetry(`/products?slugs=${encodeURIComponent(pick)}&limit=1`).then(d => !dead && setPicked(d.items?.[0] || null)).catch(() => {}); return () => { dead = true } }, [pick]);
   const feat = picked || catalog.featured[0];
+  const picks = catalog.featured.filter(p => p.slug !== feat?.slug).slice(0, 2);
   const marquee = ['SCOPE 13', 'CONTEMPORARY MENSWEAR', 'NEW ARRIVALS', 'MADURAI', 'EVERYDAY STYLE'];
 
   const mx = useMotionValue(0), my = useMotionValue(0);
@@ -64,9 +63,6 @@ export default function ScopeHero() {
   const sunScroll = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [0, 90]);
   const move = e => { if (!fine || reduced) return; const r = ref.current.getBoundingClientRect(); mx.set((e.clientX - r.left) / r.width - 0.5); my.set((e.clientY - r.top) / r.height - 0.5) };
 
-  const badgeInner = (<>
-    <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="bd" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0" /></defs><text><textPath href="#bd" startOffset="0" textLength="268" lengthAdjust="spacing">{badgeText}</textPath></text></svg>
-    <b aria-hidden="true">↗</b></>);
   return (
     <section ref={ref} className="s13-hero" data-hero aria-label="SCOPE 13" onPointerMove={move} onPointerLeave={() => { mx.set(0); my.set(0) }}>
       <div className="s13-h-art" aria-hidden="true">
@@ -106,11 +102,6 @@ export default function ScopeHero() {
         <p>NEW<br />COLLECTION</p><i aria-hidden="true" />
       </motion.div>
 
-      {/* rotating circular badge */}
-      <motion.div className="s13-h-badge" initial={{ opacity: 0, scale: 0.8 }} animate={show ? { opacity: 1, scale: 1 } : undefined} transition={{ duration: 1, delay: 1.2, ease: EASE }}>
-        {/^https:/.test(badgeLink) ? <a href={badgeLink} target="_blank" rel="noopener noreferrer" aria-label={badgeText} data-cursor="OPEN">{badgeInner}</a> : <Link to={badgeLink} aria-label={badgeText} data-cursor="OPEN">{badgeInner}</Link>}
-      </motion.div>
-
       {looks.length > 1 && (
         <div className="s13-h-looks" role="group" aria-label="Outfits" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
           <button type="button" aria-label="Previous outfit" onClick={() => step(-1)}>&#8249;</button>
@@ -133,6 +124,12 @@ export default function ScopeHero() {
         <motion.div className="s13-h-feat" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.15, ease: EASE }}>
           <Link to={`/product/${feat.slug}`} data-cursor="VIEW"><small>FEATURED</small><strong>{feat.name}</strong><em>{inr(feat.price)} <i aria-hidden="true">&rarr;</i></em></Link>
         </motion.div>
+      )}
+      {picks.length > 0 && (
+        <motion.aside className="s13-h-picks" aria-label="Trending now" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.25, ease: EASE }}>
+          <p>TRENDING NOW</p>
+          <ul>{picks.map(p => <li key={p.slug}><Link to={`/product/${p.slug}`} data-cursor="VIEW"><span>{p.name}</span><em>{inr(p.price)}</em></Link></li>)}</ul>
+        </motion.aside>
       )}
       {cats.length > 0 && (
         <motion.nav className="s13-h-index" aria-label="Categories" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.25, ease: EASE }}>
