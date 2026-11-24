@@ -5,7 +5,7 @@ import { useApp } from '../../context/App';
 import { useFinePointer, useReduced } from '../../lib/hooks';
 import { Magnetic } from '../Motion';
 import FigurePlaceholder from '../home/FigurePlaceholder';
-import { media } from '../../config/content';
+import { media, contact } from '../../config/content';
 import { decodePos } from '../../lib/imgPos';
 import { inr } from '../../lib/format';
 import { apiRetry } from '../../lib/api';
@@ -125,6 +125,13 @@ export default function ScopeHero() {
           <Link to={`/product/${feat.slug}`} data-cursor="VIEW"><small>FEATURED</small><strong>{feat.name}</strong><em>{inr(feat.price)} <i aria-hidden="true">&rarr;</i></em></Link>
         </motion.div>
       )}
+      <motion.aside className="s13-h-info" aria-label="Visit SCOPE 13" initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.35, ease: EASE }}>
+        <ul>
+          <li><small>VISIT</small><span>Ismailpuram, Madurai</span></li>
+          <li><small>CALL</small><a href={`tel:${contact.phone}`}>{contact.phone}</a></li>
+          <li><small>FOLLOW</small><a href={contact.instagram.url} target="_blank" rel="noopener noreferrer">{contact.instagram.handle}</a></li>
+        </ul>
+      </motion.aside>
       {(picks.length > 0 || cats.length > 0) && (
         <motion.aside className="s13-h-picks" aria-label={picks.length ? 'Trending now' : 'Shop by category'} initial={{ opacity: 0, y: 14 }} animate={show ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.9, delay: 1.25, ease: EASE }}>
           <p>{picks.length ? 'TRENDING NOW' : 'SHOP BY CATEGORY'}</p>
