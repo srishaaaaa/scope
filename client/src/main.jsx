@@ -19,6 +19,7 @@ import './scope13-homecolor.css';
 import './scope13-sitecolor.css';
 import './scope13-beige.css';
 import './scope13-fit.css';
+import './scope13-premium.css';
 import './barcode.css';
 
 addEventListener('vite:preloadError', e => { if (reloadOnce()) e.preventDefault() }); // a page chunk missing after a release: reload once

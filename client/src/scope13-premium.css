@@ -1,0 +1,73 @@
+/* ======================= Premium hero — loaded last =======================
+   Two-model hero set like a quiet editorial studio: warm ivory light, one soft spotlight behind the pair,
+   a wide contact shadow, an ink strip. Fewer decorations (no dot-matrix, ruler or mirrored floor) so the pair breathes. */
+:root { --pm-ink: #14110d; --pm-gold: #b08a4a; --pm-ivory: #f6efe2 }
+
+.s13-home .s13-hero {
+  background:
+    radial-gradient(46% 60% at 50% 46%, rgba(255,251,242,.95), rgba(255,251,242,0) 72%),
+    radial-gradient(36% 48% at 6% 14%, rgba(214,176,108,.30), transparent 72%),
+    radial-gradient(34% 44% at 96% 90%, rgba(150,176,172,.26), transparent 72%),
+    radial-gradient(30% 36% at 70% 4%, rgba(168,186,160,.20), transparent 72%),
+    linear-gradient(180deg, #F3EADA, #E9DCC6) !important;
+}
+/* fine paper grain over the whole stage */
+.s13-hero::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .18 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E") }
+
+/* decoration clean-up */
+.s13-h-dots, .s13-h-ruler, .s13-h-fig .refl { display: none !important }
+.s13-h-art .ring { border-color: rgba(20,17,13,.10) }
+.s13-h-art .g { background: linear-gradient(180deg, transparent, rgba(20,17,13,.08) 20%, rgba(20,17,13,.08) 80%, transparent) }
+.s13-h-side { color: rgba(20,17,13,.42) }
+
+/* the pair: large, grounded, lit */
+.s13-h-fig { height: 87% !important; bottom: calc(38px + 2.6%) !important; width: max-content }
+.s13-h-fig img.cut { filter: drop-shadow(0 26px 30px rgba(60,40,15,.22)) drop-shadow(0 4px 8px rgba(60,40,15,.12)) }
+.s13-h-fig img { max-width: min(78vw, 820px) }
+.s13-h-ground { bottom: calc(38px + 1.2%) !important; width: min(64vh, 46vw) !important; height: 5.5% !important; background: radial-gradient(closest-side, rgba(52,34,12,.42), rgba(52,34,12,.16) 55%, transparent) !important; filter: blur(9px) !important }
+.s13-h-art::before { content: ''; position: absolute; left: 50%; top: 50%; width: min(58vw, 880px); aspect-ratio: 1; translate: -50% -52%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255,252,244,.85), rgba(255,252,244,.35) 60%, transparent) }
+
+/* wordmark: deep ink, a hair lighter than pure black so it reads as print, not UI */
+.s13-h-word-in { color: var(--pm-ink) !important; margin-top: -2vh !important }
+
+/* copy blocks */
+.s13-h-tag p, .s13-h-note p { color: rgba(20,17,13,.78) !important }
+.s13-h-tag i, .s13-h-note i { background: var(--pm-gold) !important; width: 56px !important }
+.s13-home .s13-h-tag, .s13-home .s13-h-note { color: var(--pm-ink) }
+.s13-home .s13-h-feat a { background: rgba(255,252,246,.82); box-shadow: inset 0 0 0 1px rgba(20,17,13,.08), 0 18px 40px -22px rgba(60,40,15,.45); border-radius: 2px; backdrop-filter: blur(10px) }
+.s13-home .s13-h-feat a b, .s13-home .s13-h-feat a small, .s13-home .s13-h-feat a i { color: var(--pm-gold) }
+.s13-h-index p { color: rgba(20,17,13,.5) }
+.s13-h-index a { border-bottom-color: rgba(20,17,13,.1) !important }
+
+/* primary action */
+.s13-h-cta .s13-black { background: var(--pm-ink) !important; color: #fbf6ea !important; box-shadow: 0 18px 34px -16px rgba(20,17,13,.7); letter-spacing: .12em; transition: background .35s, box-shadow .35s }
+.s13-h-cta .s13-black:hover { background: var(--pm-gold) !important; box-shadow: 0 22px 40px -16px rgba(120,86,30,.6) }
+.s13-under { color: var(--pm-ink) !important; border-color: var(--pm-gold) !important }
+.s13-under:hover { color: var(--pm-gold) !important }
+
+/* badge */
+.s13-home .s13-h-badge a { background: rgba(255,252,246,.9); box-shadow: inset 0 0 0 1px rgba(176,138,74,.45), 0 14px 32px -16px rgba(60,40,15,.5) }
+.s13-home .s13-h-badge a:hover { background: var(--pm-ink) }
+
+/* strip: ink with champagne marks */
+.s13-home .s13-h-strip { background: var(--pm-ink) !important; border-top: 1px solid rgba(176,138,74,.5) }
+.s13-h-strip li { color: #efe5d1 } .s13-h-strip li i { color: var(--pm-gold) !important }
+
+/* outfit switcher (only when extra looks exist) */
+.s13-h-looks { background: rgba(255,252,246,.86); bottom: 58px }
+.s13-h-looks .dots button.on { background: var(--pm-gold) }
+.s13-h-looks > button:hover { background: var(--pm-ink); border-color: var(--pm-ink) }
+
+@media (max-width: 1100px) { .s13-h-fig { height: 84% !important } }
+@media (max-width: 900px) {
+  .s13-h-word { place-items: start center !important; padding-top: 27% }
+  .s13-h-word-in { font-size: 10.8vw !important; margin-top: 0 !important }
+  .s13-h-badge { top: 2.5% !important }
+  .s13-h-fig { height: 66% !important; bottom: calc(32px + 4.5%) !important }
+  .s13-h-fig img { max-width: 94vw }
+  .s13-h-ground { bottom: calc(32px + 3%) !important; width: 70vw !important }
+  .s13-h-art::before { width: 120vw }
+  .s13-h-cta { bottom: calc(32px + 3%) !important }
+}
