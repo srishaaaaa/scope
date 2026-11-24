@@ -106,3 +106,10 @@
 .s13-h-picks .meta { display: grid; gap: 3px; padding: 10px 12px 11px }
 .s13-h-picks .meta span { font: 500 13px/1.3 var(--sans); color: var(--pm-ink) }
 .s13-h-picks .meta em { font: 500 11.5px var(--sans); font-style: normal; color: var(--pm-gold) }
+
+/* editorial "new arrivals" card */
+.s13-h-picks .edit { display: grid; gap: 8px; padding: 16px 16px 14px; background: var(--pm-ink); color: #f6efe2; box-shadow: 0 22px 40px -22px rgba(20,17,13,.7); transition: background .35s }
+.s13-h-picks .edit strong { font: 600 24px/1.02 var(--brand); letter-spacing: -.02em }
+.s13-h-picks .edit span { font: 400 11.5px/1.45 var(--sans); color: rgba(246,239,226,.72) }
+.s13-h-picks .edit em { font: 600 9.5px/1.2 var(--sans); font-style: normal; letter-spacing: .08em; text-transform: uppercase; color: var(--pm-gold); padding-top: 8px; border-top: 1px solid rgba(176,138,74,.4) }
+.s13-h-picks .edit:hover { background: #2a2217 }
