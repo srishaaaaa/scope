@@ -1,12 +1,12 @@
+import { hasStyle } from '../lib/catalog.js';
 import { Router } from 'express';
 import { z } from 'zod';
 import { one, rows } from '../db/index.js';
 import { HttpError, wrap } from '../lib/http.js';
 import { audit } from '../lib/orders.js';
 import { hasCostColumns, hasBestSeller } from '../lib/cost.js';
-import { hasStyle } from '../lib/catalog.js';
 import { createReturn, getReturn } from '../lib/returns.js';
-import { listMeasurements, setTailoring, stitchingOrders, stitchingOverview } from '../lib/measurements.js';
+import { listMeasurements, setTailoring, stitchingOrders, stitchingOverview, setDueDate } from '../lib/measurements.js';
 import { DEFAULT_RULES, loadRules } from '../lib/delivery.js';
 import { loadAccess, pagesFor, CAN, PAGES } from '../lib/staffAccess.js';
 import { syncWebInvoices } from '../lib/webInvoices.js';
@@ -29,7 +29,7 @@ const measure = z.object({
   remarks: z.array(text(200).min(1)).max(20).default([]),
 });
 const item = z.union([
-  z.object({ variantId: z.number().int().positive(), qty: z.number().int().min(1).max(999) }),
+  z.object({ variantId: z.number().int().positive(), qty: z.number().int().min(1).max(999), taxRate: z.number().int().min(0).max(28).optional(), measure: measure.optional() }),
   // free-text line (retail "Item name / description", services, and every wholesale line): cashier-entered price, no stock
   z.object({ name: text(160).min(1), sku: text(60).optional(), price: paise, qty: z.number().int().min(1).max(99999), taxRate: z.number().int().min(0).max(28).default(0), measure: measure.optional() }),
 ]);
@@ -43,7 +43,7 @@ const saleBody = z.object({
   customerPhone: text(20).regex(/^[0-9+\-\s]*$/, 'Phone may only contain digits').default(''),
   customerAddress: text(300).default(''),
   customerDob: date.optional(),
-  isGst: z.boolean().default(true),
+  isGst: z.boolean().default(true), gstInclusive: z.boolean().default(false),
   gstRate: z.number().int().min(0).max(28).optional(), // flat GST % for the whole bill; omitted = each item's own rate
   discountType: z.enum(['percent', 'fixed']).default('fixed'),
   discountValue: paise.default(0),
@@ -62,6 +62,7 @@ const settingsBody = z.object({
   deliveryPresets: z.array(z.object({ name: text(60).min(1), fee: paise })).max(20).default([]),
   state: text(60).default('Tamil Nadu (33)'),
   terms: text(600).default('Custom-stitched and altered garments are made to order and are non-returnable.'),
+  hsn: text(12).regex(/^(\d{4,8})?$/, 'HSN code is 4 to 8 digits').default(''), // printed on each invoice line
   // Shop details printed on POS bills. Blank means "use the website's store details".
   shopName: text(80).default(''), shopAddress: text(400).default(''), shopPhone: text(30).default(''), shopEmail: text(120).default(''),
   ownerName: text(80).default(''), ownerPhone: text(30).default(''), whatsapp: text(30).default(''), city: text(80).default(''), hours: text(120).default(''), shopNameTamil: text(80).default(''), instagram: text(60).default(''),
@@ -87,7 +88,7 @@ const stockBody = z.object({ variantId: z.number().int().positive(), type: z.enu
 const advanceBody = z.object({
   items: z.array(item).min(1).max(100), customerDob: date.optional(),
   customerName: text(120).default(''), customerPhone: text(20).regex(/^[0-9+\-\s]*$/, 'Phone may only contain digits').default(''), customerAddress: text(300).default(''),
-  isGst: z.boolean().default(false), gstRate: z.number().int().min(0).max(28).optional(),
+  isGst: z.boolean().default(false), gstRate: z.number().int().min(0).max(28).optional(), gstInclusive: z.boolean().default(false),
   discountType: z.enum(['percent', 'fixed']).default('fixed'), discountValue: paise.default(0), deliveryFee: paise.default(0),
   deposit: paise, depositMode: z.enum(['cash', 'upi', 'card', 'split']).default('cash'), depositSplit: z.object({ cash: paise.default(0), upi: paise.default(0), card: paise.default(0) }).optional(), deliveryDate: date.nullable().optional(), notes: text(500).optional(),
 });
@@ -99,7 +100,7 @@ const DEFAULT_BDAY = { offers: [{ id: 'o1', text: '10% off on your next purchase
 const bdayBody = z.object({ offers: z.array(z.object({ id: text(20).min(1), text: text(120).min(1) })).max(20), selected: text(20).default(''), message: text(1000).min(1) });
 const DEFAULT_EXPENSE_CATEGORIES = ['Electricity', 'Marketing', 'Miscellaneous', 'Packing', 'Rent', 'Repairs & Maintenance', 'Salaries', 'Stationery', 'Tea & Snacks', 'Transport'];
 
-// Dhanya POS API. Roles are enforced here on the server (and re-read from the database on every request by auth.role):
+// SCOPE 13 POS API. Roles are enforced here on the server (and re-read from the database on every request by auth.role):
 // owner/admin/cashier may bill and look things up; only owner/admin may void bills, view reports and manage coupons, settings,
 // customers' edits, expenses, products and the wholesale catalogue; inventory staff may also adjust stock.
 export default function pos({ db, auth }) {
@@ -188,12 +189,42 @@ export default function pos({ db, auth }) {
     res.json(await listMeasurements(db, f));
   }));
   r.get('/pos/stitching/orders', biller, wrap(async (req, res) => {
-    const f = z.object({ q: text(80).default(''), name: text(80).default(''), phone: text(20).default(''), status: z.enum(['all', 'pending', 'completed', 'cancelled']).default('all'), from: date.optional(), to: date.optional() }).parse(req.query);
+    const f = z.object({ q: text(80).default(''), name: text(80).default(''), phone: text(20).default(''), status: z.enum(['all', 'pending', 'completed', 'cancelled']).default('all'), from: date.optional(), to: date.optional(),
+      due: z.enum(['all', 'overdue', 'today', 'week', 'none']).default('all'), dueFrom: date.optional(), dueTo: date.optional(), kind: z.enum(['all', 'bill', 'advance']).default('all'), garment: text(60).default(''), gst: z.enum(['all', 'gst', 'nongst']).default('all'), sort: z.enum(['new', 'old', 'due']).default('new') }).parse(req.query);
     res.json(await stitchingOrders(db, f));
+  }));
+  r.patch('/pos/stitching/due', biller, wrap(async (req, res) => {
+    const d = z.object({ kind: z.enum(['bill', 'advance']), ref: text(40).min(1), due: date }).parse(req.body);
+    res.json(await setDueDate(db, req.user, d));
+  }));
+  // Stitching designs: extra neck designs (a name and an uploaded picture) and sleeve options the owner adds. They appear in the measurement pickers next to the built-in ones.
+  const designBody = z.object({
+    front: z.array(z.object({ name: text(60).min(1), image: text(600).nullable().default(null) })).max(60).default([]),
+    back: z.array(z.object({ name: text(60).min(1), image: text(600).nullable().default(null) })).max(60).default([]),
+    sleeveTypes: z.array(text(40).min(1)).max(40).default([]), sleeveLengths: z.array(text(40).min(1)).max(40).default([]),
+  });
+  const EMPTY_DESIGNS = { front: [], back: [], sleeveTypes: [], sleeveLengths: [] };
+  r.get('/pos/stitch-designs', biller, wrap(async (_req, res) => res.json({ ...EMPTY_DESIGNS, ...(await getSetting(db, 'stitch_designs', {})) })));
+  r.put('/pos/stitch-designs', area('/admin/stitching/designs'), wrap(async (req, res) => {
+    const v = designBody.parse(req.body);
+    for (const d of [...v.front, ...v.back]) if (d.image && !/^(https?:\/\/|\/)/.test(d.image)) throw new HttpError(400, 'Design pictures must be uploaded images');
+    await putSetting(db, 'stitch_designs', v); await audit(db, req.user.id, 'pos.stitch_designs', 'pos_settings', 'stitch_designs', { front: v.front.length, back: v.back.length });
+    res.json(v);
+  }));
+  // Alert settings (POS Settings → Alerts): the stitching due-date alert.
+  const ALERTS = { stitchDue: true, daysBefore: 2, popup: true, banner: true };
+  const loadAlerts = async () => ({ ...ALERTS, ...(await getSetting(db, 'alerts', {})) });
+  r.get('/pos/alert-settings', biller, wrap(async (_req, res) => res.json(await loadAlerts())));
+  r.put('/pos/alert-settings', manager, wrap(async (req, res) => {
+    const v = z.object({ stitchDue: z.boolean(), daysBefore: z.number().int().min(0).max(30), popup: z.boolean(), banner: z.boolean() }).parse(req.body);
+    await putSetting(db, 'alerts', v); await audit(db, req.user.id, 'pos.alert_settings', 'pos_settings', 'alerts', v); res.json(v);
   }));
   r.get('/pos/stitching/overview', biller, wrap(async (req, res) => {
     const f = z.object({ from: date.optional(), to: date.optional() }).parse(req.query);
-    res.json(await stitchingOverview(db, f));
+    const out = await stitchingOverview(db, f), al = await loadAlerts();
+    const lim = new Date(out.today + 'T00:00:00Z'); lim.setUTCDate(lim.getUTCDate() + al.daysBefore); const lead = lim.toISOString().slice(0, 10);
+    out.alerts = { ...al, dueSoonCount: out.dueSoon.filter(o => o.due > out.today && o.due <= lead && o.status === 'pending').length };
+    res.json(out);
   }));
   // Best Sellers shelf: flag / unflag one product (the shelf keeps the 10 newest flagged pieces).
   r.patch('/pos/products/:id/best-seller', area('/admin/billing/inventory', { not: ['inventory'] }), wrap(async (req, res) => {
@@ -205,7 +236,9 @@ export default function pos({ db, auth }) {
     res.json({ ok: true });
   }));
   r.patch('/pos/sales/:invoice', manager, wrap(async (req, res) => {
-    const d = z.object({ customerName: text(120).optional(), customerPhone: text(20).optional(), customerAddress: text(300).optional(), billDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(), notes: text(300).optional() }).parse(req.body);
+    const d = z.object({ customerName: text(120).optional(), customerPhone: text(20).optional(), customerAddress: text(300).optional(), billDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(), notes: text(300).optional(),
+      items: z.array(z.object({ id: z.number().int(), quantity: z.number().int().min(0).max(9999), unitPrice: z.number().int().min(0).optional() })).max(100).optional(),
+      payment: z.object({ mode: z.enum(['cash', 'upi', 'card', 'split']), split: z.object({ cash: z.number().int().min(0).optional(), upi: z.number().int().min(0).optional(), card: z.number().int().min(0).optional() }).optional() }).optional() }).parse(req.body);
     res.json(await editSale(db, req.user, req.params.invoice, d));
   }));
   r.patch('/pos/sales/:invoice/tailoring', biller, wrap(async (req, res) => {
@@ -227,7 +260,7 @@ export default function pos({ db, auth }) {
     res.json(await setAdvanceStatus(db, req.user, req.params.code, status));
   }));
   r.post('/pos/advances/:code/finalize', biller, wrap(async (req, res) => {
-    const d = z.object({ balanceMode: z.enum(['cash', 'upi', 'card', 'split']).default('cash'), balanceSplit: z.object({ cash: paise.default(0), upi: paise.default(0), card: paise.default(0) }).optional(), paymentRef: text(80).optional() }).parse(req.body);
+    const d = z.object({ balanceMode: z.enum(['cash', 'upi', 'card', 'split']).default('cash'), balanceSplit: z.object({ cash: paise.default(0), upi: paise.default(0), card: paise.default(0) }).optional(), paymentRef: text(80).optional(), cashReceived: paise.optional() }).parse(req.body);
     res.json(await finalizeAdvance(db, req.user, req.params.code, d));
   }));
 
@@ -335,8 +368,8 @@ export default function pos({ db, auth }) {
     res.json({ customer: c, totals: { bills: done.length, spent: done.reduce((s, i) => s + i.total, 0), advances: advances.length }, invoices, advances, stitching: invoices.filter(i => i.stitching) });
   }));
   // Delivery charge rules (by PIN zone and order value).
-  r.get('/pos/delivery-rules', manager, wrap(async (_req, res) => res.json(await loadRules(db))));
-  r.put('/pos/delivery-rules', manager, wrap(async (req, res) => {
+  r.get('/pos/delivery-rules', area('/admin/delivery'), wrap(async (_req, res) => res.json(await loadRules(db))));
+  r.put('/pos/delivery-rules', area('/admin/delivery'), wrap(async (req, res) => {
     const v = z.object({
       enabled: z.boolean(), note: text(300).default(''), storePin: z.string().regex(/^(\d{6})?$/, 'Shop PIN code must be 6 digits').default(''),
       defaultFee: paise, freeOver: paise.nullable(), maxKm: z.number().min(0).max(5000).default(0), perKmBeyond: paise.default(0),
@@ -514,6 +547,15 @@ export default function pos({ db, auth }) {
     if (!cats.includes(name)) throw new HttpError(404, 'Category not found');
     const next = cats.filter(c => c !== name); await putSetting(db, 'expense_categories', next);
     await audit(db, req.user.id, 'pos.expense_category.remove', 'pos_settings', name); res.json(next);
+  }));
+  r.patch('/pos/expenses/:id', area('/admin/billing/expenses'), wrap(async (req, res) => {
+    const e = expenseBody.parse(req.body);
+    if (e.date && e.date > today()) throw new HttpError(400, 'Expense date cannot be in the future');
+    const u = await db.query('UPDATE pos_expenses SET title = $2, category = $3, amount = $4, payment_mode = $5, notes = $6, expense_date = COALESCE($7::date, expense_date) WHERE id = $1 RETURNING id',
+      [id.parse(req.params.id), e.title, e.category, e.amount, e.paymentMode, e.notes, e.date ?? null]);
+    if (!u.rows.length) throw new HttpError(404, 'Expense not found');
+    await audit(db, req.user.id, 'pos.expense.edit', 'pos_expense', u.rows[0].id, { amount: e.amount });
+    res.json({ id: u.rows[0].id });
   }));
   r.delete('/pos/expenses/:id', area('/admin/billing/expenses'), wrap(async (req, res) => {
     const d = await db.query('DELETE FROM pos_expenses WHERE id = $1 RETURNING id', [id.parse(req.params.id)]);

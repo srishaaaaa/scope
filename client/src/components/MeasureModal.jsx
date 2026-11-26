@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Modal from './Modal';
-import { BACK_NECKS, FRONT_NECKS, Sheet } from '../pages/stitching/NeckPicker';
+import { BACK_NECKS, FRONT_NECKS, SLEEVE_LENGTHS_X, SLEEVE_TYPES_X, Sheet, useDesigns } from '../pages/stitching/NeckPicker';
 
 // Measurements for a stitching service line in Billing: neck types, sleeve, due date, sizes in cm and remarks.
 export const SLEEVE_TYPES = ['Sleeveless', 'Short', '3/4', 'Full', 'Puff', 'Bell'];
@@ -24,7 +24,10 @@ function Chips({ options, value, onChange, label }) {
   );
 }
 
-export default function MeasureModal({ value, onSave, onClose }) {
+// charge: the extra stitching charge already on the bill for this item (rupees text, '' = none). onSave(measure, charge).
+export default function MeasureModal({ value, onSave, onClose, charge = '' }) {
+  const [extra, setExtra] = useState(charge ? 'extra' : 'free'); const [amt, setAmt] = useState(charge || '');
+  useDesigns();
   const [m, setM] = useState(() => ({ frontNeck: '', backNeck: '', sleeveType: '', sleeveLength: '', dueDate: '', ...value, cm: { ...(value?.cm || {}) }, remarks: [...(value?.remarks || [])] }));
   const [sheet, setSheet] = useState(null);
   const [remark, setRemark] = useState(null);
@@ -35,7 +38,7 @@ export default function MeasureModal({ value, onSave, onClose }) {
   const neck = (label, key, list, step) => (
     <div className="msr-f"><span className="msr-l">{label}</span>
       <button type="button" className="msr-neck" onClick={() => setSheet(step)}>
-        {m[key] ? <>{icon(list, m[key])}<b>{m[key]}</b></> : <span className="muted">Select {label.toLowerCase()}</span>}
+        {m[key] ? <>{icon(list, m[key])}<b>{m[key]}</b></> : <span className="muted">Select…</span>}
         <span aria-hidden="true">✎</span>
       </button>
     </div>
@@ -49,25 +52,28 @@ export default function MeasureModal({ value, onSave, onClose }) {
       ...(m.dueDate ? { dueDate: m.dueDate } : {}), cm, remarks: m.remarks.map(r => r.trim()).filter(Boolean),
     };
     const empty = !Object.keys(cm).length && !out.remarks.length && Object.keys(out).length === 2;
-    onSave(empty ? null : out); onClose();
+    onSave(empty ? null : out, extra === 'extra' && parseFloat(amt) > 0 ? String(parseFloat(amt)) : ''); onClose();
   };
 
   return (
-    <Modal title="Measurements" sub="For this stitching service. Sizes in cm." wide onClose={onClose}
+    <Modal title="Measurements" sub="For this stitching service. Sizes in cm." wide className="msr-modal" onClose={onClose}
       footer={<><button type="button" className="dpos-btn ghost" onClick={onClose}>Cancel</button><button type="button" className="dpos-btn" onClick={save}>Save measurements</button></>}>
-      <div className="msr">
+      <div className="msr msr-land">
+        <div className="msr-a">
         <div className="msr-two">{neck('Front neck type', 'frontNeck', FRONT_NECKS, 'front')}{neck('Back neck type', 'backNeck', BACK_NECKS, 'back')}</div>
-        <div className="msr-f"><span className="msr-l">Sleeve type</span><Chips label="Sleeve type" options={SLEEVE_TYPES} value={m.sleeveType} onChange={v => set({ sleeveType: v })} /></div>
-        <div className="msr-f"><span className="msr-l">Sleeve length</span><Chips label="Sleeve length" options={SLEEVE_LENGTHS} value={m.sleeveLength} onChange={v => set({ sleeveLength: v })} /></div>
-        <label className="msr-f"><span className="msr-l">Due date (optional)</span><input type="date" value={m.dueDate} onChange={e => set({ dueDate: e.target.value })} /></label>
-
-        <h4 className="msr-h">Measurements (cm)</h4>
-        <div className="msr-two">
-          {CM_FIELDS.map(([k, l]) => (
-            <label key={k} className="msr-f"><span className="msr-l">{l}</span>
-              <span className="msr-cm"><input inputMode="decimal" placeholder="0" value={m.cm[k] ?? ''} onChange={e => set({ cm: { ...m.cm, [k]: e.target.value.replace(/[^\d.]/g, '').slice(0, 6) } })} /><em>cm</em></span>
-            </label>))}
+        <div className="msr-f"><span className="msr-l">Sleeve type</span><Chips label="Sleeve type" options={[...SLEEVE_TYPES, ...SLEEVE_TYPES_X.filter(x => !SLEEVE_TYPES.includes(x))]} value={m.sleeveType} onChange={v => set({ sleeveType: v })} /></div>
+        <div className="msr-f"><span className="msr-l">Sleeve length</span><Chips label="Sleeve length" options={[...SLEEVE_LENGTHS, ...SLEEVE_LENGTHS_X.filter(x => !SLEEVE_LENGTHS.includes(x))]} value={m.sleeveLength} onChange={v => set({ sleeveLength: v })} /></div>
+        <div className="msr-f"><span className="msr-l">Stitching charge</span>
+          <div className="msr-charge">
+            <div className="msr-chips" role="radiogroup" aria-label="Stitching charge">
+              <button type="button" role="radio" aria-checked={extra === 'free'} className={extra === 'free' ? 'on' : ''} onClick={() => setExtra('free')}>No extra charge</button>
+              <button type="button" role="radio" aria-checked={extra === 'extra'} className={extra === 'extra' ? 'on' : ''} onClick={() => setExtra('extra')}>Extra charge</button>
+            </div>
+            {extra === 'extra' && <span className="msr-cm msr-amt"><em>₹</em><input autoFocus inputMode="decimal" aria-label="Extra stitching charge in rupees" placeholder="0" value={amt} onChange={e => setAmt(e.target.value.replace(/[^\d.]/g, '').slice(0, 8))} /></span>}
+          </div>
+          {extra === 'extra' && <small className="msr-note">Added to the bill as a separate “Stitching charge” line.</small>}
         </div>
+        <label className="msr-f"><span className="msr-l">Due date (optional)</span><input type="date" value={m.dueDate} onChange={e => set({ dueDate: e.target.value })} /></label>
 
         <div className="msr-rh"><h4 className="msr-h">Remarks</h4><button type="button" className="dpos-btn ghost sm" onClick={() => setRemark('')}>+ Add remark</button></div>
         {!m.remarks.length && remark === null && <p className="muted small" style={{ margin: 0 }}>No remarks added.</p>}
@@ -82,6 +88,17 @@ export default function MeasureModal({ value, onSave, onClose }) {
             <button type="button" className="dpos-btn sm" disabled={!remark.trim()} onClick={addRemark}>Add</button>
             <button type="button" className="dpos-btn ghost sm" onClick={() => setRemark(null)}>Cancel</button>
           </div>)}
+        </div>
+        <div className="msr-b">
+        <h4 className="msr-h">Measurements (cm)</h4>
+        <div className="msr-grid">
+          {CM_FIELDS.map(([k, l]) => (
+            <label key={k} className="msr-f"><span className="msr-l">{l}</span>
+              <span className="msr-cm"><input inputMode="decimal" placeholder="0" value={m.cm[k] ?? ''} onChange={e => set({ cm: { ...m.cm, [k]: e.target.value.replace(/[^\d.]/g, '').slice(0, 6) } })} /><em>cm</em></span>
+            </label>))}
+        </div>
+
+        </div>
       </div>
       {sheet === 'front' && <Sheet title="Select Front Neck Type" options={FRONT_NECKS} value={m.frontNeck} onCancel={() => setSheet(null)} onNext={v => { set({ frontNeck: v }); setSheet(m.backNeck ? null : 'back') }} />}
       {sheet === 'back' && <Sheet title="Select Back Neck Type" options={BACK_NECKS} value={m.backNeck} last onCancel={() => setSheet(null)} onNext={v => { set({ backNeck: v }); setSheet(null) }} />}

@@ -7,7 +7,11 @@ import { clock, longDate } from '../../lib/invoiceFormat';
 import { istDay } from '../../components/PeriodFilter';
 import '../../pos.css';
 import '../../pos3.css';
+import '../../invoice.css';
 import { Empty, Err, dmy, inr, statusName, useMeta } from './common';
+import PrintSettings from '../../components/PrintSettings';
+
+const PAGE = { a4: 'A4; margin: 10mm', a5: 'A5; margin: 8mm', 80: '80mm auto; margin: 2mm', 58: '58mm auto; margin: 2mm' };
 
 const num = (n, unit) => `${n}${unit === 'in' ? '"' : ' cm'}`;
 
@@ -15,7 +19,14 @@ const num = (n, unit) => `${n}${unit === 'in' ? '"' : ' cm'}`;
 export default function Print() {
   const { id } = useParams(); const [sp] = useSearchParams(); const copy = sp.get('copy') === 'customer' ? 'customer' : 'job';
   const { user, authReady } = useApp(); const [meta] = useMeta();
+  const [ps, setPs] = useState(false); const [paper, setPaper] = useState('a4');
   const [o, setO] = useState(null); const [shop, setShop] = useState(null); const [err, setErr] = useState();
+  useEffect(() => { // paper size and, for a thermal roll, a narrow sheet
+    let el = document.getElementById('stc-page-size'); if (!el) { el = document.createElement('style'); el.id = 'stc-page-size'; document.head.appendChild(el) }
+    const roll = paper === '80' || paper === '58';
+    el.textContent = `@page { size: ${PAGE[paper]} }` + (roll ? `@media print { .stc-sheet { width: ${paper === '58' ? 50 : 72}mm !important; max-width: none !important; padding: 0 !important; font-size: ${paper === '58' ? 9 : 10.5}px !important } .stc-sheet .two, .stc-sheet .head { display: block !important } .stc-sheet img { max-width: 40px } .stc-sheet table { font-size: inherit } }` : paper === 'a5' ? '@media print { .stc-sheet { zoom: .7 } }' : '');
+    return () => { el.textContent = '' };
+  }, [paper]);
   useEffect(() => { document.body.classList.add('stc-printing'); return () => document.body.classList.remove('stc-printing') }, []);
   const ok = user && ['owner', 'admin', 'cashier'].includes(user.role);
   useEffect(() => { if (!ok) return; Promise.all([api(`/admin/stitching/orders/${id}`), api('/admin/pos/shop')]).then(([a, b]) => { setO(a); setShop(b) }).catch(e => setErr(e.message)) }, [id, ok]);
@@ -26,9 +37,10 @@ export default function Print() {
   if (!o || !shop || !meta) return <div className="page-pad"><Empty>Loading…</Empty></div>;
   const job = copy === 'job';
   return (
-    <div style={{ background: '#f3f1ec', minHeight: '100vh', '--d-ink': '#121214', '--d-acc': '#131f25', '--d-line': '#e7e1d6', '--d-mut': '#6f6b66' }}>
-      <div className="stc-bar-tools"><button className="dpos-btn" onClick={() => window.print()}>Print</button><Link className="dpos-btn ghost" to={`/admin/stitching/orders/${o.id}`}>← Back to order</Link>
+    <div style={{ background: '#f3f1ec', minHeight: '100vh', '--d-ink': '#121214', '--d-acc': '#242424', '--d-line': '#e7e1d6', '--d-mut': '#6f6b66' }}>
+      <div className="stc-bar-tools"><button className="dpos-btn" onClick={() => setPs(true)}>Print</button><Link className="dpos-btn ghost" to={`/admin/stitching/orders/${o.id}`}>← Back to order</Link>
         <Link className="dpos-btn ghost" to={`/admin/stitching/print/${o.id}?copy=${job ? 'customer' : 'job'}`}>Switch to {job ? 'customer receipt' : 'job card'}</Link></div>
+      {ps && <PrintSettings onClose={() => setPs(false)} onPrint={({ paper: p }) => { setPaper(p); setPs(false); setTimeout(() => window.print(), 350) }} />}
       <article className="stc-sheet">
         <header className="head">
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}><img src={shop.logo || DEFAULT_LOGO} alt="" /><div><h1>{shop.name}</h1><div>{(shop.address || []).join(', ')}</div>{shop.phone && <div>Phone: {shop.phone}</div>}</div></div>
@@ -44,7 +56,7 @@ export default function Print() {
             {job ? <>
               {(Object.keys(it.specs).length > 0 || it.custom.length > 0) && <table><tbody>{Object.entries(it.specs).map(([k, v]) => <tr key={k}><td style={{ width: '32%' }}>{meta.specLibrary[k]?.label ?? k}</td><td><b>{v}</b></td></tr>)}{it.custom.map((c, j) => <tr key={j}><td>{c.label}</td><td><b>{c.value}</b></td></tr>)}</tbody></table>}
               {it.notes && <p style={{ margin: '6px 0' }}><b>Instructions:</b> {it.notes}</p>}
-              <p style={{ margin: '6px 0' }}><b>Fabric:</b> {[it.fabric.source === 'boutique' ? 'Boutique provides' : 'Customer provides', it.fabric.type, it.fabric.color, it.fabric.quantity].filter(Boolean).join(', ')}{it.fabric.lining && ` · Lining: ${it.fabric.lining}`}{it.fabric.accessories && ` · Accessories: ${it.fabric.accessories}`} · {{ pending: 'awaiting fabric', received: 'fabric received', ready: 'ready for cutting' }[it.fabric.status ?? 'pending']}</p>
+              <p style={{ margin: '6px 0' }}><b>Fabric:</b> {[it.fabric.source === 'boutique' ? 'Shop provides' : 'Customer provides', it.fabric.type, it.fabric.color, it.fabric.quantity].filter(Boolean).join(', ')}{it.fabric.lining && ` · Lining: ${it.fabric.lining}`}{it.fabric.accessories && ` · Accessories: ${it.fabric.accessories}`} · {{ pending: 'awaiting fabric', received: 'fabric received', ready: 'ready for cutting' }[it.fabric.status ?? 'pending']}</p>
               {it.fabric.photos?.length > 0 && <div style={{ display: 'flex', gap: 6, margin: '6px 0' }}>{it.fabric.photos.map(u => <img key={u} src={u} alt="Fabric reference" style={{ width: 70, height: 70, objectFit: 'cover', borderRadius: 4 }} />)}</div>}
               {Object.entries(it.measurements.groups ?? {}).map(([g, v]) => <div key={g} style={{ margin: '6px 0' }}><b>{meta.measureGroups[g]?.label ?? g} measurements ({v.unit === 'in' ? 'inches' : 'cm'}, {dmy(istDay(v.takenAt))}):</b>
                 <div className="m">{[...Object.entries(v.values).map(([k, n]) => [meta.measureGroups[g]?.fields.find(f => f[0] === k)?.[1] ?? k, n]), ...v.custom.map(c => [c.label, c.value])].map(([k, n]) => <div key={k}>{k}: <b>{num(n, v.unit)}</b></div>)}</div>{v.notes && <div>Note: {v.notes}</div>}</div>)}

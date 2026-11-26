@@ -1,0 +1,16 @@
+/* Loaded last, admin only. Theme colours are SCOPE's own: charcoal accent and neutral greys, as before the admin update. */
+.dpos, .dpos-modal { --d-acc: var(--pos-accent, #242424); --d-bill: var(--pos-accent, #242424) }
+.dpos .cp, .dpos .bd { --p: var(--pos-accent, #242424) }
+
+/* Phone: two fixes on top of the shared phone styles */
+@media (max-width: 700px) {
+  /* Bill Generated buttons: two to a row, WhatsApp full width, so no label is clipped */
+  html body .dpos-modal .dpos-done > .dpos-done-act { grid-template-columns: repeat(2, minmax(0, 1fr)) !important }
+  html body .dpos-modal .dpos-done > .dpos-done-act > .wa { grid-column: 1 / -1 !important }
+  /* tables: one line per cell, scrolling sideways */
+  html body div.dpos .dpos-tw { max-width: 100%; overflow-x: auto }
+  html body div.dpos .dpos-tw th, html body div.dpos .dpos-tw td, html body div.dpos .dpos-tw td .oid { white-space: nowrap }
+}
+
+/* footer sits at the end of the page; it never floats over the content */
+html body div.dpos .dpos-main > .dpos-foot, html body div.dpos .dpos-foot { position: static !important; bottom: auto !important; box-shadow: none !important; margin-top: auto !important }

@@ -9,16 +9,16 @@ import { downloadCsv } from '../components/StockMovements';
 const toPaise = s => { const n = Math.round(parseFloat(String(s || '').replace(/,/g, '')) * 100); return Number.isFinite(n) && n > 0 ? n : 0 };
 const dmy = d => d ? String(d).slice(0, 10).split('-').reverse().join('-') : '';
 const BLANK = { code: '', type: 'percent', value: '', min: '', expires: '', limit: '', sentOnly: false };
-const generate = () => { const w = ['SCOPE 13', 'NEWDROP', 'FESTIVE', 'WELCOME', 'STYLE']; const r = Math.random().toString(36).slice(2, 5).toUpperCase(); return `${w[Math.floor(Math.random() * w.length)]}${r}` };
+const generate = () => { const w = ['SCOPE13', 'NEWDROP', 'FESTIVE', 'WELCOME', 'STYLE']; const r = Math.random().toString(36).slice(2, 5).toUpperCase(); return `${w[Math.floor(Math.random() * w.length)]}${r}` };
 const offerText = c => c.discountType === 'percent' ? `${c.discountValue}% OFF` : `${inr(c.discountValue)} OFF`;
 const expired = c => c.expiresOn && String(c.expiresOn).slice(0, 10) < new Date().toISOString().slice(0, 10);
 
 // The message opened in WhatsApp: the offer, its rules and the link to the printable coupon card.
 const message = (c, name, shop) => [
-  `Hello${name ? ' ' + name : ''},`, `🎁 Here is a coupon from *${shop?.name || 'SCOPE 13'}*`, '', `Code: *${c.code}*`, `Offer: *${offerText(c)}*`, '',
+  `Dear${name ? ' ' + name : ' valued customer'},`, '', `✨ A special gift from *${shop?.name || 'SCOPE 13'}* ✨`, '', `🎁 *${offerText(c)}*`, `🔑 Your code: *${c.code}*`, '',
   ...(c.minOrder ? [`• Valid on purchases of ${inr(c.minOrder)} or more`] : []), ...(c.expiresOn ? [`• Valid till ${dmy(c.expiresOn)}`] : []),
   ...(c.sentOnly ? ['• Only for the mobile number it was sent to'] : []), '• Show this code at billing. Discount applies to the item value only.', '',
-  `Download your coupon: ${location.origin}/coupon/${c.code}`, ...(shop?.phone ? ['', `📞 ${shop.phone}`] : []),
+  `💳 Open your coupon: ${location.origin}/coupon/${c.code}`, ...(shop?.phone ? ['', `📞 ${shop.phone}`] : []),
 ].join('\n');
 
 function SendModal({ c, shop, onClose, onDone }) {
@@ -57,12 +57,12 @@ function Recipients({ c, shop, onClose, onDone }) {
   };
   const n = (list || []).filter(p => p.sent || sent[p.phone]).length;
   return (
-    <Modal className="cpm" title={<>Send <span className="mono">{c.code}</span> to customers</>} onClose={onClose} footer={<><span className="muted small" style={{ marginRight: 'auto' }}>{n} sent</span><button className="dpos-btn" onClick={onClose}>Done · {n} sent</button></>}>
+    <Modal className="cpm" title={<>Send <span className="mono">{c.code}</span> to customers</>} onClose={onClose} footer={<><span className="cpm-count">{n} of {(list || []).length} sent</span><button className="dpos-btn" onClick={onClose}>Done</button></>}>
       {err && <p className="dpos-err" role="alert">{err}</p>}
       {!list ? <p className="muted">Loading…</p> : !list.length ? <p className="muted">No customers with a mobile number yet.</p> : (
         <ul className="cp-rec">{list.map(p => { const done = p.sent || sent[p.phone]; return (
           <li key={p.phone}><span><b>{p.name || 'Customer'}</b><em>{p.phone}</em></span>
-            <button type="button" className={`cp-send ${done ? 'done' : ''}`} onClick={() => send(p)}>{done ? 'SENT ✓ · AGAIN' : 'SEND'}</button></li>) })}</ul>)}
+            <span className="cp-rec-act">{done && <span className="cp-rec-ok">✓ Sent</span>}<button type="button" className={`cp-send ${done ? 'done' : ''}`} onClick={() => send(p)}>{done ? 'Send again' : 'Send'}</button></span></li>) })}</ul>)}
     </Modal>
   );
 }

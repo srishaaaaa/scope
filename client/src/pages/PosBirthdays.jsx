@@ -37,9 +37,9 @@ export default function PosBirthdays({ shop, CustomerModal }) {
   const dirty = offer && JSON.stringify(offer) !== saved;
   const chosen = offer?.offers.find(o => o.id === offer.selected);
   const vars = { shop: shop?.name || 'SCOPE 13', phone: shop?.phone || '', instagram: (shop?.instagram || '').replace(/^@/, '') || 'yourshop', offer: chosen?.text || '' };
-  const send = r => { const d = r.phone.replace(/\D/g, ''); return `https://wa.me/${d.length === 10 ? '91' + d : d}?text=${encodeURIComponent(fill(offer?.message || '', { ...vars, name: r.name || 'there' }))}` };
+  const send = r => { const d = r.phone.replace(/\D/g, ''); return `https://api.whatsapp.com/send?phone=${d.length === 10 ? '91' + d : d}&text=${encodeURIComponent(fill(offer?.message || '', { ...vars, name: r.name || 'there' }))}` };
   const save = async () => { setSaving(true); setErr(); try { const o = await api('/admin/pos/birthday-offer', { method: 'PUT', body: offer }); setOffer(o); setSaved(JSON.stringify(o)) } catch (x) { setErr(x.issues?.[0]?.message || x.message) } finally { setSaving(false) } };
-  const addOffer = () => { const text = prompt('Offer text (e.g. 40% off on sarees):'); if (!text?.trim()) return; const id = 'o' + Date.now().toString(36); setOffer(o => ({ ...o, offers: [...o.offers, { id, text: text.trim() }], selected: id })) };
+  const addOffer = () => { const text = prompt('Offer text (e.g. 40% off on shirts):'); if (!text?.trim()) return; const id = 'o' + Date.now().toString(36); setOffer(o => ({ ...o, offers: [...o.offers, { id, text: text.trim() }], selected: id })) };
   const editOffer = () => { if (!chosen) return; const text = prompt('Edit the offer:', chosen.text); if (text?.trim()) setOffer(o => ({ ...o, offers: o.offers.map(x => x.id === chosen.id ? { ...x, text: text.trim() } : x) })) };
   const delOffer = () => { if (!chosen || !confirm(`Delete the offer “${chosen.text}”?`)) return; setOffer(o => { const left = o.offers.filter(x => x.id !== chosen.id); return { ...o, offers: left, selected: left[0]?.id ?? '' } }) };
   const exportCsv = () => downloadCsv('birthdays.csv', ['Customer', 'Mobile', 'Date of birth', 'Next birthday', 'Days away'], shown.map(r => [r.name, r.phone, r.dob, r.nextBirthday, r.daysAway]));

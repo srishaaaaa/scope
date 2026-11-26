@@ -1,3 +1,4 @@
+import { pageGuard } from '../lib/staffAccess.js';
 import { Router } from 'express';
 import { z } from 'zod';
 import { one } from '../db/index.js';
@@ -11,7 +12,7 @@ const nullableText = n => text(n).transform(v => v || null).nullable().default(n
 const hhmm = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use HH:MM');
 
 export const storeSchema = z.object({
-  name: text(80).default('DHANYA'),
+  name: text(80).default('SCOPE 13'),
   address: z.array(text(160).min(1)).max(5).nullable().default(null),
   owner: nullableText(80),
   phone: nullableText(30),
@@ -68,7 +69,7 @@ export default function settingsRoutes({ db, cfg, auth }) {
   r.get('/delivery-info', wrap(async (_req, res) => {
     const d = await loadRules(db).catch(() => ({}));
     res.set('Cache-Control', 'public, max-age=30');
-    res.json({ note: d.note || '', lines: (d.productLines || []).filter(Boolean), freeOver: d.enabled && d.freeOver > 0 ? d.freeOver : null, byWeight: !!(d.enabled && d.weightMode) });
+    res.json({ note: d.note || '', lines: (d.productLines || []).filter(Boolean), freeOver: d.enabled && d.freeOver > 0 ? d.freeOver : null, byWeight: !!(d.enabled && d.weightMode), regions: d.enabled && d.weightMode ? (d.weightRegions || []).filter(r => r.active !== false && r.name).map(r => r.name) : [] });
   }));
 
   // Public: boutique location/hours/social. The map URL is only produced for a configured address.
@@ -109,9 +110,9 @@ export default function settingsRoutes({ db, cfg, auth }) {
     await audit(db, req.user.id, 'settings.update', 'settings', key);
   };
   r.put('/admin/settings/store', staff, wrap(async (req, res) => { const v = storeSchema.parse(req.body); await save(req, 'store', v); res.json(v) }));
-  r.put('/admin/settings/social', staff, wrap(async (req, res) => { const v = socialSchema.parse(req.body); await save(req, 'social', v); await sweepMedia(db, true); res.json(v) }));
-  r.put('/admin/settings/branding', staff, wrap(async (req, res) => { const v = brandingSchema.parse(req.body); await save(req, 'branding', v); await sweepMedia(db, true); res.json(v) }));
-  r.put('/admin/settings/homepage', staff, wrap(async (req, res) => { const v = homepageSchema.parse(req.body); await save(req, 'homepage', v); res.json(v) }));
+  r.put('/admin/settings/social', pageGuard(db, auth, '/admin/reels'), wrap(async (req, res) => { const v = socialSchema.parse(req.body); await save(req, 'social', v); await sweepMedia(db, true); res.json(v) }));
+  r.put('/admin/settings/branding', pageGuard(db, auth, '/admin/storefront'), wrap(async (req, res) => { const v = brandingSchema.parse(req.body); await save(req, 'branding', v); await sweepMedia(db, true); res.json(v) }));
+  r.put('/admin/settings/homepage', pageGuard(db, auth, '/admin/trending'), wrap(async (req, res) => { const v = homepageSchema.parse(req.body); await save(req, 'homepage', v); res.json(v) }));
   r.put('/admin/settings/content', staff, wrap(async (req, res) => { const v = contentSchema.parse(req.body); await save(req, 'content', v); res.json(v) }));
   r.put('/admin/settings/flags', staff, wrap(async (req, res) => { const v = flagsSchema.parse(req.body); await save(req, 'flags', v); res.json(v) }));
   r.put('/admin/pages/:slug', staff, wrap(async (req, res) => {

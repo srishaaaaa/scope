@@ -1,5 +1,3 @@
-import ImageAdjust from '../components/ImageAdjust';
-import { splitAlt, joinAlt } from '../lib/imgPos';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useApp } from '../context/App';
@@ -14,7 +12,7 @@ function useGate() {
   const { user, authReady } = useApp();
   if (!authReady) return <div className="page-pad"><p className="muted">Loading…</p></div>;
   if (!user) return <Navigate to="/login" replace />;
-  if (!['owner', 'admin'].includes(user.role)) return <StaffOnly />;
+  if (!['owner', 'admin', 'cashier', 'inventory'].includes(user.role)) return <StaffOnly />;
   return null;
 }
 const Err = ({ children }) => children ? <p className="dpos-err" role="alert">{children}</p> : null;
@@ -28,7 +26,7 @@ function AddModal({ kind, onClose, onDone }) {
     catch (x) { setErr(x.issues?.[0]?.message || x.message) } finally { setBusy(false) }
   };
   return (
-    <Modal title={kind === 'category' ? 'Add category' : 'Add category'} sub={kind === 'category' ? 'A product category such as Sarees or Blouses' : 'A department / collection shown on the storefront (starts hidden)'} onClose={onClose}>
+    <Modal title={kind === 'category' ? 'Add category' : 'Add category'} sub={kind === 'category' ? 'A product category such as Shirts or T-Shirts' : 'A department / collection shown on the storefront (starts hidden)'} onClose={onClose}>
       <form onSubmit={submit} style={{ display: 'grid', gap: 14 }}>
         {kind === 'category' && <label className="f">Code (optional) <small className="muted">type it in any search to list this category</small><input value={code} maxLength={12} onChange={e => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))} placeholder="e.g. SAR" /></label>}
         <label className="f">Name<input autoFocus required value={name} maxLength={80} onChange={e => setName(e.target.value)} placeholder={kind === 'category' ? 'e.g. Dupattas' : 'e.g. Festive 2026'} /></label>
@@ -102,7 +100,7 @@ export function AdminCategories() {
       <Err>{err}</Err>
       <div className="dpos-tx">
         <div>
-          <h2><Icon n="layers" size={20} />Departments <button className="dpos-btn ghost sm" style={{ marginLeft: 'auto' }} onClick={() => setModal('collection')}>+ Add category</button></h2>
+          <h2><Icon n="layers" size={20} />Departments</h2>
           {d?.shelves && <>
             <div className="dpos-txc"><div><b>Trending collections</b><small>{d.shelves.trending} products · Featured pieces on the home page · Live on the site</small></div><Link className="dpos-btn ghost sm" to="/admin/trending">Edit pieces</Link></div>
             <div className="dpos-txc"><div><b>Best Sellers</b><small>{d.shelves.best} products · Products marked best seller · Up to 10 · Live on the site</small></div><Link className="dpos-btn ghost sm" to="/admin/billing/inventory">Edit in products</Link></div></>}
@@ -119,16 +117,6 @@ export function AdminCategories() {
                 <button className="dpos-trash" aria-label={`Delete ${c.name}`} onClick={() => confirm(`Delete the category “${c.name}”? ${c.products ? `${c.products} product(s) will become uncategorised (they are not deleted).` : ''}`) && act(() => api(`/admin/categories/${c.id}`, { method: 'DELETE' }), 'Category deleted.')}><Icon n="trash" size={18} /></button>
               </div>
             </div>))}
-          {cols.length > 0 && <h2 style={{ marginTop: 22 }}><Icon n="layers" size={20} />Collections</h2>}
-          {!d ? <p className="dpos-empty">Loading…</p> : !cols.length ? null : cols.map(c => (
-            <div className="dpos-txc" key={c.id}>
-              <div><b>{c.name}</b><small>{c.products} products · {c.status === 'published' ? 'Live on the site' : 'Hidden'}</small></div>
-              <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                <button className="dpos-btn ghost sm" onClick={() => setEdit({ kind: 'collection', item: c })}>Edit pieces</button>
-                <Switch on={c.status === 'published'} label={`Show ${c.name} on the storefront`} onChange={on => act(() => api(`/admin/collections/${c.id}`, { method: 'PATCH', body: { status: on ? 'published' : 'draft' } }))} />
-                <button className="dpos-trash" aria-label={`Delete ${c.name}`} onClick={() => confirm(`Delete the collection “${c.name}”? Its products are not deleted.`) && act(() => api(`/admin/collections/${c.id}`, { method: 'DELETE' }), 'Collection deleted.')}><Icon n="trash" size={18} /></button>
-              </div>
-            </div>))}
         </div>
       </div>
       {edit && <PiecesModal kind={edit.kind} item={edit.item} onClose={() => setEdit(null)} onDone={() => { toast('Saved.'); load(); loadCatalog?.() }} />}
@@ -137,7 +125,7 @@ export function AdminCategories() {
   );
 }
 
-// Three reel slots = the first three Instagram posts, which the homepage "Inside the boutique" section plays.
+// Three reel slots = the first three Instagram posts, which the homepage "Inside SCOPE 13" section plays.
 const REEL_MAX = 6, PHOTO_MAX = 6;
 
 // Reels & Photo Gallery: up to 6 videos (shown first on the home page) and up to 6 photos (shown after them), each in its own slots.
@@ -161,7 +149,7 @@ export function AdminReels() {
     setBusy(kind + i); setErr();
     try {
       const up = await uploadMedia(file);
-      const item = kind === 'video' ? { video: up.url, alt: lists.video[i]?.alt || 'Boutique video' } : { image: up.url, alt: lists.photo[i]?.alt || 'Boutique photo' };
+      const item = kind === 'video' ? { video: up.url, alt: lists.video[i]?.alt || 'SCOPE 13 video' } : { image: up.url, alt: lists.photo[i]?.alt || 'SCOPE 13 photo' };
       const cur = lists[kind]; const next = i < cur.length ? cur.map((p, n) => n === i ? item : p) : [...cur, item];
       await save({ ...lists, [kind]: next }); toast(i < cur.length ? 'Replaced.' : 'Added.');
     } catch (e) { setErr(e.message) } finally { setBusy(null) }
@@ -172,10 +160,8 @@ export function AdminReels() {
     if (!/^https?:\/\//i.test(url)) return setErr('Paste a full link that starts with https://');
     if (lists.video.length >= REEL_MAX) return setErr(`You already have ${REEL_MAX} reels. Remove one first.`);
     setBusy('link'); setErr();
-    try { await save({ ...lists, video: [...lists.video, { video: url, alt: 'Boutique reel' }] }); setLink(''); toast('Reel added.') } catch (e) { setErr(e.message) } finally { setBusy(null) }
+    try { await save({ ...lists, video: [...lists.video, { video: url, alt: 'SCOPE 13 reel' }] }); setLink(''); toast('Reel added.') } catch (e) { setErr(e.message) } finally { setBusy(null) }
   };
-  const frame = (kind, i, pos) => run2(kind + i, async () => { const cur = lists[kind]; await save({ ...lists, [kind]: cur.map((p, n) => n === i ? { ...p, alt: joinAlt(splitAlt(p.alt).alt, pos) } : p) }); toast(pos ? 'Framing saved.' : 'Framing reset.') });
-  const run2 = async (key, fn) => { setBusy(key); setErr(); try { await fn() } catch (e) { setErr(e.message) } finally { setBusy(null) } };
   const pick = (kind, i) => { target.current = { kind, i }; input.current.accept = kind === 'video' ? 'video/mp4,video/webm' : 'image/jpeg,image/png,image/webp'; input.current.click() };
   const grid = (kind, max, noun) => {
     const cur = lists[kind];
@@ -186,7 +172,7 @@ export function AdminReels() {
           return (
             <section className="dpos-reel" key={key}>
               <header><span>{noun.toUpperCase()} {i + 1}</span>{live && <span className="dpos-live">LIVE</span>}</header>
-              {live && !(p.video && isEmbed(p.video)) ? <div className="dpos-adj"><ImageAdjust src={p.image || null} video={p.video && !isEmbed(p.video) ? p.video : null} pos={splitAlt(p.alt).pos} aspect={9 / 16} busy={busy !== null} onChange={v => frame(kind, i, v)} /></div> : <div className="media">{!s ? 'Loading…' : p?.video ? (isEmbed(p.video) ? <iframe src={parseVideo(p.video).embed.replace('autoplay=1', 'autoplay=0')} title={`Reel ${i + 1}`} allowFullScreen /> : <video src={p.video} muted loop playsInline controls preload="metadata" />) : p?.image ? <img src={p.image} alt={p.alt || `${noun} ${i + 1}`} /> : <span>{canAdd ? `Empty — add a ${noun.toLowerCase()}` : `Fill ${noun.toLowerCase()} ${cur.length + 1} first`}</span>}</div>}
+              <div className="media">{!s ? 'Loading…' : p?.video ? (isEmbed(p.video) ? <iframe src={parseVideo(p.video).embed.replace('autoplay=1', 'autoplay=0')} title={`Reel ${i + 1}`} allowFullScreen /> : <video src={p.video} muted loop playsInline controls preload="metadata" />) : p?.image ? <img src={p.image} alt={p.alt || `${noun} ${i + 1}`} /> : <span>{canAdd ? `Empty — add a ${noun.toLowerCase()}` : `Fill ${noun.toLowerCase()} ${cur.length + 1} first`}</span>}</div>
               <footer>
                 <button className="dpos-btn ghost sm" disabled={busy !== null || !canAdd || !s} onClick={() => pick(kind, i)}>{busy === key ? 'Uploading…' : live ? '↻ Replace' : '+ Upload'}</button>
                 {live && <a className="dpos-btn ghost sm" href={p.video || p.image} target="_blank" rel="noopener noreferrer" aria-label="Preview"><Icon n="eye" size={14} /></a>}

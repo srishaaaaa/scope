@@ -4,8 +4,8 @@ import { useApp } from '../context/App';
 import Modal from './Modal';
 
 const GREYS = ['#0a0a0a', '#18181b', '#1c1917', '#1e293b', '#262626', '#292524', '#2a2423', '#334155', '#3b4256', '#404048', '#44403c', '#4a4540', '#475569', '#4b5563', '#52525b', '#5c564d', '#57534e', '#64748b', '#6b7280', '#78716c'];
-const COLOURS = ['#131f25', '#355667', '#3c6275', '#b91c1c', '#c2410c', '#a16207', '#15803d', '#047857', '#0f766e', '#0e7490', '#1d4ed8', '#4338ca', '#588ea9', '#52859e', '#457086', '#49768d'];
-export const DEFAULT_ACCENT = '#131f25';
+const COLOURS = ['#242424', '#7f1d3f', '#9f1239', '#b91c1c', '#c2410c', '#a16207', '#15803d', '#047857', '#0f766e', '#0e7490', '#1d4ed8', '#4338ca', '#808080', '#787878', '#666666', '#6b6b6b'];
+export const DEFAULT_ACCENT = '#242424';
 
 // One accent colour for the POS: buttons, totals, invoice headers. Saved with the other settings.
 export function AccentPicker({ value, onChange }) {
@@ -27,8 +27,8 @@ export function AccentPicker({ value, onChange }) {
 
 // Low-stock warning for this device. The choice is kept in this browser, so each counter can decide for itself.
 const KEY = 'dhanya.pos.alerts';
-export const readAlerts = () => { try { return { on: false, sound: false, level: 5, ...JSON.parse(localStorage.getItem(KEY) || '{}') } } catch { return { on: false, sound: false, level: 5 } } };
-const beep = () => { try { const a = new (window.AudioContext || window.webkitAudioContext)(); const o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination); o.type = 'sine'; o.frequency.value = 880; g.gain.setValueAtTime(.001, a.currentTime); g.gain.exponentialRampToValueAtTime(.3, a.currentTime + .02); g.gain.exponentialRampToValueAtTime(.001, a.currentTime + .6); o.start(); o.stop(a.currentTime + .65) } catch { /* no audio available */ } };
+export const readAlerts = () => { try { return { on: true, sound: true, level: 5, ...JSON.parse(localStorage.getItem(KEY) || '{}') } } catch { return { on: true, sound: true, level: 5 } } };
+export const beep = () => { try { const a = new (window.AudioContext || window.webkitAudioContext)(); const o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination); o.type = 'sine'; o.frequency.value = 880; g.gain.setValueAtTime(.001, a.currentTime); g.gain.exponentialRampToValueAtTime(.3, a.currentTime + .02); g.gain.exponentialRampToValueAtTime(.001, a.currentTime + .6); o.start(); o.stop(a.currentTime + .65) } catch { /* no audio available */ } };
 const Toggle = ({ on, onChange, label, disabled }) => <button type="button" role="switch" aria-checked={on} aria-label={label} disabled={disabled} className={`dpos-switch ${on ? 'on' : ''}`} onClick={() => onChange(!on)} />;
 
 export function StockAlertsCard() {
@@ -37,7 +37,7 @@ export function StockAlertsCard() {
   return (
     <section className="dpos-card"><h2>Stock alerts</h2>
       <p className="sub" style={{ marginBottom: 12 }}>Choose how this device warns you when products run low or go out of stock.</p>
-      <div className="pset-row"><div><b>Low-stock notification</b><p className="sub">Show a popup when items reach their low-stock alert level.</p></div><Toggle on={a.on} onChange={v => set({ on: v })} label="Low-stock notification" /></div>
+      <div className="pset-row"><div><b>Low-stock notification</b><p className="sub">ON: the Stock Alert window opens when you open Inventory. OFF: no window and no sound.</p></div><Toggle on={a.on} onChange={v => set({ on: v })} label="Low-stock notification" /></div>
       <div className={`pset-row ${a.on ? '' : 'off'}`}><div><b>Alert sound</b><p className="sub">Play a short sound with the popup.</p></div><Toggle on={a.sound} disabled={!a.on} onChange={v => set({ sound: v })} label="Alert sound" /></div>
       <label className="f">Low-stock level (units)<input inputMode="numeric" value={a.level} onChange={e => set({ level: Math.max(0, Math.min(999, Math.floor(+e.target.value.replace(/\D/g, '')) || 0)) })} /></label>
       <button type="button" className="dpos-btn ghost sm" onClick={beep}>TEST SOUND</button>
@@ -48,7 +48,7 @@ export function StockAlertsCard() {
 export function LowStockAlert() {
   const [items, setItems] = useState(null);
   useEffect(() => {
-    const a = readAlerts(); if (!a.on) return;
+    const a = readAlerts(); if (!a.on) return; if (location.pathname.includes('/billing/inventory') || location.pathname === '/admin/billing') return; // never cover the counter while billing; // Inventory shows its own Stock Alert window
     try { if (sessionStorage.getItem('dhanya.pos.alerted')) return } catch { /* ignore */ }
     api('/admin/pos/catalog?limit=300').then(r => {
       const low = r.filter(v => v.stock <= a.level).sort((x, y) => x.stock - y.stock);
@@ -79,47 +79,38 @@ export function LoginPasswordCard() {
   };
   const t = show ? 'text' : 'password';
   return (
-    <form className="dpos-card" onSubmit={submit}><h2>Login password <button type="button" className="link-u pset-show" onClick={() => setShow(v => !v)}>{show ? 'HIDE' : 'SHOW'}</button></h2>
+    <form className="dpos-card pwd-card" onSubmit={submit}><h2>Login password <button type="button" className="link-u pset-show" onClick={() => setShow(v => !v)}>{show ? 'HIDE' : 'SHOW'}</button></h2>
       <p className="sub" style={{ marginBottom: 10 }}>Change the password you use to sign in. It needs your current password. Staff change their own from their account page.</p>
-      <label className="f">Current password<input type={t} autoComplete="current-password" value={f.current} onChange={e => setF({ ...f, current: e.target.value })} /></label>
-      <div className="dpos-grid"><label className="f">New password<input type={t} autoComplete="new-password" value={f.password} onChange={e => setF({ ...f, password: e.target.value })} /></label>
+      <div className="pwd-grid"><label className="f">Current password<input type={t} autoComplete="current-password" value={f.current} onChange={e => setF({ ...f, current: e.target.value })} /></label>
+        <label className="f">New password<input type={t} autoComplete="new-password" value={f.password} onChange={e => setF({ ...f, password: e.target.value })} /></label>
         <label className="f">Confirm new password<input type={t} autoComplete="new-password" value={f.again} onChange={e => setF({ ...f, again: e.target.value })} /></label></div>
       {err && <p className="dpos-err" role="alert">{err}</p>}
-      <button className="dpos-btn" disabled={busy}>{busy ? 'Saving…' : 'Change password'}</button>
+      <div className="pwd-foot"><button className="dpos-btn" disabled={busy}>{busy ? 'Saving…' : 'Change password'}</button></div>
     </form>
   );
 }
 
-const ROLES = [['admin', 'Admin', 'Everything, including settings and reports'], ['cashier', 'Cashier', 'Billing, advance orders, order history, customers'], ['inventory', 'Stock keeper', 'Inventory and stock adjustments']];
+const ROLES = [['admin', 'Admin', 'Everything, including settings and reports'], ['cashier', 'Staff', 'The pages ticked under Staff permissions']];
 
 // Staff accounts for the POS. Only the owner can add staff or change a role.
 export function StaffAccessCard() {
   const { user, toast } = useApp();
   const owner = ['owner', 'admin'].includes(user?.role); // owner and admin are the same
-  const [rows, setRows] = useState(null); const [err, setErr] = useState(); const [nw, setNw] = useState({ name: '', email: '', password: '', role: 'cashier' }); const [busy, setBusy] = useState(false);
+  const [rows, setRows] = useState(null); const [err, setErr] = useState();
   const load = useCallback(() => api('/admin/users').then(r => setRows(r.filter(u => u.role !== 'customer'))).catch(e => setErr(e.message)), []);
   useEffect(() => { load() }, [load]);
   const setRole = async (u, role) => { setErr(); try { await api(`/admin/users/${u.id}/role`, { method: 'PATCH', body: { role } }); toast('Access updated.'); load() } catch (e) { setErr(e.message) } };
-  const add = async e => {
-    e.preventDefault(); setErr(); setBusy(true);
-    try { await api('/admin/users', { method: 'POST', body: nw }); setNw({ name: '', email: '', password: '', role: 'cashier' }); toast('Staff member added.'); load() }
-    catch (x) { setErr(x.issues?.[0]?.message || (x.message === 'Validation failed' ? 'Enter a name, a valid email and a password of 8+ characters.' : x.message)) } finally { setBusy(false) }
-  };
   return (
     <section className="dpos-card"><h2>Staff access</h2>
-      <p className="sub" style={{ marginBottom: 12 }}>Each staff member signs in with their own email and password, and sees only what their role allows. {ROLES.map(r => `${r[1]}: ${r[2].toLowerCase()}.`).join(' ')}</p>
+      <p className="sub" style={{ marginBottom: 12 }}>Staff sign in with their own account and see only what their role allows. {ROLES.map(r => `${r[1]}: ${r[2].toLowerCase()}.`).join(' ')}</p>
       {err && <p className="dpos-err" role="alert">{err}</p>}
       {!rows ? <p className="dpos-empty">Loading…</p> : (
         <ul className="pset-staff">{rows.map(u => (
           <li key={u.id}><span><b>{u.name || u.email}</b><em>{u.email}</em></span>
             {u.role === 'owner' || !owner || u.id === user.id ? <span className="dpos-pill">{u.role === 'owner' ? 'Admin' : (ROLES.find(r => r[0] === u.role)?.[1] || u.role)}</span>
-              : <select aria-label={`Role for ${u.email}`} value={u.role} onChange={e => setRole(u, e.target.value)}>{ROLES.map(r => <option key={r[0]} value={r[0]}>{r[1]}</option>)}</select>}</li>))}</ul>)}
-      {owner && (
-        <form onSubmit={add} className="pset-add"><p className="pset-l">ADD A STAFF MEMBER</p>
-          <div className="dpos-grid"><input aria-label="Name" placeholder="Name" value={nw.name} onChange={e => setNw({ ...nw, name: e.target.value })} /><input aria-label="Email" type="email" placeholder="Email" required value={nw.email} onChange={e => setNw({ ...nw, email: e.target.value })} /></div>
-          <div className="dpos-grid"><input aria-label="Password" type="password" placeholder="Password (8+ characters)" required minLength={8} value={nw.password} onChange={e => setNw({ ...nw, password: e.target.value })} />
-            <select aria-label="Role" value={nw.role} onChange={e => setNw({ ...nw, role: e.target.value })}>{ROLES.map(r => <option key={r[0]} value={r[0]}>{r[1]}</option>)}</select></div>
-          <button className="dpos-btn" disabled={busy}>{busy ? 'Adding…' : 'Add staff member'}</button></form>)}
+              : <select aria-label={`Role for ${u.email}`} value={u.role === 'inventory' ? 'cashier' : u.role} onChange={e => setRole(u, e.target.value)}>{ROLES.map(r => <option key={r[0]} value={r[0]}>{r[1]}</option>)}</select>}</li>))}</ul>)}
+      <p className="pset-l" style={{ marginTop: 14 }}>NEW STAFF</p>
+      <p className="sub">People are added automatically when they sign in with their email on the Sign in page. Open Users in the sidebar, find them and set their role to give them access.</p>
     </section>
   );
 }

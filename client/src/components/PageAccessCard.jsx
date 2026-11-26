@@ -4,7 +4,7 @@ import { useApp } from '../context/App';
 import { resetStaffAccess } from '../lib/staffAccess';
 import { Icon } from './AdminShell';
 
-const ROLES = [['cashier', 'Cashier', 'Bills and looks things up at the counter'], ['inventory', 'Stock staff', 'Adjusts stock and manages products']];
+const ROLES = [['cashier', 'Staff', 'Everyone with the Staff role']];
 
 // POS Settings → Staff access (owner only): tick which admin pages each kind of staff member sees. The owner always sees everything.
 export default function PageAccessCard() {
@@ -16,19 +16,17 @@ export default function PageAccessCard() {
   const toggle = (role, page) => setCfg(c => ({ ...c, [role]: c[role].includes(page) ? c[role].filter(p => p !== page) : [...c[role], page] }));
   const save = async () => {
     setBusy(true); setErr();
-    try { const r = await api('/admin/pos/staff-access', { method: 'PUT', body: { cashier: cfg.cashier, inventory: cfg.inventory } }); setCfg(r); resetStaffAccess(); toast('Staff access saved.') } catch (e) { setErr(e.message) } finally { setBusy(false) }
+    try { const r = await api('/admin/pos/staff-access', { method: 'PUT', body: { cashier: cfg.cashier, inventory: cfg.cashier } }); setCfg(r); resetStaffAccess(); toast('Staff access saved.') } catch (e) { setErr(e.message) } finally { setBusy(false) }
   };
   return (
     <section className="dpos-card sa-card" style={{ marginTop: 16 }}>
-      <h2><Icon n="users" />Staff dashboard: who sees what</h2>
-      <p className="sub">Choose which pages each kind of staff member sees in the admin sidebar. Admins see everything and can change this. Choose what a cashier and stock staff can open. A page appears only if that kind of staff can use it.</p>
-      <div className="sa-grid">
-        <div className="sa-head"><span>Page</span>{ROLES.map(([k, l, h]) => <span key={k} title={h}>{l}</span>)}</div>
-        {d.all.map(([path, label]) => (
-          <div className="sa-row" key={path}><span>{label}</span>
-            {ROLES.map(([k, l]) => d.can[k].includes(path)
-              ? <label key={k} className="sa-tick"><input type="checkbox" checked={cfg[k].includes(path)} onChange={() => toggle(k, path)} aria-label={`${l} can open ${label}`} /></label>
-              : <span key={k} className="sa-na" title={`${l} cannot use this page`}>—</span>)}</div>))}
+      <h2><Icon n="users" />Staff permissions</h2>
+      <p className="sub">Tick the pages every Staff member can open from the admin sidebar. Admins always see everything.</p>
+      <div className="sa-boxes">
+        {d.all.filter(([path]) => d.can.cashier.includes(path)).map(([path, label]) => (
+          <label className={`sa-box ${cfg.cashier.includes(path) ? 'on' : ''}`} key={path}>
+            <input type="checkbox" checked={cfg.cashier.includes(path)} onChange={() => toggle('cashier', path)} aria-label={`Staff can open ${label}`} /><span>{label}</span>
+          </label>))}
       </div>
       {err && <p className="dpos-err" role="alert">{err}</p>}
       <div style={{ marginTop: 14 }}><button type="button" className="dpos-btn" disabled={busy} onClick={save}>{busy ? 'Saving…' : 'Save page access'}</button></div>

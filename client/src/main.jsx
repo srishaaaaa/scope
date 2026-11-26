@@ -8,6 +8,7 @@ import './styles.css';
 import './home.css';
 import './boutique.css';
 import './nav.css';
+import './admin-ref.css';
 import './scope13.css';
 import './scope13-screens.css';
 import './scope13-story.css';
@@ -21,6 +22,9 @@ import './scope13-beige.css';
 import './scope13-fit.css';
 import './scope13-premium.css';
 import './barcode.css';
+import './scope13-header.css';
+import './scope13-fixes.css';
+import './admin-brand.css';
 
 addEventListener('vite:preloadError', e => { if (reloadOnce()) e.preventDefault() }); // a page chunk missing after a release: reload once
 

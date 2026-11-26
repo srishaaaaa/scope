@@ -1,3 +1,4 @@
+import { pageGuard } from '../lib/staffAccess.js';
 import express, { Router } from 'express';
 import { z } from 'zod';
 import { one, rows } from '../db/index.js';
@@ -59,8 +60,10 @@ export function mediaPublic({ db }) {
 export function mediaAdmin({ db, auth }) {
   const r = Router();
   const staff = auth.role('owner', 'admin');
+  const photos = pageGuard(db, auth, ['/admin/billing/inventory', '/admin/storefront']); // product photos: whoever manages products
 
-  r.post('/media', staff, express.raw({ type: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm'], limit: MAX_BYTES }), wrap(async (req, res) => {
+  // Anyone who manages photos somewhere (storefront, reels, products, categories, designs) can upload.
+  r.post('/media', pageGuard(db, auth, ['/admin/storefront', '/admin/reels', '/admin/billing/inventory', '/admin/categories', '/admin/stitching/designs']), express.raw({ type: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm'], limit: MAX_BYTES }), wrap(async (req, res) => {
     if (!Buffer.isBuffer(req.body) || !req.body.length) throw new HttpError(400, 'Send the file as the request body (JPEG, PNG, WebP, MP4 or WebM, up to 4 MB)');
     const mime = sniff(req.body);
     if (!mime || mime !== req.get('content-type')?.split(';')[0]) throw new HttpError(400, 'That file is not a valid JPEG, PNG, WebP, MP4 or WebM file');
@@ -84,8 +87,8 @@ export function mediaAdmin({ db, auth }) {
   const gallery = (productId) => rows(db, 'SELECT id, image_url AS url, alt_text AS alt, color, focus_x AS "focusX", focus_y AS "focusY", display_order FROM product_images WHERE product_id = $1 ORDER BY display_order, id', [productId]);
   const pid = z.coerce.number().int().positive();
 
-  r.get('/products/:id/images', staff, wrap(async (req, res) => res.json(await gallery(pid.parse(req.params.id)))));
-  r.post('/products/:id/images', staff, wrap(async (req, res) => {
+  r.get('/products/:id/images', photos, wrap(async (req, res) => res.json(await gallery(pid.parse(req.params.id)))));
+  r.post('/products/:id/images', photos, wrap(async (req, res) => {
     const id = pid.parse(req.params.id);
     const d = z.object({ url: imageUrl, alt: z.string().trim().max(200).default(''), color: z.string().trim().max(40).nullable().default(null) }).parse(req.body);
     if (!(await one(db, 'SELECT 1 AS x FROM products WHERE id = $1', [id]))) throw new HttpError(404, 'Product not found');
@@ -94,13 +97,13 @@ export function mediaAdmin({ db, auth }) {
     await audit(db, req.user.id, 'product.image.add', 'product', id, { url: d.url });
     res.status(201).json(await gallery(id));
   }));
-  r.put('/products/:id/images/order', staff, wrap(async (req, res) => {
+  r.put('/products/:id/images/order', photos, wrap(async (req, res) => {
     const id = pid.parse(req.params.id);
     const { ids } = z.object({ ids: z.array(z.number().int()).max(60) }).parse(req.body);
     await db.tx(async t => { for (const [i, imgId] of ids.entries()) await t.query('UPDATE product_images SET display_order = $1 WHERE id = $2 AND product_id = $3', [i, imgId, id]) });
     res.json(await gallery(id));
   }));
-  r.patch('/images/:imageId', staff, wrap(async (req, res) => {
+  r.patch('/images/:imageId', photos, wrap(async (req, res) => {
     const pct = z.number().int().min(0).max(100).nullable();
     const d = z.object({ alt: z.string().trim().max(200).optional(), color: z.string().trim().max(40).nullable().optional(), focusX: pct.optional(), focusY: pct.optional() })
       .refine(b => b.alt !== undefined || b.color !== undefined || b.focusX !== undefined || b.focusY !== undefined, 'Nothing to change')
@@ -111,7 +114,7 @@ export function mediaAdmin({ db, auth }) {
     if (!u.rows.length) throw new HttpError(404, 'Image not found');
     res.json(await gallery(u.rows[0].product_id));
   }));
-  r.delete('/images/:imageId', staff, wrap(async (req, res) => {
+  r.delete('/images/:imageId', photos, wrap(async (req, res) => {
     const d = await db.query('DELETE FROM product_images WHERE id = $1 RETURNING product_id, image_url', [pid.parse(req.params.imageId)]);
     if (!d.rows.length) throw new HttpError(404, 'Image not found');
     await dropIfOrphan(db, d.rows[0].image_url);
@@ -122,15 +125,15 @@ export function mediaAdmin({ db, auth }) {
   // ---- category + collection cover images ----
   const covers = (table, col, posCol, fallbackSql) => {
     // `fallback` is the product photo the site uses while no cover is uploaded, so staff can position the photo that is really shown.
-    r.get(`/${table}`, staff, wrap(async (_req, res) => res.json(await rows(db, `SELECT t.id, t.name, t.slug, t.${col} AS image, t.${posCol} AS pos, (${fallbackSql}) AS fallback FROM ${table} t ORDER BY t.display_order, t.id`))));
-    r.put(`/${table}/:id/focus`, staff, wrap(async (req, res) => {
+    r.get(`/${table}`, pageGuard(db, auth, '/admin/storefront'), wrap(async (_req, res) => res.json(await rows(db, `SELECT t.id, t.name, t.slug, t.${col} AS image, t.${posCol} AS pos, (${fallbackSql}) AS fallback FROM ${table} t ORDER BY t.display_order, t.id`))));
+    r.put(`/${table}/:id/focus`, pageGuard(db, auth, '/admin/storefront'), wrap(async (req, res) => {
       const { pos } = z.object({ pos: z.string().regex(/^\d{1,3}% \d{1,3}%$/).nullable() }).parse(req.body);
       const u = await db.query(`UPDATE ${table} SET ${posCol} = $2 WHERE id = $1 RETURNING id`, [pid.parse(req.params.id), pos]);
       if (!u.rows.length) throw new HttpError(404, 'Not found');
       await audit(db, req.user.id, `${table}.focus`, table, req.params.id);
       res.json({ ok: true });
     }));
-    r.put(`/${table}/:id/image`, staff, wrap(async (req, res) => {
+    r.put(`/${table}/:id/image`, pageGuard(db, auth, '/admin/storefront'), wrap(async (req, res) => {
       const { url } = z.object({ url: imageUrl.nullable() }).parse(req.body);
       const old = await one(db, `SELECT ${col} AS image FROM ${table} WHERE id = $1`, [pid.parse(req.params.id)]);
       if (!old) throw new HttpError(404, 'Not found');

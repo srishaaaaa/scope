@@ -72,7 +72,7 @@ export async function seed(db, cfg, log = console.log, { sample = true } = {}) {
 
     // Store settings start empty: no invented address, hours or social handles.
     await t.query(`INSERT INTO store_settings (key, value) VALUES ('store', $1), ('social', $2) ON CONFLICT (key) DO NOTHING`,
-      [JSON.stringify({ name: 'DHANYA', address: null, phone: null, email: null, timeZone: 'Asia/Kolkata', hours: null }), JSON.stringify({ instagram: { handle: null, url: null, posts: [] }, links: [] })]);
+      [JSON.stringify({ name: 'SCOPE 13', address: null, phone: null, email: null, timeZone: 'Asia/Kolkata', hours: null }), JSON.stringify({ instagram: { handle: null, url: null, posts: [] }, links: [] })]);
 
     if (cfg.ADMIN_EMAIL && cfg.ADMIN_PASSWORD) {
       await t.query(`INSERT INTO profiles (email, password_hash, full_name, role) VALUES ($1,$2,'Owner','owner') ON CONFLICT (lower(email)) DO NOTHING`,

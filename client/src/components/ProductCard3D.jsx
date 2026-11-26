@@ -4,7 +4,8 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import ProductArt from './ProductArt';
 import { useApp } from '../context/App';
 import { useFinePointer, useReduced } from '../lib/hooks';
-import { inr } from '../lib/format';
+import { inr, sortSizes } from '../lib/format';
+import { api } from '../lib/api';
 import { swatch } from '../lib/swatch';
 
 // A photo fades in once it has loaded (never a half-drawn image) and is framed on the focus point chosen in the admin.
@@ -41,13 +42,25 @@ export default function ProductCard({ p, tall = false, className = '', index = n
   const out = p.stock < 1;
   const tilt = false; // no pointer tilt: cards stay still on hover
   const [adding, setAdding] = useState(false);
-  // Pieces with a single purchasable variant add straight to the bag; otherwise the visitor picks a size first.
-  const add = async () => {
-    if (!p.single_variant) return setQuick(p);
+  const [sizes, setSizes] = useState(null); // size picker on the card: null (closed) | 'loading' | variants
+  const [colour, setColour] = useState('');
+  const put = async variantId => {
     setAdding(true);
-    if (await addToBag({ variantId: p.single_variant })) toast(`${p.name} added to your bag.`);
+    if (await addToBag({ variantId })) { toast(`${p.name} added to your bag.`); setSizes(null) }
     setAdding(false);
   };
+  // Pieces with a single purchasable variant add straight to the bag. Otherwise the sizes open right on the card
+  // (QUICK VIEW is the separate preview window). Stock is read fresh from the server.
+  const add = async () => {
+    if (p.single_variant) return put(p.single_variant);
+    setSizes('loading');
+    try { const d = await api('/products/' + p.slug); setSizes(d.variants) } catch { setSizes(null); toast('Sizes could not be loaded. Please try again.') }
+  };
+  const list = Array.isArray(sizes) ? sizes : [];
+  const colours = [...new Set(list.map(v => v.color || 'Default'))];
+  const active = colours.includes(colour) ? colour : (colours.find(c => list.some(v => (v.color || 'Default') === c && v.stock)) || colours[0] || '');
+  const inColour = list.filter(v => (v.color || 'Default') === active);
+  const order = sortSizes(inColour.map(v => v.size));
 
   return (
     <motion.article className={`pcard ${tall ? 'tall' : ''} ${className}`} style={tilt ? { rotateX: rotX, rotateY: rotY, transformPerspective: 1000 } : undefined}
@@ -71,7 +84,14 @@ export default function ProductCard({ p, tall = false, className = '', index = n
         <button className={`icon-btn pcard-wish ${liked ? 'on' : ''}`} onClick={() => toggleWish(p.slug, p.name)} aria-pressed={liked} aria-label={liked ? `Remove ${p.name} from wishlist` : `Save ${p.name} to wishlist`}>
           <HeartIcon on={liked} />
         </button>
-        <div className="pcard-actions">
+        {sizes && (
+          <div className="pcard-pick" role="group" aria-label={`Choose a size for ${p.name}`}>
+            <div className="pk-top"><b>{sizes === 'loading' ? 'Loading sizes…' : 'Select size'}</b><button type="button" aria-label="Close size choices" onClick={() => setSizes(null)}>✕</button></div>
+            {colours.length > 1 && <div className="pk-cols">{colours.map(c => <button key={c} type="button" className={c === active ? 'on' : ''} aria-pressed={c === active} onClick={() => setColour(c)}>{c}</button>)}</div>}
+            <div className="pk-sizes">{[...inColour].sort((a, b) => order.indexOf(a.size) - order.indexOf(b.size)).map(v => <button key={v.id} type="button" disabled={!v.stock || adding} aria-label={v.stock ? `Add size ${v.size} to bag` : `${v.size}, sold out`} onClick={() => put(v.id)}>{v.size}</button>)}</div>
+          </div>
+        )}
+        <div className="pcard-actions" hidden={!!sizes}>
           <button className="pcard-quick" onClick={() => setQuick(p)} aria-label={`Quick view ${p.name}`}>QUICK VIEW</button>
           {!out && <button className="pcard-add" onClick={add} disabled={adding} aria-label={p.single_variant ? `Add ${p.name} to bag` : `Choose a size for ${p.name}`}>{adding ? '…' : p.single_variant ? 'ADD TO BAG' : 'CHOOSE SIZE'}</button>}
         </div>

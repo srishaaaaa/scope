@@ -20,7 +20,7 @@ function ProfileModal({ meta, customer, profile, onClose, onSaved }) {
       footer={<><button className="dpos-btn ghost" onClick={onClose}>Back</button><button className="dpos-btn" disabled={busy || !name.trim() || !hasMeasure(m)} onClick={save}>{busy ? 'SAVING…' : profile ? `SAVE AS VERSION ${profile.version + 1}` : 'SAVE PROFILE'}</button></>}>
       <div className="stc-stack"><Err>{err}</Err>
         <div className="stc-grid"><Field label="Garment group"><select value={group} disabled={!!profile} onChange={e => { setGroup(e.target.value); setM({ ...blankMeasure(m.unit), notes: m.notes }) }}>{Object.entries(meta.measureGroups).map(([k, g]) => <option key={k} value={k}>{g.label}</option>)}</select></Field>
-          <Field label="Profile name"><input value={name} maxLength={80} onChange={e => setName(e.target.value)} placeholder="e.g. Bridal blouse, Nov 2026" /></Field>
+          <Field label="Profile name"><input value={name} maxLength={80} onChange={e => setName(e.target.value)} placeholder="e.g. Formal shirt, Nov 2026" /></Field>
           <Field label="Fit preference"><input value={fit} maxLength={80} onChange={e => setFit(e.target.value)} placeholder="Snug / regular / relaxed" /></Field></div>
         <MeasureEditor group={group} meta={meta} value={m} onChange={setM} allowSave={false} />
         {profile && <p className="muted small" style={{ margin: 0 }}>Every save is kept in the history with who made it and when. Past orders keep their own copy of the measurements.</p>}</div>
@@ -56,7 +56,7 @@ export default function Book() {
             <div className="stc-row"><button className="dpos-btn sm" disabled={!nw.name.trim() || nw.phone.replace(/\D/g, '').length < 7} onClick={addCustomer}>Add customer</button><button className="dpos-btn ghost sm" onClick={() => setNw(null)}>Cancel</button></div></div>
             : <button className="dpos-btn outline sm" onClick={() => setNw({ name: '', phone: '' })}>+ New customer</button>}
           {!list ? <Empty>Loading…</Empty> : !list.length ? <Empty>No customers found.</Empty> : <ul style={{ listStyle: 'none', margin: 0, padding: 0, maxHeight: 520, overflow: 'auto' }}>{list.map(c => (
-            <li key={c.id}><button className="stc-row between" style={{ width: '100%', textAlign: 'left', padding: '10px 8px', borderRadius: 12, background: sel?.id === c.id ? '#edf2f5' : 'transparent' }} onClick={() => setSel(c)}>
+            <li key={c.id}><button className="stc-row between" style={{ width: '100%', textAlign: 'left', padding: '10px 8px', borderRadius: 12, background: sel?.id === c.id ? '#f1f1f1' : 'transparent' }} onClick={() => setSel(c)}>
               <span><b>{c.name || 'Customer'}</b><div className="muted small">{c.phone}</div></span><span className={`stc-pill ${c.profiles ? 's-work' : ''}`}>{c.profiles} profile{c.profiles === 1 ? '' : 's'}</span></button></li>))}</ul>}
         </section>
         <section className="dpos-card stc-stack">

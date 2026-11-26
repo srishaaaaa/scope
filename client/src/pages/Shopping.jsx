@@ -134,6 +134,7 @@ export function Auth({ mode }) {
   return (
     <div className="auth auth2">
       <aside className="auth-side" aria-hidden={false}>
+        <img className="auth-photo" src="/images/hero-model.webp" alt="" />
         <div className="auth-mark"><p className="auth-brand">SCOPE 13</p><p className="auth-sub"><i />A CLOTHING ERA<i /></p></div>
         <p className="auth-tag">{reg ? 'Join SCOPE 13' : 'Welcome back'}</p>
         <ul><li>Track your orders and bills</li><li>Save addresses for one-tap checkout</li><li>Keep a wishlist of pieces you love</li></ul>

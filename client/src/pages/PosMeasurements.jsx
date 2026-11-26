@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { InvoicePreview } from './PosOrders';
+import { EyeIcon, DocIcon } from '../components/RowActions';
 import { api } from '../lib/api';
 import { inr } from '../lib/format';
 import ExportCsv from '../components/ExportCsv';
 import { PeriodFilter, periodRange, usePeriod } from '../components/PeriodFilter';
 import { CM_FIELDS, measureSummary } from '../components/MeasureModal';
-import { BACK_NECKS, FRONT_NECKS } from './stitching/NeckPicker';
+import { BACK_NECKS, FRONT_NECKS, useDesigns } from './stitching/NeckPicker';
 
 const dmy = d => d ? String(d).slice(0, 10).split('-').reverse().join('-') : '';
 const TILES = [['all', 'TOTAL BILLS', 'plum'], ['pending', 'PENDING', 'amber'], ['completed', 'COMPLETED', 'green'], ['cancelled', 'CANCELLED', 'red']];
@@ -12,6 +15,7 @@ const drawing = (list, name) => list.find(([n]) => n.toLowerCase() === String(na
 
 // Measurements: one card per bill that has stitching lines, with the neck drawings, sizes and a Pending / Completed status.
 export default function PosMeasurements() {
+  useDesigns();
   const [per, setPer] = usePeriod('all'); const [f, setF] = useState({ q: '', name: '', phone: '' }); const [status, setStatus] = useState('all');
   const [data, setData] = useState(null); const [err, setErr] = useState(); const [open, setOpen] = useState({}); const [n, setN] = useState(0);
   const [from, to] = periodRange(per);
@@ -20,16 +24,20 @@ export default function PosMeasurements() {
     return () => clearTimeout(t);
   }, [from, to, status, f, n]);
   const setTailoring = async (b, s) => { try { await api(`/admin/pos/sales/${encodeURIComponent(b.invoiceNo)}/tailoring`, { method: 'PATCH', body: { status: s } }); setN(x => x + 1) } catch (e) { setErr(e.message) } };
+  const [pv, setPv] = useState(null);
   const bills = data?.bills || [];
   const rows = bills.flatMap(b => b.items.map(i => [b.invoiceNo, b.customerName, b.customerPhone, dmy(b.billDate), b.status, i.name, i.measure?.frontNeck ?? '', i.measure?.backNeck ?? '', measureSummary(i.measure)]));
   return (
     <div className="msp">
       <div className="msp-top"><span />
         <div className="msp-tools"><PeriodFilter value={per} onChange={setPer} />
-          <ExportCsv name="measurements" header={['Invoice', 'Customer', 'Phone', 'Date', 'Status', 'Item', 'Front neck', 'Back neck', 'Measurements']} rows={rows} /></div></div>
+          <ExportCsv name="measurements" header={['Invoice', 'Customer', 'Phone', 'Date', 'Status', 'Item', 'Front neck', 'Back neck', 'Measurements']} rows={rows} /><Link className="dpos-btn outline" to="/admin/stitching/designs">Options</Link></div></div>
       {err && <p className="dpos-err" role="alert">{err}</p>}
       <div className="msp-tiles">{TILES.map(([k, l, c]) => (
-        <button key={k} type="button" className={`msp-tile ${c} ${status === k ? 'on' : ''}`} aria-pressed={status === k} onClick={() => setStatus(k)}><span>{l}</span><b>{data ? data.counts[k] : '…'}</b></button>))}</div>
+        <button key={k} type="button" className={`msp-tile ${c} ${status === k ? 'on' : ''}`} aria-pressed={status === k} onClick={() => setStatus(k)}>
+          <div><span>{l}</span><b>{data ? data.counts[k] : '…'}</b><small>{k === 'all' ? 'Bills with measurements' : k === 'pending' ? 'Stitching in progress' : k === 'completed' ? 'Delivered / finished' : 'Cancelled bills'}</small></div>
+          <i className={c}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{k === 'completed' ? <path d="m5 12.5 4.5 4.5L19 7.5" /> : k === 'cancelled' ? <path d="M6 6l12 12M18 6 6 18" /> : k === 'pending' ? <><circle cx="12" cy="12" r="8" /><path d="M12 8v4l3 2" /></> : <path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" />}</svg></i>
+        </button>))}</div>
       <div className="msp-filters">
         <label>Search order ID<input value={f.q} onChange={e => setF({ ...f, q: e.target.value })} placeholder="INV-…" /></label>
         <label>Customer name<input value={f.name} onChange={e => setF({ ...f, name: e.target.value })} /></label>
@@ -44,7 +52,8 @@ export default function PosMeasurements() {
               <div className="msp-st" onClick={e => e.stopPropagation()}>
                 {b.status === 'cancelled' ? <span className="msp-pill red">Cancelled</span>
                   : <select value={b.status} aria-label={`Status of ${b.invoiceNo}`} onChange={e => setTailoring(b, e.target.value)}><option value="pending">Pending</option><option value="completed">Completed</option></select>}
-                <i aria-hidden="true">{open[b.invoiceNo] ? '▲' : '▼'}</i></div>
+                {b.shareToken && <span className="dpos-rowact"><button type="button" className="ra eye" title="Preview invoice" aria-label="Preview invoice" onClick={() => setPv({ invoiceNo: b.invoiceNo, shareToken: b.shareToken })}><EyeIcon /></button><button type="button" className="ra doc" title="Print invoice" aria-label="Print invoice" onClick={() => window.open(`/invoice/${b.shareToken}?print=1`, '_blank')}><DocIcon /></button></span>}
+                <button type="button" className={`msp-tog ${open[b.invoiceNo] ? 'on' : ''}`} aria-expanded={!!open[b.invoiceNo]} aria-label={open[b.invoiceNo] ? 'Hide measurements' : 'Show measurements'} onClick={() => setOpen(o => ({ ...o, [b.invoiceNo]: !o[b.invoiceNo] }))}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></div>
             </header>
             {open[b.invoiceNo] && (
               <div className="msp-body">
@@ -62,6 +71,7 @@ export default function PosMeasurements() {
                   </section>))}
               </div>)}
           </article>))}</div>)}
+      {pv && <InvoicePreview row={pv} onClose={() => setPv(null)} />}
     </div>
   );
 }

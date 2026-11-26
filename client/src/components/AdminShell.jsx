@@ -1,5 +1,5 @@
-import { GlobalScanListener } from './barcode/scanner';
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+import { installInstantSelect } from '../lib/instantSelect';
 import { Link, NavLink, Navigate, useLocation } from 'react-router-dom';
 import { useStaffAccess } from '../lib/staffAccess';
 import { useApp } from '../context/App';
@@ -9,6 +9,8 @@ import '../pos2.css';
 import '../pos3.css';
 import '../dhanya.css';
 import '../invoice.css';
+import '../fonts.css';
+import { GlobalScanListener } from './barcode/scanner';
 
 // The admin layout (sidebar + "Dashboard" top bar + cards) shared by every admin page. Admin only: it is imported solely by
 // code-split admin pages, so public visitors never download this or pos.css.
@@ -58,17 +60,13 @@ export const Icon = ({ n, size = 18 }) => <svg width={size} height={size} viewBo
 export const NAV = [
   { group: 'Online store', items: [['/admin/orders', 'Online orders', 'orders', true]] },
   { group: 'Retail billing', items: [
-    ['/admin/billing', 'Billing', 'billing'], ['/admin/billing/analytics', 'POS Analytics', 'chart', true], ['/admin/billing/advance', 'Advance Orders', 'clock'], ['/admin/billing/orders', 'Order History', 'orders'],
+    ['/admin/billing', 'Billing', 'billing'], ['/admin/billing/analytics', 'POS Analytics', 'chart', true], ['/admin/billing/advance', 'Advance Orders', 'clock'], ['/admin/billing/orders', 'Order History', 'orders'], ['/admin/billing/measurements', 'Measurements', 'ruler'],
     ['/admin/billing/inventory', 'Inventory', 'box', true], ['/admin/billing/customers', 'Customers', 'user'], ['/admin/billing/coupons', 'Coupons', 'tag', true],
     ['/admin/billing/birthdays', 'Date of Birth', 'cake', true], ['/admin/billing/expenses', 'Expenses', 'wallet', true]] },
-  { group: 'Stitching', roles: ['owner', 'admin', 'cashier'], items: [
-    ['/admin/stitching', 'Stitching Dashboard', 'scissors', false], ['/admin/stitching/orders', 'Stitching Orders', 'orders', false], ['/admin/billing/measurements', 'Measurements', 'ruler', false],
-    ['/admin/stitching/reports', 'Stitching Reports', 'chart', true]] },
   { group: 'Website', items: [
-    ['/admin/reviews', 'Reviews', 'star', true], ['/admin/categories', 'Categories', 'tag', true], ['/admin/trending', 'Trending', 'star', true], ['/admin/site-text', 'Site text', 'edit', true],
-    ['/admin/storefront', 'Storefront images', 'image', true], ['/admin/reels', 'Reels & Gallery', 'film', true], ['/admin/enquiries', 'Enquiries', 'mail', true],
-    ['/admin/users', 'Users', 'users', true], ['/admin/sample', 'Sample data', 'flask', true]] },
-  { group: 'Settings', items: [['/admin/billing/settings', 'POS Settings', 'gear', true], ['/admin/settings', 'Store Settings', 'gear', true]] },
+    ['/admin/reviews', 'Reviews', 'star', true], ['/admin/categories', 'Categories', 'tag', true], ['/admin/trending', 'Trending', 'star', true], ['/admin/storefront', 'Storefront images', 'image', true], ['/admin/reels', 'Reels & Gallery', 'film', true], ['/admin/enquiries', 'Enquiries', 'mail', true],
+    ['/admin/users', 'Users', 'users', true], ['/admin/delivery', 'Delivery', 'truck', true], ['/admin/sample', 'Sample data', 'flask', true]] },
+  { group: 'Settings', items: [['/admin/billing/settings', 'Settings', 'gear', true]] },
 ];
 
 // Every admin page draws its own sidebar, so its scroll position is kept here: opening a panel near the bottom
@@ -87,6 +85,12 @@ export default function AdminShell({ title, sub, actions, children }) {
       if (a.left < b.left) el.scrollLeft -= b.left - a.left + 12; else if (a.right > b.right) el.scrollLeft += a.right - b.right + 12;
     }
   }, []);
+  useEffect(() => installInstantSelect(), []); // dropdowns open at once
+  // tapping an amount box selects its contents, so the first digit typed replaces a 0 or an auto-filled amount
+  useEffect(() => {
+    const f = e => { const t = e.target; if (t?.tagName === 'INPUT' && /^(decimal|numeric)$/.test(t.inputMode || '') && t.value) setTimeout(() => { try { t.select() } catch { /* not selectable */ } }, 0) };
+    document.addEventListener('focusin', f); return () => document.removeEventListener('focusin', f);
+  }, []);
   const { user, site } = useApp();
   const nm = 'SCOPE 13'; // admin chrome always carries the brand name, whatever the stored store name is
   const manager = !!user && ['owner', 'admin'].includes(user.role);
@@ -99,7 +103,7 @@ export default function AdminShell({ title, sub, actions, children }) {
     <div className="dpos">
       <GlobalScanListener />
       <nav className="dpos-side" aria-label="Admin sections" ref={side} onScroll={e => { sideScroll.top = e.currentTarget.scrollTop; sideScroll.left = e.currentTarget.scrollLeft }}>
-        <Link to="/admin/billing" className="dpos-brand" aria-label={nm}><span className="wm-text"><b>{nm.split(' ')[0]}</b><i>{nm.split(' ').slice(1).join(' ')}</i></span><i className="dpos-role">{user?.role === 'inventory' ? 'STOCK' : manager ? 'ADMIN' : 'CASHIER'}</i></Link>
+        <Link to="/admin/billing" className="dpos-brand" aria-label={nm}><span className="wm-text"><b>{nm.split(' ')[0]}</b><i>{nm.split(' ').slice(1).join(' ') }</i></span><i className="dpos-role">{user?.role === 'inventory' ? 'STOCK' : manager ? 'ADMIN' : 'CASHIER'}</i></Link>
         {NAV.map(g => {
           const items = g.roles && !g.roles.includes(user?.role) ? [] : g.items.filter(i => pages ? pages.includes(i[0]) : (!i[3] || manager));
           return items.length ? (

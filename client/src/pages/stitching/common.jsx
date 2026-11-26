@@ -17,7 +17,7 @@ export const dmy = d => d ? longDate(String(d).slice(0, 10)) : '—';
 export const when = iso => iso ? `${longDate(istDay(iso))}, ${clock(iso)}` : '—';
 export const toPaise = s => { const n = Math.round(parseFloat(String(s ?? '').replace(/,/g, '')) * 100); return Number.isFinite(n) && n > 0 ? n : 0 };
 export const rupees = p => p ? String(p / 100) : '';
-export const waLink = (phone, text) => { const d = String(phone || '').replace(/\D/g, '').slice(-10); return `https://wa.me/${d.length === 10 ? '91' + d : ''}?text=${encodeURIComponent(text)}` };
+export const waLink = (phone, text) => { const d = String(phone || '').replace(/\D/g, '').slice(-10); return `https://api.whatsapp.com/send?phone=${d.length === 10 ? '91' + d : ''}&text=${encodeURIComponent(text)}` };
 
 // Garment types, status names, field catalogues: one fetch, shared by every Stitching Studio screen (server is the source of truth).
 let metaPromise = null;
@@ -150,7 +150,7 @@ function FabricLink({ value, name, onPick }) {
   const [q, setQ] = useState(''); const [list, setList] = useState([]);
   useEffect(() => { if (q.trim().length < 2) { setList([]); return } const t = setTimeout(() => api('/admin/pos/catalog?q=' + encodeURIComponent(q.trim()) + '&limit=8').then(setList).catch(() => setList([])), 200); return () => clearTimeout(t) }, [q]);
   if (value) return <div className="stc-row"><span className="stc-pill s-work">Linked: {name}</span><button type="button" className="dpos-btn ghost sm" onClick={() => onPick(null, '')}>Unlink</button></div>;
-  return <div className="stc-pick"><input type="search" value={q} onChange={e => setQ(e.target.value)} placeholder="Link a boutique product (optional): search by name or SKU" aria-label="Link fabric product" />
+  return <div className="stc-pick"><input type="search" value={q} onChange={e => setQ(e.target.value)} placeholder="Link a shop product (optional): search by name or SKU" aria-label="Link fabric product" />
     {list.length > 0 && <ul>{list.map(v => <li key={v.variantId}><button type="button" onClick={() => { onPick(v.variantId, v.name); setQ('') }}><span>{v.name} <span className="muted">{v.size !== 'Default' ? v.size : ''} {v.color !== 'Default' ? v.color : ''}</span></span><span className="muted">{v.stock} in stock</span></button></li>)}</ul>}</div>;
 }
 
@@ -198,8 +198,8 @@ export function ItemForm({ meta, item, onChange, customerId, designs, lockType }
 
       <div className="stc-sec"><h4>Fabric and materials</h4>
         <div className="stc-grid">
-          <Field label="Fabric from"><select value={item.fabric.source} onChange={e => fab({ source: e.target.value })}><option value="customer">Customer brings fabric</option><option value="boutique">Boutique provides fabric</option></select></Field>
-          <Field label="Fabric type"><input value={item.fabric.type} onChange={e => fab({ type: e.target.value })} placeholder="e.g. Kanjivaram silk" /></Field>
+          <Field label="Fabric from"><select value={item.fabric.source} onChange={e => fab({ source: e.target.value })}><option value="customer">Customer brings fabric</option><option value="boutique">Shop provides fabric</option></select></Field>
+          <Field label="Fabric type"><input value={item.fabric.type} onChange={e => fab({ type: e.target.value })} placeholder="e.g. Cotton, Linen" /></Field>
           <Field label="Colour"><input value={item.fabric.color} onChange={e => fab({ color: e.target.value })} /></Field>
           <Field label="Quantity / notes"><input value={item.fabric.quantity} onChange={e => fab({ quantity: e.target.value })} placeholder="e.g. 1.2 m" /></Field>
           <Field label="Lining material"><input value={item.fabric.lining} onChange={e => fab({ lining: e.target.value })} /></Field>

@@ -25,7 +25,7 @@ import Enquiry from './pages/Enquiry';
 // Each lazy element is created once at module level (never inside render).
 // The one loading screen of the website (same as the one shown while the site starts). Admin pages get no full-screen loader.
 function PageLoader() {
-  if (location.pathname.startsWith('/admin')) return <div className="page-pad" />;
+  if (location.pathname.startsWith('/admin') || window.self !== window.top) return <div className="page-pad" />;
   return (
     <div className="boot" role="status" aria-label="Loading SCOPE 13">
       <b>SCOPE 13</b><small>A CLOTHING ERA</small><i />
@@ -38,9 +38,9 @@ const A = {
   stitchDash: lazyEl(() => import('./pages/StitchPages').then(m => ({ default: m.StitchDashboard }))), stitchOrders: lazyEl(() => import('./pages/StitchPages').then(m => ({ default: m.StitchOrders }))), stitchReports: lazyEl(() => import('./pages/StitchPages').then(m => ({ default: m.StitchReports }))),
   stitch: lazyEl(() => import('./pages/AdminStitching')), stitchNew: lazyEl(() => import('./pages/AdminStitching').then(m => ({ default: () => <m.default view="new" /> }))), stitchDetail: lazyEl(() => import('./pages/AdminStitching').then(m => ({ default: () => <m.default view="detail" /> }))), stitchPrint: lazyEl(() => import('./pages/stitching/Print')),
   pos: lazyEl(() => import('./pages/AdminPos')), invoice: lazyEl(() => import('./pages/InvoicePage')), coupon: lazyEl(() => import('./pages/CouponCard')),
-  orders: lazyEl(store, 'AdminOrders'), reviews: lazyEl(store, 'AdminReviews'), users: lazyEl(store, 'AdminUsers'), settings: lazyEl(store, 'AdminSettings'),
-  categories: lazyEl(more, 'AdminCategories'), reels: lazyEl(more, 'AdminReels'),
-  storefront: lazyEl(media, 'AdminStorefront'), trending: lazyEl(media, 'AdminTrending'), sitetext: lazyEl(media, 'AdminSiteText'), enquiries: lazyEl(media, 'AdminEnquiries'), sample: lazyEl(media, 'AdminSample'),
+  orders: lazyEl(store, 'AdminOrders'), reviews: lazyEl(store, 'AdminReviews'), users: lazyEl(store, 'AdminUsers'),
+  designs: lazyEl(() => import('./pages/StitchDesigns')), delivery: lazyEl(() => import('./pages/AdminDelivery')), categories: lazyEl(more, 'AdminCategories'), reels: lazyEl(more, 'AdminReels'),
+  storefront: lazyEl(media, 'AdminStorefront'), trending: lazyEl(media, 'AdminTrending'), enquiries: lazyEl(media, 'AdminEnquiries'), sample: lazyEl(media, 'AdminSample'),
 };
 
 // /admin opens the first page of the sidebar that this staff member is allowed to see (set by the owner in POS Settings → Staff access).
@@ -55,9 +55,19 @@ function AdminHome() {
   return <Navigate to={order.find(p => pages.includes(p)) || '/account'} replace />;
 }
 
+// Admin: once the first admin page is up, fetch the code of every other admin page in the background, so moving between panels is instant.
+let adminWarm = false;
+function warmAdmin() {
+  if (adminWarm) return; adminWarm = true;
+  const go = () => [store, media, more, () => import('./pages/AdminPos'), () => import('./pages/InvoicePage'), () => import('./pages/AdminDelivery'),
+    () => import('./pages/StitchDesigns'), () => import('./pages/StitchPages'), () => import('./pages/AdminStitching')].reduce((p, f) => p.then(() => f()).catch(() => {}), Promise.resolve());
+  (window.requestIdleCallback || (f => setTimeout(f, 1200)))(go, { timeout: 2500 });
+}
+
 export default function App() {
   const { entered, enter, setBagOpen, setSearchOpen, setMenuOpen, setQuick } = useApp();
   const location = useLocation();
+  useEffect(() => { if (location.pathname === '/admin' || location.pathname.startsWith('/admin/')) warmAdmin() }, [location.pathname]);
   const bare = location.pathname.startsWith('/invoice/') || location.pathname.startsWith('/coupon/') || location.pathname.startsWith('/admin/stitching/print/'); // invoice / job card pages are clean documents: no site header, footer, intro or overlays
 
   const admin = location.pathname === '/admin' || location.pathname.startsWith('/admin/'); // the admin panel has its own sidebar: no website menu, footer or intro
@@ -92,18 +102,20 @@ export default function App() {
           <Route path="/admin/users" element={A.users} />
           <Route path="/admin/categories" element={A.categories} />
           <Route path="/admin/reels" element={A.reels} />
-          <Route path="/admin/settings" element={A.settings} />
+          <Route path="/admin/settings" element={<Navigate to="/admin/billing/settings" replace />} />
+          <Route path="/admin/delivery" element={A.delivery} />
+          <Route path="/admin/stitching/designs" element={A.designs} />
           <Route path="/admin/products" element={<Navigate to="/admin/billing/inventory" replace />} />
           <Route path="/admin/storefront" element={A.storefront} />
           <Route path="/admin/trending" element={A.trending} />
-          <Route path="/admin/site-text" element={A.sitetext} />
+          <Route path="/admin/site-text" element={<Navigate to="/admin/orders" replace />} />
           <Route path="/admin/enquiries" element={A.enquiries} />
           <Route path="/admin/sample" element={A.sample} />
           <Route path="/invoice/:token" element={A.invoice} />
           <Route path="/coupon/:code" element={A.coupon} />
-          <Route path="/admin/stitching" element={A.stitchDash} />
-          <Route path="/admin/stitching/orders" element={A.stitchOrders} />
-          <Route path="/admin/stitching/reports" element={A.stitchReports} />
+          <Route path="/admin/stitching" element={<Navigate to="/admin/billing/analytics?tab=stitching" replace />} />
+          <Route path="/admin/stitching/orders" element={<Navigate to="/admin/billing/measurements" replace />} />
+          <Route path="/admin/stitching/reports" element={<Navigate to="/admin/billing/analytics?tab=stitching" replace />} />
           <Route path="/admin/stitching/print/:id" element={A.stitchPrint} />
           <Route path="/admin/stitching/orders/new" element={A.stitchNew} />
           <Route path="/admin/stitching/orders/:id" element={A.stitchDetail} />

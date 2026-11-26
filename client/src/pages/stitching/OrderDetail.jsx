@@ -81,7 +81,7 @@ export default function OrderDetail() {
                   {Object.entries(it.specs).map(([k, v]) => <Fragment key={k}><dt>{meta.specLibrary[k]?.label ?? k}</dt><dd>{v}</dd></Fragment>)}
                   {it.custom.map((c, j) => <Fragment key={j}><dt>{c.label}</dt><dd>{c.value}</dd></Fragment>)}
                   {it.notes && <><dt>Instructions</dt><dd>{it.notes}</dd></>}
-                  <dt>Fabric</dt><dd>{[it.fabric.source === 'boutique' ? 'Boutique fabric' : 'Customer fabric', it.fabric.type, it.fabric.color, it.fabric.quantity].filter(Boolean).join(' · ')} <span className="stc-pill">{{ pending: 'Awaiting fabric', received: 'Received', ready: 'Ready' }[it.fabric.status ?? 'pending']}</span>
+                  <dt>Fabric</dt><dd>{[it.fabric.source === 'boutique' ? 'Shop fabric' : 'Customer fabric', it.fabric.type, it.fabric.color, it.fabric.quantity].filter(Boolean).join(' · ')} <span className="stc-pill">{{ pending: 'Awaiting fabric', received: 'Received', ready: 'Ready' }[it.fabric.status ?? 'pending']}</span>
                     {it.fabric.linked && <div className="muted small">Linked product: {it.fabric.linked.name} ({it.fabric.linked.sku})</div>}</dd>
                   {(it.fabric.lining || it.fabric.accessories) && <><dt>Materials</dt><dd>{[it.fabric.lining && `Lining: ${it.fabric.lining}`, it.fabric.accessories && `Accessories: ${it.fabric.accessories}`].filter(Boolean).join(' · ')}</dd></>}
                 </dl>
