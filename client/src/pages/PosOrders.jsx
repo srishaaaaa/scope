@@ -103,13 +103,13 @@ export function OrderHistory({ tick, manager, openInvoice, onChanged }) {
       <div className="dpos-filterbar">
         <span className="of-l">TYPE</span><Chips value={tab} onChange={t => { setTab(t); setRows(null) }} options={[['all', 'All bills'], ['online', 'Online (website)'], ['offline', 'In-store (billing)']]} />
         <Chips value={f.gst} onChange={v => setF({ ...f, gst: v })} options={[['all', 'All bills'], ['gst', 'GST invoices'], ['nongst', 'Non-GST bills']]} />
-        {tab !== 'online' && <><span className="of-l">PAYMENT</span><Chips value={f.payment} onChange={v => setF({ ...f, payment: v })} options={[['all', 'All methods'], ['cash', 'Cash'], ['upi', 'GPay / UPI'], ['card', 'Card']]} /></>}
+        {tab !== 'online' && <span className="of-group"><span className="of-l">PAYMENT</span><Chips value={f.payment} onChange={v => setF({ ...f, payment: v })} options={[['all', 'All methods'], ['cash', 'Cash'], ['upi', 'GPay / UPI'], ['card', 'Card']]} /></span>}
       </div>
       <Err>{err}</Err>
       {onlineList}
       <section className="dpos-card dpos-ordcard">
         {!rows ? <Empty>Loading…</Empty> : !rows.length ? <Empty>No orders match.</Empty> : (
-          <div className="dpos-tw"><table className="dpos-ord"><thead><tr><th>Order ID</th><th>Date &amp; time</th><th>Customer name</th><th>Mobile number</th><th>Source</th><th>Total due</th><th className="r">Status</th></tr></thead>
+          <div className="dpos-tw"><table className="dpos-ord"><thead><tr><th>Order ID</th><th>Date &amp; time</th><th>Customer name</th><th>Mobile number</th><th>Source</th><th>Total due</th><th>Status</th><th className="r">Actions</th></tr></thead>
             <tbody>{onlineRows.slice(0, shown).map(r => { const dt = dtShort(r.createdAt); return (
               <Fragment key={r.invoiceNo}><tr className={`${r.status === 'voided' ? 'voided' : ''} click`} onClick={e => { if (!e.target.closest('a,button')) toggle(r.invoiceNo) }} title="Show the invoice details">
                 <td className="oid">{r.invoiceNo}{r.returnCount > 0 && <span className="ret-badge" title={`${r.returnCount} return bill${r.returnCount > 1 ? 's' : ''}`}>{r.fullyReturned ? 'RETURNED' : 'PART RETURN'}</span>}</td>
@@ -118,8 +118,8 @@ export function OrderHistory({ tick, manager, openInvoice, onChanged }) {
                 <td>{r.customerPhone || <span className="muted">—</span>}</td>
                 <td><span className="ord-tags"><span className="dpos-tag">{r.isWeb ? 'online' : 'offline'}</span><span className="dpos-tag solid">{r.isGst ? 'GST' : 'NON-GST'}</span></span></td>
                 <td className="due">{inr(r.total)}</td>
+                <td className="stat"><span className={`dpos-pill ${r.status === 'voided' ? 'bad' : 'ok'}`}>{r.status === 'voided' ? 'Void' : 'Completed'}</span>{r.isWeb && r.status !== 'voided' && <FulfilControl r={r} />}</td>
                 <td className="r"><div className="dpos-rowact">
-                  <span className={`dpos-pill ${r.status === 'voided' ? 'bad' : 'ok'}`}>{r.status === 'voided' ? 'Void' : 'Completed'}</span>{r.isWeb && r.status !== 'voided' && <FulfilControl r={r} />}
                   <button type="button" className="ra wa" title="Send invoice on WhatsApp" aria-label="Send on WhatsApp" onClick={() => openWhatsApp(r.customerPhone, () => billMessageFor(r.invoiceNo)).catch(e => setErr(e.message))}><WaIcon /></button>
                   <button className="ra doc" title="Invoice preview" aria-label="Invoice preview" onClick={() => setPreview(r)}><DocIcon /></button>
                   <button className="ra eye" title="Quick details" aria-label="Quick details" onClick={() => toggle(r.invoiceNo)}><EyeIcon /></button>
@@ -432,12 +432,12 @@ export function AdvanceOrders({ manager, tick, onBilled, initialCode }) {
       <Err>{err}</Err>
       <section className="dpos-card">
         {!rows ? <Empty>Loading…</Empty> : !shown.length ? <Empty>No advance orders here. Add items in Billing and press “Save as advance order”.</Empty> : (
-          <div className="dpos-tw"><table><thead><tr><th>Deposit ID</th><th>Customer</th><th>Product</th><th>Total / Paid / Balance</th><th>Delivery</th><th>Status</th><th className="r">Actions</th></tr></thead>
+          <div className="dpos-tw"><table className="adv-list"><thead><tr><th>Deposit ID</th><th>Customer</th><th>Product</th><th>Total / Paid / Balance</th><th>Delivery</th><th>Status</th><th className="r">Actions</th></tr></thead>
             <tbody>{shown.map(r => { const late = r.deliveryDate && r.deliveryDate < today && ['pending', 'ready'].includes(r.status); const [lab, tone] = ADV_STATUS[r.status]; return (
               <tr key={r.code} className="click" tabIndex={0} onClick={() => setSel(r.code)} onKeyDown={e => e.key === 'Enter' && setSel(r.code)}>
                 <td><b className="oid">{r.code}</b><div className="muted small">{String(r.createdAt || '').slice(0, 10).split('-').reverse().join('/')}</div></td><td><b>{r.customerName || 'Walk-in'}</b>{r.customerPhone ? <div className="muted small">{r.customerPhone}</div> : null}</td>
                 <td className="adv-prod">{r.itemsText ? r.itemsText.split(/, (?=\d+× )/).map((t, n) => <div key={n}>{t}</div>) : `${r.itemCount} items`}</td>
-                <td className="adv-tpb"><div><b>Total: {inr(r.total)}</b></div><div className="ok">Paid: {inr(r.deposit)}</div><div className="bad">Balance: {inr(r.balance)}</div><small className="muted">Deposit {inr(r.deposit)} via {r.depositMode === 'split' ? splitText(depSplit(r)) : (MODE[r.depositMode] || r.depositMode)}</small></td>
+                <td className="adv-tpb"><div className="adv-money"><span><i>Total</i><b>{inr(r.total)}</b></span><span className="ok"><i>Paid</i><b>{inr(r.deposit)}</b></span><span className="bad"><i>Balance</i><b>{inr(r.balance)}</b></span></div><small className="muted">Deposit {inr(r.deposit)} via {r.depositMode === 'split' ? splitText(depSplit(r)) : (MODE[r.depositMode] || r.depositMode)}</small></td>
                 <td>{r.deliveryDate ? longDate(r.deliveryDate) : <span className="muted">—</span>} {late && <span className="dpos-pill bad">Late</span>}</td>
                 <td onClick={e => e.stopPropagation()}>{['pending', 'ready'].includes(r.status) ? <select className={`adv-st ${r.status}`} aria-label={`Status of ${r.code}`} value={r.status} onChange={e => setAdvStatus(r, e.target.value)}><option value="pending">Pending</option><option value="ready">Ready</option></select> : <span className={`adv-st-pill ${r.status}`}>{lab}</span>}</td>
                 <td className="r"><RowActions label={r.code} wa={r.customerPhone ? { phone: r.customerPhone, load: () => advanceMessageFor(r.code) } : null} eye={() => setView(r.code)} doc={() => r.invoiceNo ? api('/admin/pos/sales/' + encodeURIComponent(r.invoiceNo)).then(x => setInvPv({ invoiceNo: r.invoiceNo, shareToken: (x.sale || x).shareToken })).catch(e => setErr(e.message)) : setAdvInv(r.code)} pay={['pending', 'ready'].includes(r.status) ? () => setSel(r.code) : null} del={manager && ['pending', 'ready'].includes(r.status) ? () => cancelAdv(r) : null} /></td></tr>) })}</tbody></table></div>)}

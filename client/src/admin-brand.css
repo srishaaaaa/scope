@@ -97,3 +97,82 @@ html body .dpos-modal .od-done .od-note2 { order: 4; margin: 12px 22px 0; font-s
 .dpos-modal .adv-sum .bsum > div { display: grid !important; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 14px; padding: 5px 0 !important }
 .dpos-modal .adv-sum .bsum > div > b { white-space: nowrap; text-align: right }
 @media (max-width: 520px) { .dpos-modal .adv-figs b { font-size: 13.5px } }
+
+/* Analytics → Revenue: the two charts share the full height of the right-hand column (no gap under them) */
+.dpos .an-charts { display: flex; flex-direction: column; gap: 18px; min-width: 0 }
+@media (min-width: 1100px) {
+  html body div.dpos .dpos-split.an-rev { align-items: stretch }
+  html body div.dpos .an-rev .an-charts > section { flex: 1 1 0; display: flex; flex-direction: column; min-height: 0 }
+  html body div.dpos .an-rev .an-charts .dpos-ch { flex: 1 1 auto; height: auto !important; min-height: 190px }
+}
+
+/* ===== Order History and Advance Orders: one tidy table each ===== */
+@media (min-width: 900px) {
+  /* shared: same cell padding, headings sit exactly over their column, everything centred on the row */
+  html body div.dpos table.dpos-ord, html body div.dpos table.adv-list { width: 100%; border-collapse: collapse; table-layout: auto }
+  html body div.dpos table.dpos-ord th, html body div.dpos table.adv-list th { padding: 6px 12px 12px !important; text-align: left; vertical-align: bottom; white-space: nowrap; font-size: 10px !important; letter-spacing: .12em }
+  html body div.dpos table.dpos-ord td, html body div.dpos table.adv-list td { padding: 14px 12px !important; text-align: left; vertical-align: middle !important; font-size: 13px }
+  html body div.dpos table.dpos-ord th.r, html body div.dpos table.dpos-ord td.r, html body div.dpos table.adv-list th.r, html body div.dpos table.adv-list td.r { text-align: right !important; width: 1% }
+  html body div.dpos table.dpos-ord tbody tr:last-child td, html body div.dpos table.adv-list tbody tr:last-child td { border-bottom: 0 !important }
+  html body div.dpos table.dpos-ord .dpos-rowact, html body div.dpos table.adv-list .dpos-rowact { display: inline-flex; flex-wrap: nowrap; justify-content: flex-end; align-items: center; gap: 6px }
+  html body div.dpos table .dpos-rowact .ra { width: 34px; height: 34px; flex: none }
+
+  /* order history */
+  html body div.dpos table.dpos-ord td:nth-child(1), html body div.dpos table.dpos-ord td:nth-child(2), html body div.dpos table.dpos-ord td:nth-child(4), html body div.dpos table.dpos-ord td:nth-child(6) { white-space: nowrap }
+  html body div.dpos table.dpos-ord .ord-tags { display: inline-flex !important; flex-wrap: nowrap; align-items: center; gap: 6px }
+  html body div.dpos table.dpos-ord .ord-tags .dpos-tag { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; white-space: nowrap }
+  html body div.dpos table.dpos-ord td.stat { white-space: nowrap }
+  html body div.dpos table.dpos-ord td.stat .dpos-pill { display: inline-flex; align-items: center; height: 24px; padding: 0 11px; margin: 0 }
+
+  /* advance orders */
+  html body div.dpos table.adv-list td:nth-child(1), html body div.dpos table.adv-list td:nth-child(2), html body div.dpos table.adv-list td:nth-child(5) { white-space: nowrap }
+  html body div.dpos table.adv-list td.adv-prod { line-height: 1.7; min-width: 170px }
+  html body div.dpos table.adv-list select.adv-st, html body div.dpos table.adv-list .adv-st-pill { min-width: 118px !important; width: 128px; height: 34px }
+}
+html body div.dpos .adv-list .adv-money { display: grid; grid-template-columns: repeat(3, 76px); gap: 6px }
+html body div.dpos .adv-list .adv-money > span { display: grid; gap: 3px; padding: 7px 9px; border-radius: 10px; background: #f4f3ef }
+html body div.dpos .adv-list .adv-money > span.ok { background: #e9f6ee } html body div.dpos .adv-list .adv-money > span.bad { background: #fdecec }
+html body div.dpos .adv-list .adv-money i { font-style: normal; font-size: 8.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #77736c }
+html body div.dpos .adv-list .adv-money b { font-size: 12.5px; font-weight: 700; white-space: nowrap; color: #1f1d1a }
+html body div.dpos .adv-list .adv-money .ok b { color: #0a7d45 } html body div.dpos .adv-list .adv-money .bad b { color: #b3261e }
+html body div.dpos .adv-list .adv-tpb > small { display: block; margin-top: 5px; font-size: 11px; white-space: nowrap }
+
+/* filter row: label and choices stay together, evenly spaced; the count and Sort share one line */
+html body div.dpos .dpos-filterbar { display: flex !important; flex-wrap: wrap !important; align-items: center; justify-content: flex-start !important; gap: 10px 10px; overflow: visible !important; margin: 2px 0 12px }
+html body div.dpos .dpos-filterbar > .of-l { display: inline-flex; align-items: center; height: 36px; margin: 0 -2px 0 0 }
+html body div.dpos .dpos-filterbar > .of-l:not(:first-child) { margin-left: 8px }
+html body div.dpos .dpos-filterbar .dpos-pg { margin: 0 !important }
+html body div.dpos .ol-sort { display: inline-flex !important; flex-direction: row !important; align-items: center; gap: 10px; margin: 0 }
+html body div.dpos .ol-sort small { margin: 0; line-height: 1 }
+html body div.dpos .ol-sort select { margin: 0; height: 36px }
+html body div.dpos *:has(> .ol-sort) { align-items: center !important }
+/* laptops: a little tighter, so nothing needs sideways scrolling */
+@media (min-width: 900px) and (max-width: 1439px) {
+  html body div.dpos table.dpos-ord th, html body div.dpos table.adv-list th { padding-left: 7px !important; padding-right: 7px !important; letter-spacing: .08em }
+  html body div.dpos table.dpos-ord td, html body div.dpos table.adv-list td { padding-left: 7px !important; padding-right: 7px !important; font-size: 12.5px }
+  html body div.dpos table.adv-list td.adv-prod { min-width: 130px }
+  html body div.dpos .adv-list .adv-money { grid-template-columns: repeat(3, 66px); gap: 4px }
+  html body div.dpos .adv-list .adv-money > span { padding: 6px }
+  html body div.dpos .adv-list .adv-money b { font-size: 11.5px }
+  html body div.dpos table.adv-list select.adv-st, html body div.dpos table.adv-list .adv-st-pill { min-width: 100px !important; width: 104px; padding-left: 10px }
+  html body div.dpos table .dpos-rowact { gap: 4px !important }
+  html body div.dpos table .dpos-rowact .ra { width: 30px; height: 30px }
+}
+
+html body div.dpos .dpos-filterbar > .of-group { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; flex-wrap: nowrap }
+@media (max-width: 700px) { html body div.dpos .dpos-filterbar > .of-group { flex-wrap: wrap } }
+/* phone cards for order history: the status sits on its own line above the row buttons */
+@media (max-width: 899px) {
+  html body div.dpos table.dpos-ord tbody tr { grid-template-areas: "oid due" "name due" "date src" "phone src" "stat stat" "act act" !important }
+  html body div.dpos table.dpos-ord tbody td:nth-child(7) { grid-area: stat !important; text-align: left; white-space: nowrap }
+  html body div.dpos table.dpos-ord tbody td:nth-child(8) { grid-area: act !important; text-align: left; min-width: 0 }
+  html body div.dpos table.dpos-ord tbody td:nth-child(8) .dpos-rowact { display: flex; flex-wrap: wrap; gap: 8px }
+}
+@media (max-width: 899px) {
+  html body div.dpos .dpos-tw table.dpos-ord, html body div.dpos .dpos-tw table.dpos-ord tbody { display: block !important; width: 100% !important; min-width: 0 !important }
+  html body div.dpos .dpos-tw table.dpos-ord tbody tr { width: 100% !important; min-width: 0 !important; box-sizing: border-box; grid-template-columns: minmax(0, 1fr) auto !important }
+  html body div.dpos .dpos-tw table.dpos-ord tbody td { width: auto !important; min-width: 0 !important; max-width: 100% }
+  html body div.dpos .dpos-tw table.dpos-ord tbody td:nth-child(3) { overflow: hidden; text-overflow: ellipsis }
+  html body div.dpos .dpos-tw table.dpos-ord tbody td:nth-child(5), html body div.dpos .dpos-tw table.dpos-ord tbody td:nth-child(6) { justify-self: end; text-align: right !important }
+  html body div.dpos .dpos-tw table.dpos-ord tbody td:nth-child(8) { white-space: normal !important }
+}

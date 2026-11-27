@@ -579,8 +579,8 @@ function Analytics({ channel, openInvoice, tick, goExpenses }) {
       </>}
 
       {tab === 'revenue' && rep && <>
-        <div className="dpos-split">
-          <div style={{ display: 'grid', gap: 18 }}>
+        <div className="dpos-split an-rev">
+          <div className="an-charts">
             <section className="dpos-card"><h2>Revenue trend <span className="muted">this year {rep.year}</span></h2>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 6 }}><b style={{ fontSize: 28 }}>{inr(rep.monthly.reduce((a, b) => a + b, 0))}</b><span className="dpos-pill">Avg {k(Math.round(rep.monthly.reduce((a, b) => a + b, 0) / (new Date().getMonth() + 1)))}/mo</span></div>
               <Chart values={rep.monthly} labels={MONTHS} /></section>
