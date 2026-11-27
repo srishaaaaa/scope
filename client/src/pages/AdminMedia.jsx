@@ -27,18 +27,20 @@ function Gate({ state, children }) {
   return children;
 }
 
-// One single-image slot (hero model / story photo): preview, upload, reset.
-function Slot({ title, hint, value, fallback, onUpload, onReset, alt, onAlt, accept, busy, pos, onPos, aspect = 4 / 3, fit = 'cover' }) {
+// One single-image slot (logo / hero model / story photo): preview, upload, reset.
+function Slot({ title, hint, value, fallback, onUpload, onReset, accept, busy, pos, onPos, aspect = 4 / 3, fit = 'cover' }) {
   return (
-    <section className="adm-card">
-      <h2 className="serif adm-h2">{title}</h2>
-      <p className="muted small">{hint}</p>
-      {(value || fallback)
-        ? (onPos ? <ImageAdjust src={value || fallback} pos={pos} aspect={aspect} fit={fit} busy={busy} onChange={onPos} /> : <div className="adm-prev"><img src={value || fallback} alt="" /></div>)
-        : <div className="adm-prev"><span className="muted">Blank — nothing added yet</span></div>}
-      <Drop onFiles={fs => fs[0] && onUpload(fs[0])} multiple={false} accept={accept} busy={busy} label={value ? 'Custom image in use' : 'Using the built-in image'} />
-      <label className="field"><span>Describe the image (for screen readers)</span><input value={alt} onChange={e => onAlt(e.target.value)} /></label>
-      {value && <button className="link-u small" onClick={onReset}>Reset to the built-in image</button>}
+    <section className="adm-card sf-card">
+      <header><h2 className="serif adm-h2">{title}</h2><p className="muted small">{hint}</p></header>
+      <div className={`sf-stage ${fit}`}>
+        {(value || fallback)
+          ? (onPos ? <ImageAdjust src={value || fallback} pos={pos} aspect={aspect} fit={fit} busy={busy} onChange={onPos} /> : <div className="adm-prev"><img src={value || fallback} alt="" /></div>)
+          : <div className="adm-prev"><span className="muted">No photo added yet</span></div>}
+      </div>
+      <div className="sf-foot">
+        <Drop onFiles={fs => fs[0] && onUpload(fs[0])} multiple={false} accept={accept} busy={busy} label={value ? 'Your photo is in use' : 'Built-in image in use'} />
+        {value && <button className="link-u small" onClick={onReset}>Reset to the built-in image</button>}
+      </div>
     </section>
   );
 }
@@ -146,31 +148,30 @@ export function AdminStorefront() {
         {err && <p role="alert" className="err">{err}</p>}
         {b && (
           <div className="adm-slots">
-            <Slot title="Logo" accept="image/png,image/webp,image/jpeg" busy={busy === 'logo'} value={b.logo} fallback={DEFAULT_LOGO} alt={b.logoAlt} onAlt={v => setB({ ...b, logoAlt: v })}
-              hint="The SCOPE 13 logo, shown in the site header, menu and footer. It is shown whole, so a portrait or square image works best. The built-in SCOPE 13 logo is used until you upload another; you can replace it whenever you like."
+            <Slot title="Logo" accept="image/png,image/webp,image/jpeg" busy={busy === 'logo'} value={b.logo} fallback={DEFAULT_LOGO} 
+              hint="Used in the footer and on bills. A square or portrait image works best."
               onUpload={f => run('logo', async () => { const up = await uploadImage(f); const next = { ...b, logo: up.url }; await saveBranding(next); setB(next) }, 'Logo updated.')}
               onReset={() => run('logo', async () => { const next = { ...b, logo: null, logoAlt: '' }; await saveBranding(next); setB(next) }, 'Logo removed. The text wordmark is back.')} />
-            <Slot title="Hero model photo" aspect={3 / 4} fit="contain" accept="image/png,image/webp,image/jpeg" busy={busy === 'hero'} value={b.heroModel} fallback={brandMedia.heroCutout} pos={b.heroModelPos} onPos={v => run('hero', async () => { const next = { ...b, heroModelPos: v }; await saveBranding(next); setB(next) }, 'Focus saved.')} alt={b.heroAlt} onAlt={v => setB({ ...b, heroAlt: v })}
-              hint="The model photograph that stands in front of the big SCOPE 13 wordmark on the home page. A tall, full-length photo with the background removed (transparent PNG or WebP) works best. The built-in model photo is used until you upload another."
+            <Slot title="Hero model photo" aspect={3 / 4} fit="contain" accept="image/png,image/webp,image/jpeg" busy={busy === 'hero'} value={b.heroModel} fallback={brandMedia.heroCutout} pos={b.heroModelPos} onPos={v => run('hero', async () => { const next = { ...b, heroModelPos: v }; await saveBranding(next); setB(next) }, 'Focus saved.')} 
+              hint="Home page, first screen. Use a full-length photo with the background removed (PNG or WebP)."
               onUpload={f => run('hero', async () => { const up = await uploadImage(f); const next = { ...b, heroModel: up.url }; await saveBranding(next); setB(next) }, 'Hero model updated.')}
               onReset={() => run('hero', async () => { const next = { ...b, heroModel: null, heroAlt: '' }; await saveBranding(next); setB(next) }, 'Hero model removed.')} />
-            <section className="adm-block">
-              <h3 className="serif adm-h2">Hero outfits (change his shirt)</h3>
-              <p className="muted small">Add up to 5 more photos of the same model in different outfits (same pose, transparent PNG or WebP works best). The home page hero cycles through them with arrows and dots, starting with the Hero model photo above.</p>
-              <ul className="adm-covers">{(b.heroLooks || []).map((u, i) => (
+            <Slot title="Our Story photo" aspect={4 / 3} accept="image/jpeg,image/png,image/webp" busy={busy === 'story'} value={b.storyImage} fallback="" pos={b.storyPos} onPos={v => run('story', async () => { const next = { ...b, storyPos: v }; await saveBranding(next); setB(next) }, 'Position saved.')} 
+              hint="Our Story section and the About page. A landscape or square photo works best."
+              onUpload={f => run('story', async () => { const up = await uploadImage(f); const next = { ...b, storyImage: up.url }; await saveBranding(next); setB(next) }, 'Story photo updated.')}
+              onReset={() => run('story', async () => { const next = { ...b, storyImage: null, storyAlt: '' }; await saveBranding(next); setB(next) }, 'Story photo reset.')} />
+            <section className="adm-block sf-outfits">
+              <h3 className="serif adm-h2">More hero photos</h3>
+              <p className="muted small">Optional: add up to 5 more cut-out photos and the home page cycles through them after the hero model photo.</p>
+              {(b.heroLooks || []).length > 0 && <ul className="adm-covers">{(b.heroLooks || []).map((u, i) => (
                 <li key={u + i}>
                   <div className="adm-cover"><img src={u} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>
                   <b>Outfit {i + 2}</b>
                   <div className="adm-act"><button className="btn dark pill" disabled={busy === 'look'} onClick={() => run('look', async () => { const next = { ...b, heroLooks: b.heroLooks.filter((_, j) => j !== i) }; await saveBranding(next); setB(next) }, 'Outfit removed.')}>REMOVE</button></div>
                 </li>))}
-              </ul>
+              </ul>}
               {(b.heroLooks || []).length < 5 && <label className="btn dark pill adm-file">{busy === 'look' ? '…' : 'ADD OUTFIT PHOTO'}<input type="file" hidden accept="image/png,image/webp,image/jpeg" onChange={e => { const f = e.target.files?.[0]; e.target.value = ''; if (f) run('look', async () => { const up = await uploadImage(f); const next = { ...b, heroLooks: [...(b.heroLooks || []), up.url] }; await saveBranding(next); setB(next) }, 'Outfit added.') }} /></label>}
             </section>
-            <Slot title="Our Story photo" aspect={4 / 3} accept="image/jpeg,image/png,image/webp" busy={busy === 'story'} value={b.storyImage} fallback="" pos={b.storyPos} onPos={v => run('story', async () => { const next = { ...b, storyPos: v }; await saveBranding(next); setB(next) }, 'Position saved.')} alt={b.storyAlt} onAlt={v => setB({ ...b, storyAlt: v })}
-              hint="A landscape or square photograph for the Our Story section on the home page. Until you add one, a product photo is used."
-              onUpload={f => run('story', async () => { const up = await uploadImage(f); const next = { ...b, storyImage: up.url }; await saveBranding(next); setB(next) }, 'Story photo updated.')}
-              onReset={() => run('story', async () => { const next = { ...b, storyImage: null, storyAlt: '' }; await saveBranding(next); setB(next) }, 'Story photo reset.')} />
-            <button className="btn dark" onClick={() => run('alt', () => saveBranding(b), 'Descriptions saved.')} disabled={busy === 'alt'}>SAVE DESCRIPTIONS</button>
           </div>
         )}
 

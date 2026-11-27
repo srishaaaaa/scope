@@ -176,3 +176,46 @@ html body div.dpos .dpos-filterbar > .of-group { display: inline-flex; align-ite
   html body div.dpos .dpos-tw table.dpos-ord tbody td:nth-child(5), html body div.dpos .dpos-tw table.dpos-ord tbody td:nth-child(6) { justify-self: end; text-align: right !important }
   html body div.dpos .dpos-tw table.dpos-ord tbody td:nth-child(8) { white-space: normal !important }
 }
+
+/* ===== Billing: the scan bar is one box (icon, text, camera); the field inside it has no box of its own ===== */
+html body div.dpos .bc-scan .bc-scan-bar { display: flex !important; align-items: center; gap: 12px; box-sizing: border-box; width: 100%; height: 56px; min-height: 56px; padding: 0 7px 0 16px; border: 1.5px solid #d6d3cc; border-radius: 14px; background: #fff; box-shadow: none }
+html body div.dpos .bc-scan .bc-scan-bar:focus-within { border-color: #242424; box-shadow: 0 0 0 3px rgba(36, 36, 36, .1) }
+html body div.dpos .bc-scan .bc-scan-bar > input, html body div.dpos .bc-scan .bc-scan-bar > input:focus, html body div.dpos .bc-scan .bc-scan-bar > input:focus-visible {
+  flex: 1 1 auto; width: 100% !important; min-width: 0; height: 100% !important; margin: 0 !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; outline: 0 !important; box-shadow: none !important; background: transparent !important; font-size: 14px !important; font-weight: 600 !important; line-height: 1.2; text-overflow: ellipsis }
+html body div.dpos .bc-scan .bc-scan-ic { flex: none; width: 22px; height: 22px }
+html body div.dpos .bc-scan .bc-scan-cam { flex: none; width: 42px; height: 42px; margin: 0; padding: 0; border-radius: 10px }
+@media (max-width: 520px) { html body div.dpos .bc-scan .bc-scan-bar { gap: 8px; padding-left: 12px } html body div.dpos .bc-scan .bc-scan-bar > input { font-size: 13px !important } }
+
+/* ===== Storefront images: three equal cards in one row, then a full-width strip. No gaps. ===== */
+html body div.dpos .adm-sf .adm-slots { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; align-items: stretch !important; gap: 16px !important }
+html body div.dpos .adm-sf .sf-card { display: flex !important; flex-direction: column; gap: 12px; padding: 18px; border-radius: 20px }
+html body div.dpos .adm-sf .sf-card header { min-height: 66px }
+html body div.dpos .adm-sf .sf-card .adm-h2 { margin: 0 0 4px; font-size: 17px }
+html body div.dpos .adm-sf .sf-card header p { margin: 0; font-size: 12px; line-height: 1.5 }
+html body div.dpos .adm-sf .sf-stage { flex: 1 0 auto; display: flex; flex-direction: column; justify-content: center; min-height: 372px }
+html body div.dpos .adm-sf .sf-stage .adm-prev { aspect-ratio: auto; height: 372px; margin: 0; border-radius: 14px; background: #f4f3ef }
+html body div.dpos .adm-sf .sf-stage .adm-prev img { width: 100%; height: 100%; object-fit: contain }
+html body div.dpos .adm-sf .sf-stage .adj { display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 0 }
+html body div.dpos .adm-sf .sf-stage.contain .adj-box { aspect-ratio: auto !important; height: 300px; max-height: none !important; width: 100% }
+html body div.dpos .adm-sf .sf-stage.cover .adj-box { width: 100%; max-height: 300px !important; border-radius: 14px }
+html body div.dpos .adm-sf .sf-stage .adj-row .muted { font-size: 11px }
+html body div.dpos .adm-sf .sf-foot { margin-top: auto; display: grid; gap: 8px; justify-items: center }
+html body div.dpos .adm-sf .sf-foot .adm-drop { width: 100%; box-sizing: border-box; justify-content: center; text-align: center; margin: 0; padding: 12px; gap: 8px }
+html body div.dpos .adm-sf .adm-slots > .sf-outfits { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; padding: 16px 20px; margin: 0 }
+html body div.dpos .adm-sf .sf-outfits .adm-h2 { flex: 0 0 100%; margin: 0; font-size: 17px }
+html body div.dpos .adm-sf .sf-outfits > p { flex: 1 1 320px; margin: 0 }
+html body div.dpos .adm-sf .sf-outfits .adm-covers { order: 3; flex: 0 0 100%; margin: 0 }
+@media (max-width: 1100px) { html body div.dpos .adm-sf .adm-slots { grid-template-columns: repeat(2, minmax(0, 1fr)) !important } html body div.dpos .adm-sf .adm-slots > .sf-card:nth-child(3) { grid-column: 1 / -1 } }
+@media (max-width: 700px) { html body div.dpos .adm-sf .adm-slots { grid-template-columns: 1fr !important } html body div.dpos .adm-sf .sf-card header { min-height: 0 } }
+/* empty covers get a proper tile instead of loose text */
+html body div.dpos .adm-sf .adm-cover > span.muted { display: grid; place-items: center; aspect-ratio: 3 / 4; padding: 12px; border: 1px dashed #d6d3cc; border-radius: 14px; background: #f4f3ef; text-align: center; font-size: 12px }
+html body div.dpos .adm-sf .adm-block > p { margin-bottom: 14px }
+html body div.dpos .adm-sf .sf-foot .adm-drop .btn { padding: 10px 18px }
+
+/* Billing item row on tablets and phones: name first, then price, then quantity and buttons underneath */
+@media (max-width: 899px) {
+  html body div.dpos .dpos-lines .dpos-line > .ln-cols { order: 1; grid-row: 1 !important; grid-column: 1 / -1 !important; width: 100% }
+  html body div.dpos .dpos-lines .dpos-line > .msr-line { order: 2; grid-row: 2 !important; grid-column: 1 / -1 !important }
+  html body div.dpos .dpos-lines .dpos-line > .ln-cols + div:not(.msr-line), html body div.dpos .dpos-lines .dpos-line > .msr-line + div { order: 3; grid-row: 3 !important; grid-column: 1 / -1 !important; justify-self: stretch !important; justify-content: flex-end }
+  html body div.dpos .dpos-lines .dpos-line > .dpos-grid.ln-cols > input:first-child { grid-column: 1 / 2; width: 100%; min-width: 0; box-sizing: border-box }
+}
