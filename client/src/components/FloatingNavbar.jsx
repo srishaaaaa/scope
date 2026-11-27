@@ -24,10 +24,10 @@ function MegaMenu({ kind, x, onNavigate }) {
   const rows = ordered(catalog.categories, hp.categories).map(c => ({ name: c.name, to: `/shop?category=${c.slug}` }));
   const label = 'Collections';
   return (
-    <motion.div className={`mega mega-sm mega-${kind}`} style={x != null ? { left: `clamp(12px, ${Math.round(x - 230)}px, calc(100vw - 482px))` } : undefined} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
+    <motion.div className={`mega mega-sm mega-${kind}`} style={x != null ? { left: `clamp(12px, ${Math.round(x - 310)}px, calc(100vw - 636px))`, '--caret': `${Math.round(x)}px` } : undefined} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
       <div className="mega-in">
         <div className="mega-col">
-          <p className="mega-label">{label}</p>
+          <div className="mega-head"><p className="mega-label">Shop by collection</p><Link to="/shop" onClick={onNavigate} className="mega-all">View all <span aria-hidden="true">→</span></Link></div>
           <ul className="mega-cats" aria-label={label}>
             {rows.map((c, i) => (
               <motion.li key={c.to} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.03 + i * 0.025, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}>

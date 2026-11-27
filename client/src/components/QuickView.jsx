@@ -6,6 +6,7 @@ import { useModal, useReduced } from '../lib/hooks';
 import { api } from '../lib/api';
 import { inr, sortSizes } from '../lib/format';
 import { ProductMedia } from './ProductCard3D';
+import { swatch } from '../lib/swatch';
 
 // Quick view fetches fresh variant/stock data from the server before offering add-to-bag.
 export default function QuickView() {
@@ -52,8 +53,9 @@ export default function QuickView() {
               {state === 'error' && <p role="alert" className="err">Availability could not be loaded. Please try again.</p>}
               {full && (
                 <>
-                  {colours.length > 1 && <div className="chips" role="radiogroup" aria-label="Colour">{colours.map(c => <button key={c} type="button" role="radio" aria-checked={activeCol === c} className={`chip ${activeCol === c ? 'on' : ''}`} onClick={() => { setCol(c); setSel(null) }}>{c}</button>)}</div>}
-                  <div className="chips" role="radiogroup" aria-label="Size">
+                  {colours.length > 1 && <><p className="qv-label">Colour <b>{activeCol}</b></p><div className="chips qv-cols" role="radiogroup" aria-label="Colour">{colours.map(c => <button key={c} type="button" role="radio" aria-checked={activeCol === c} className={`chip ${activeCol === c ? 'on' : ''}`} onClick={() => { setCol(c); setSel(null) }}><i style={{ background: swatch(c) }} aria-hidden="true" />{c}</button>)}</div></>}
+                  <p className="qv-label">Size {sel && <b>{sel.size}</b>}</p>
+                  <div className="chips qv-sizes" role="radiogroup" aria-label="Size">
                     {variants.map(v => (
                       <button key={v.id} role="radio" aria-checked={sel?.id === v.id} className={`chip ${sel?.id === v.id ? 'on' : ''}`} disabled={!v.stock} onClick={() => setSel(v)}>{v.size}{!v.stock && <span className="sr"> sold out</span>}</button>
                     ))}

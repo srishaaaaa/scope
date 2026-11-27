@@ -282,6 +282,20 @@ export function AdvanceModal({ total, onClose, onSave }) {
 }
 
 // Shown right after an advance order is saved: the receipt for the deposit, then the order lives in Advance Orders (and in Order History once billed).
+// Prints a small document through a hidden frame on this page, so the print window opens over the full browser
+// window (a tiny pop-up squeezed the print window into itself).
+function printHtml(html) {
+  document.getElementById('print-frame')?.remove();
+  const frame = Object.assign(document.createElement('iframe'), { id: 'print-frame', title: 'Print' });
+  frame.setAttribute('aria-hidden', 'true');
+  Object.assign(frame.style, { position: 'fixed', right: '0', bottom: '0', width: '1px', height: '1px', border: '0', opacity: '0' });
+  document.body.appendChild(frame);
+  const w = frame.contentWindow;
+  w.document.open(); w.document.write(html); w.document.close();
+  w.onafterprint = () => setTimeout(() => frame.remove(), 500);
+  setTimeout(() => { w.focus(); w.print() }, 250);
+}
+
 export function AdvanceDone({ adv, shop, onClose, onView }) {
   const who = adv.customerName?.trim() || 'Guest';
   const [ps, setPs] = useState(false);
@@ -289,12 +303,10 @@ export function AdvanceDone({ adv, shop, onClose, onView }) {
   // Asks thermal / A4 / A5 first, then prints the receipt sized for that paper.
   const print = ({ paper }) => {
     setPs(false);
-    const w = window.open('', '_blank', 'width=420,height=640'); if (!w) return;
     const sheet = paper === 'a4' || paper === 'a5';
     const pageCss = `<style>@page{size:${({ a4: 'A4; margin: 15mm', a5: 'A5; margin: 10mm', 80: '80mm auto; margin: 2mm', 58: '58mm auto; margin: 2mm' })[paper] || 'A4'}}body{max-width:${sheet ? (paper === 'a4' ? '170mm' : '125mm') : paper === '58' ? '50mm' : '72mm'}!important;margin:${sheet ? '0 auto' : '0'}!important;font-size:${sheet ? 15 : paper === '58' ? 10 : 12}px}${sheet ? 'h3{font-size:24px}' : ''}</style>`;
     const esc = s => String(s ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-    w.document.write(`<!doctype html><title>Advance receipt ${esc(adv.code)}</title><body style="font-family:Arial,sans-serif;max-width:300px;margin:16px auto;color:#111"><h3 style="margin:0 0 4px;text-align:center">${esc(shop?.name || '')}</h3><p style="text-align:center;margin:0 0 12px;font-size:12px">ADVANCE RECEIPT · ${esc(adv.code)}</p><p style="margin:0 0 8px;font-size:13px">Customer: ${esc(who)}${adv.customerPhone ? ' · ' + esc(adv.customerPhone) : ''}</p><hr><p style="display:flex;justify-content:space-between;margin:8px 0"><span>Order total</span><b>${money(adv.total)}</b></p><p style="display:flex;justify-content:space-between;margin:8px 0"><span>Deposit paid</span><b>${money(adv.deposit)}</b></p><p style="margin:-2px 0 6px;font-size:12px;color:#555">${esc(splitText(depSplit(adv)))}</p><p style="display:flex;justify-content:space-between;margin:8px 0;font-size:16px"><b>Balance due</b><b>${money(adv.balance)}</b></p>${adv.deliveryDate ? '<p style="font-size:12px">Expected: ' + esc(adv.deliveryDate) + '</p>' : ''}<hr><p style="font-size:11px;text-align:center">Not a tax invoice. The bill is issued when the order is collected.</p>${pageCss}<script>onload=()=>{print()}<\/script>`);
-    w.document.close();
+    printHtml(`<!doctype html><title>Advance receipt ${esc(adv.code)}</title><body style="font-family:Arial,sans-serif;max-width:300px;margin:16px auto;color:#111"><h3 style="margin:0 0 4px;text-align:center">${esc(shop?.name || '')}</h3><p style="text-align:center;margin:0 0 12px;font-size:12px">ADVANCE RECEIPT · ${esc(adv.code)}</p><p style="margin:0 0 8px;font-size:13px">Customer: ${esc(who)}${adv.customerPhone ? ' · ' + esc(adv.customerPhone) : ''}</p><hr><p style="display:flex;justify-content:space-between;margin:8px 0"><span>Order total</span><b>${money(adv.total)}</b></p><p style="display:flex;justify-content:space-between;margin:8px 0"><span>Deposit paid</span><b>${money(adv.deposit)}</b></p><p style="margin:-2px 0 6px;font-size:12px;color:#555">${esc(splitText(depSplit(adv)))}</p><p style="display:flex;justify-content:space-between;margin:8px 0;font-size:16px"><b>Balance due</b><b>${money(adv.balance)}</b></p>${adv.deliveryDate ? '<p style="font-size:12px">Expected: ' + esc(adv.deliveryDate) + '</p>' : ''}<hr><p style="font-size:11px;text-align:center">Not a tax invoice. The bill is issued when the order is collected.</p>${pageCss}`);
   };
   return (
     <div className="dpos-modal" role="dialog" aria-modal="true" aria-label="Advance order saved" onMouseDown={e => e.target === e.currentTarget && onClose()}>
@@ -373,7 +385,8 @@ function AdvanceDetail({ code, manager, onClose, onChanged, onBilled }) {
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}><span className={`dpos-pill ${tone}`}>{lab}</span>{a.deliveryDate && <span className="muted small">Delivery {longDate(a.deliveryDate)}</span>}{a.isGst && <span className="dpos-pill">GST</span>}{a.invoiceNo && <button className="link-u small" onClick={() => onBilled(null, a.invoiceNo)}>Billed as {a.invoiceNo}</button>}</div>
           <div className="dpos-tw"><table><thead><tr><th>Item</th><th className="r">Qty</th><th className="r">Price</th><th className="r">Amount</th></tr></thead>
             <tbody>{a.items.map((i, n) => <tr key={n}><td><b>{i.name}</b>{i.size ? <span className="muted small"> ({i.size}{i.color && i.color !== 'Default' ? `, ${i.color}` : ''})</span> : null}</td><td className="r">{i.qty}</td><td className="r">{inr(i.price)}</td><td className="r">{inr(i.price * i.qty)}</td></tr>)}</tbody></table></div>
-          <div className="dpos-box"><BillSummary bill={a} sale={sale} /></div>
+          <div className="rrp-tiles adv-figs"><div><small>ORDER TOTAL</small><b>{inr(a.total)}</b></div><div className="ok"><small>{a.status === 'cancelled' ? 'DEPOSIT TAKEN' : 'AMOUNT PAID'}</small><b>{inr(a.status === 'cancelled' ? a.deposit : a.invoiceNo ? a.total : a.deposit)}</b></div><div className="bad"><small>BALANCE DUE</small><b>{inr(a.invoiceNo || a.status === 'cancelled' ? 0 : a.balance)}</b></div></div>
+          <div className="dpos-box adv-sum"><BillSummary bill={a} sale={sale} /></div>
           {a.notes && <p className="sub">Note: {a.notes}</p>}
           {open && <div className="dpos-box" style={{ display: 'grid', gap: 10 }}>
             <p className="muted small" style={{ fontWeight: 800, letterSpacing: '.1em', margin: 0 }}>BALANCE RECEIVED BY</p>

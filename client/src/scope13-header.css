@@ -60,3 +60,16 @@
 /* header and phone menu show the name only, no logo picture */
 .site-header .wm-logo, .mobile-menu .wm-logo { display: none !important }
 .site-header .hdr > .hdr-logo { padding-left: 14px !important }
+
+/* one continuous beige from the top of the page: the hero's background now starts behind the header */
+.s13-home {
+  background:
+    radial-gradient(46% 60% at 50% 46%, rgba(255, 248, 232, .85), rgba(255, 248, 232, 0) 72%) top / 100% 100svh no-repeat,
+    radial-gradient(36% 48% at 6% 14%, rgba(214, 176, 108, .30), transparent 72%) top / 100% 100svh no-repeat,
+    radial-gradient(34% 44% at 96% 90%, rgba(150, 176, 172, .24), transparent 72%) top / 100% 100svh no-repeat,
+    linear-gradient(180deg, #EFE3CC 0, #E9DCC6 100svh, #EFE6D6 100%) !important }
+.s13-home .s13-hero { background: transparent !important }
+/* the bar and its tool group are beige too, not white */
+.site-header .hdr { background: linear-gradient(180deg, rgba(240, 229, 207, .96), rgba(233, 220, 196, .96)) !important; box-shadow: 0 16px 34px -22px rgba(60, 40, 15, .5) !important }
+.site-header .tools-pill { background: rgba(176, 138, 74, .10) !important }
+@media (max-width: 900px) { .site-header .tools-pill { background: transparent !important } }

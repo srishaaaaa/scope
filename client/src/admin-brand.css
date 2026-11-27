@@ -14,3 +14,86 @@
 
 /* footer sits at the end of the page; it never floats over the content */
 html body div.dpos .dpos-main > .dpos-foot, html body div.dpos .dpos-foot { position: static !important; bottom: auto !important; box-shadow: none !important; margin-top: auto !important }
+
+/* ===== "Bill Generated" and "Advance Order Saved": same width, one calm column =====
+   header, three figures, (items,) split-up, buttons. No figure or box is squeezed into half the window. */
+html body .dpos-modal .dpos-sheet.dpos-done, html body div.dpos-modal > .dpos-sheet.dpos-done { display: flex !important; flex-direction: column; gap: 0 !important; width: min(540px, calc(100vw - 20px)) !important; max-height: calc(100dvh - 24px) !important; overflow-x: hidden !important; overflow-y: auto !important; padding: 0 !important }
+html body .dpos-modal .dpos-done > * { flex: none; min-width: 0 }
+html body .dpos-modal .dpos-done > .dpos-done-head { order: 0; display: flex !important; align-items: center; justify-content: space-between; gap: 12px; margin: 0 !important; padding: 16px 22px !important }
+html body .dpos-modal .dpos-done-head h2 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 0; font-size: 18px !important; line-height: 1.2 }
+
+/* three figures */
+html body .dpos-modal .dpos-done > section.dpos-done-card:first-of-type { order: 1; display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 22px 0 !important; padding: 0 !important; border: 0 !important; background: none !important; max-width: none !important }
+html body .dpos-modal .dpos-done > section:first-of-type > .dpos-done-top { display: none !important }
+html body .dpos-modal .dpos-done > section:first-of-type > .dpos-done-row,
+html body .dpos-modal .dpos-done > section:first-of-type > .dpos-done-bal,
+html body .dpos-modal .dpos-done > section:first-of-type > .adv-bal { display: flex !important; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 82px; margin: 0 !important; padding: 12px 8px !important; border: 1px solid var(--d-line, #e5e4e0); border-radius: 14px; text-align: center; background: #fff }
+html body .dpos-modal .dpos-done > section:first-of-type > div > span { display: block; font-size: 9px !important; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--d-mut, #6f6b66); line-height: 1.4 }
+html body .dpos-modal .dpos-done > section:first-of-type > div > b { font-size: 18px !important; font-weight: 800; line-height: 1.1; white-space: nowrap }
+html body .dpos-modal .dpos-done > section:first-of-type > .dpos-done-bal { background: #f4f3ef }
+html body .dpos-modal .dpos-done > section:first-of-type > .adv-bal { background: #fdeaea; border-color: #f4bcbc }
+html body .dpos-modal .dpos-done > section:first-of-type > .adv-bal > span,
+html body .dpos-modal .dpos-done > section:first-of-type > .adv-bal > b { color: #991b1b }
+/* how the deposit was paid (each method, for a split deposit) sits under its label */
+html body .dpos-modal .dpos-done > section:first-of-type > div { position: relative }
+html body .dpos-modal .dpos-done .adv-split { display: block; position: absolute; left: 4px; right: 4px; bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 9.5px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--d-mut, #6f6b66) }
+
+/* items, then the split-up: full width, same box */
+html body .dpos-modal .dpos-done > section.dpos-done-card:not(:first-of-type) { display: block !important; order: 3; margin: 12px 22px 0 !important; padding: 12px 18px !important; border-radius: 14px !important; max-width: none !important; max-height: none !important; overflow: visible !important }
+html body .dpos-modal .dpos-done > section.dpos-done-card.d-items:not(:first-of-type) { order: 2 }
+html body .dpos-modal .dpos-done .dpos-done-l { display: block; height: auto; margin: 0 0 6px !important; padding: 0 0 8px !important; border-bottom: 1px solid var(--d-line, #e5e4e0); font-size: 9.5px !important; font-weight: 800; letter-spacing: .16em }
+html body .dpos-modal .dpos-done .dpos-done-item { display: grid !important; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 14px; padding: 5px 0 !important; font-size: 12.5px !important }
+html body .dpos-modal .dpos-done .dpos-done-item > span:last-child { white-space: nowrap; font-weight: 600 }
+html body .dpos-modal .dpos-done .bsum { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; gap: 0 !important; width: 100%; max-width: none !important }
+html body .dpos-modal .dpos-done .bsum > div { display: grid !important; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 14px; margin: 0 !important; padding: 5px 0 !important; border: 0; font-size: 12.5px !important; line-height: 1.35; font-weight: 500 }
+html body .dpos-modal .dpos-done .bsum > div > b { white-space: nowrap; text-align: right; font-size: 12.5px; font-weight: 600 }
+html body .dpos-modal .dpos-done .bsum small { margin-left: 6px }
+html body .dpos-modal .dpos-done .bsum > .bsum-muted { display: none !important }
+html body .dpos-modal .dpos-done .bsum > .bsum-total { margin: 4px 0 !important; padding: 9px 0 !important; border-top: 1px solid var(--d-line, #dcdad4) !important; border-bottom: 1px solid var(--d-line, #dcdad4) !important; font-weight: 800; font-size: 14px !important }
+html body .dpos-modal .dpos-done .bsum > .bsum-total > b { font-size: 14px; font-weight: 800 }
+html body .dpos-modal .dpos-done .bsum > .bsum-paysub { padding: 3px 0 3px 12px !important; font-size: 11.5px !important; color: var(--d-mut, #6f6b66) }
+html body .dpos-modal .dpos-done .bsum > .bsum-strong { font-weight: 800 }
+
+/* buttons along the bottom */
+html body .dpos-modal .dpos-done > .dpos-done-act { order: 4; display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 10px !important; margin: 16px 22px 0 !important; padding: 0 !important }
+html body .dpos-modal .dpos-done > .dpos-done-act > .dpos-btn { display: inline-flex !important; grid-column: auto !important; align-items: center; justify-content: center; gap: 7px; width: 100%; min-width: 0; height: 42px; padding: 0 8px !important; border-radius: 12px !important; white-space: nowrap; font-size: 10.5px !important; letter-spacing: .05em !important }
+html body .dpos-modal .dpos-done > .adv-view { order: 5; margin: 12px 22px 0 !important; text-align: center; font-size: 12px }
+html body .dpos-modal .dpos-done::after { content: ''; order: 9; flex: none; height: 18px }
+
+@media (max-width: 520px) {
+  html body .dpos-modal .dpos-done > .dpos-done-head { padding: 14px !important }
+  html body .dpos-modal .dpos-done-head h2 { font-size: 15.5px !important }
+  html body .dpos-modal .dpos-done > section.dpos-done-card,
+  html body .dpos-modal .dpos-done > section.dpos-done-card:not(:first-of-type),
+  html body .dpos-modal .dpos-done > section.dpos-done-card:first-of-type,
+  html body .dpos-modal .dpos-done > .dpos-done-act,
+  html body .dpos-modal .dpos-done > .adv-view { margin-left: 12px !important; margin-right: 12px !important }
+  html body .dpos-modal .dpos-done > section.dpos-done-card:first-of-type { gap: 6px }
+  html body .dpos-modal .dpos-done > section:first-of-type > div { padding: 10px 3px !important }
+  html body .dpos-modal .dpos-done > section:first-of-type > div > b { font-size: 13.5px !important }
+  html body .dpos-modal .dpos-done > section:first-of-type > div > span { font-size: 8px !important; letter-spacing: .08em }
+  html body .dpos-modal .dpos-done > .dpos-done-act { grid-template-columns: repeat(2, minmax(0, 1fr)) !important }
+  html body .dpos-modal .dpos-done > .dpos-done-act > .dpos-btn:last-child { grid-column: 1 / -1 !important }
+}
+
+/* advance window: the cash line repeats the deposit row above it (the Deposit Paid figure lists each payment method) */
+html body .dpos-modal .dpos-done.adv-done .bsum > div.bsum-paysub { display: none !important }
+
+/* ===== Order Details (completed bills): the same layout as Bill Generated ===== */
+html body .dpos-modal .od-done .od-load { padding: 28px 22px 0; text-align: center }
+html body .dpos-modal .od-done > section.dpos-done-card:first-of-type > .dpos-done-row.ok > b { color: #0a7d45 }
+html body .dpos-modal .od-done .od-facts dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 18px; margin: 0 }
+html body .dpos-modal .od-done .od-facts dl > div { min-width: 0 }
+html body .dpos-modal .od-done .od-facts dl > .wide { grid-column: 1 / -1 }
+html body .dpos-modal .od-done .od-facts dt { font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--d-mut, #6f6b66) }
+html body .dpos-modal .od-done .od-facts dd { margin: 3px 0 0; font-size: 12.5px; font-weight: 600; overflow-wrap: anywhere }
+html body .dpos-modal .od-done .bsum > .od-extra.bad, html body .dpos-modal .od-done .bsum > .od-extra.bad > b { color: #991b1b }
+html body .dpos-modal .od-done .od-note2 { order: 4; margin: 12px 22px 0; font-size: 12px; color: var(--d-mut, #6f6b66) }
+
+/* completed advance order window: even figures and a tidy split-up */
+.dpos-modal .adv-figs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px }
+.dpos-modal .adv-figs > div { display: grid; justify-items: center; align-content: center; gap: 5px; min-height: 78px; text-align: center }
+.dpos-modal .adv-figs b { white-space: nowrap }
+.dpos-modal .adv-sum .bsum > div { display: grid !important; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 14px; padding: 5px 0 !important }
+.dpos-modal .adv-sum .bsum > div > b { white-space: nowrap; text-align: right }
+@media (max-width: 520px) { .dpos-modal .adv-figs b { font-size: 13.5px } }

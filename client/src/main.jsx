@@ -24,6 +24,7 @@ import './scope13-premium.css';
 import './barcode.css';
 import './scope13-header.css';
 import './scope13-fixes.css';
+import './scope13-redesign.css';
 import './admin-brand.css';
 
 addEventListener('vite:preloadError', e => { if (reloadOnce()) e.preventDefault() }); // a page chunk missing after a release: reload once
